@@ -1,3 +1,3 @@
 # Tabber Backend
 # Written in Java
-# Using SpringBoot
+# Using SpringBoot, Postgres, AWS
