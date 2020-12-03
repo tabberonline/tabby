@@ -5,7 +5,7 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
     <changeSet author="mandeep.sidhu2@gmail.com" id="001_001_create_users_table">
         <createTable tableName="users">
-            <column name="user_id" type="INT" />
+            <column name="user_id" type="BIGINT" />
             <column name="locale" type="VARCHAR" />
             <column name="sub" type="VARCHAR" />
             <column name="name" type="VARCHAR" />
@@ -17,7 +17,7 @@
         </createTable>
     </changeSet>
     <changeSet author="mandeep.sidhu2@gmail.com" id="001_001_add_auto_incrementing">
-        <addAutoIncrement columnDataType="INT" columnName="user_id" incrementBy="1"
+        <addAutoIncrement columnDataType="BIGINT" columnName="user_id" incrementBy="1"
                           schemaName="public" startWith="0" tableName="users"/>
     </changeSet>
     <changeSet author="mandeep.sidhu2@gmail.com" id="001_002_primayConstraint_users">
@@ -28,13 +28,13 @@
         <addUniqueConstraint columnNames="email" constraintName="unqKeys_email" tableName="users" />
     </changeSet>
     <changeSet author="mandeep.sidhu2@gmail.com" id="001_004_notNullConstraint_users">
-        <addNotNullConstraint schemaName="public" tableName="users" columnName="user_id" columnDataType="INT" />
+        <addNotNullConstraint schemaName="public" tableName="users" columnName="user_id" columnDataType="BIGINT" />
         <addNotNullConstraint schemaName="public" tableName="users" columnName="portfolio_present" columnDataType="VARCHAR" />
         <addNotNullConstraint schemaName="public" tableName="users" columnName="email" columnDataType="VARCHAR" />
     </changeSet>
     <changeSet author="mandeep.sidhu2@gmail.com" id="001_005_index_users">
         <createIndex indexName="index_users_on_users_id" schemaName="public" tableName="users" unique="true">
-            <column name="user_id" type="VARCHAR" />
+            <column name="user_id" type="BIGINT" />
         </createIndex>
     </changeSet>
 </databaseChangeLog>

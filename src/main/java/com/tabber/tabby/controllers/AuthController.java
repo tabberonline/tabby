@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.Collections;
 import java.util.logging.Level;
@@ -24,7 +25,7 @@ public class AuthController {
     JWTService jwtService;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestParam String idTokenString){
+    public ResponseEntity<String> login(@RequestParam String idTokenString) throws Exception {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
                 .setAudience(Collections.singletonList("148434873376-a1k8ubdj3g3oqkh53an00v8angbj2itd.apps.googleusercontent.com"))
                 .build();
@@ -33,7 +34,7 @@ public class AuthController {
             idToken = verifier.verify(idTokenString);
         }
         catch (Exception ex){
-            logger.log(Level.WARNING,"Unable to verify user for identity token :{}",idTokenString);
+            logger.log(Level.WARNING,"Unable to verify user for identity token :{}",idTokenString + ex.toString());
             return new ResponseEntity<>("FORBIDDEN", HttpStatus.FORBIDDEN);
         }
         if (idToken != null) {
