@@ -1,7 +1,9 @@
 package com.tabber.tabby.service;
 
 import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.exceptions.UnauthorisedException;
 
 public interface AuthService {
-    void save(UserEntity userEntity);
+
+    String login(String idTokenString) throws UnauthorisedException;
 }

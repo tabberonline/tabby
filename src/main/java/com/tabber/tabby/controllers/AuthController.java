@@ -2,7 +2,11 @@ package com.tabber.tabby.controllers;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.exceptions.UnauthorisedException;
 import com.tabber.tabby.security.JWTService;
+import com.tabber.tabby.service.AuthService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,41 +26,22 @@ public class AuthController {
     private static final Logger logger = Logger.getLogger(AuthController.class.getName());
 
     @Autowired
-    JWTService jwtService;
+    AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<String> login(@RequestParam String idTokenString) throws Exception {
-        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
-                .setAudience(Collections.singletonList("148434873376-a1k8ubdj3g3oqkh53an00v8angbj2itd.apps.googleusercontent.com"))
-                .build();
-        GoogleIdToken idToken = null;
+    public ResponseEntity<JSONObject> login(@RequestParam String idTokenString) throws UnauthorisedException {
+        String accessToken = null;
+        JSONObject jsonObject = new JSONObject();
         try {
-            idToken = verifier.verify(idTokenString);
+            accessToken = authService.login(idTokenString);
         }
         catch (Exception ex){
-            logger.log(Level.WARNING,"Unable to verify user for identity token :{}",idTokenString + ex.toString());
-            return new ResponseEntity<>("FORBIDDEN", HttpStatus.FORBIDDEN);
+            logger.log(Level.WARNING,"Unable to verify user for identity token :{}",idTokenString.concat("for token ").concat(ex.toString()));
+            jsonObject.put("response","Forbidden");
+            return new ResponseEntity<JSONObject>(jsonObject, HttpStatus.FORBIDDEN);
         }
-        if (idToken != null) {
-            Payload payload = idToken.getPayload();
-            logger.log(Level.INFO,"User Info :{}",payload);
-            // Print user identifier
-            String userId = payload.getSubject();
-            System.out.println("User ID: " + userId);
-
-            // Get profile information from payload
-            String email = payload.getEmail();
-            boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-            String name = (String) payload.get("name");
-            String pictureUrl = (String) payload.get("picture");
-            String locale = (String) payload.get("locale");
-            String familyName = (String) payload.get("family_name");
-            String givenName = (String) payload.get("given_name");
-            String token = jwtService.getJWTToken("lol");
-            return new ResponseEntity<>(token, HttpStatus.OK);
-        }
-        logger.log(Level.WARNING,"User id token is null");
-        return new ResponseEntity<>("FORBIDDEN", HttpStatus.FORBIDDEN);
+        jsonObject.put("access_token",accessToken);
+        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
     }
 
     @PostMapping("hello")

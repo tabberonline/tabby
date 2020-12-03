@@ -1,21 +1,18 @@
 package com.tabber.tabby.entity;
 
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import java.util.Date;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder(toBuilder = true)
 @Table(name = "users")
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
+@Builder(toBuilder = true)
 public class UserEntity {
 
     @Id
