@@ -4,7 +4,9 @@ import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.respository.UserRepository;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
