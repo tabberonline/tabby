@@ -1,46 +1,35 @@
 package com.tabber.tabby.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.util.Date;
-import java.util.Set;
 
 @Data
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "websites")
 @Builder(toBuilder = true)
-public class UserEntity {
-
+public class WebsiteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "user_id")
-    private Long userId;
+    @Column(name = "id")
+    private Integer websiteId;
 
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "sub")
-    private String sub;
+    @Column(name = "deep_link")
+    private String deepLink;
 
     @Column(name = "picture_url")
     private String pictureUrl;
 
-    @Column(name = "locale")
-    private String locale;
-
-    @Column(name = "portfolio_present")
-    private Boolean portfolioPresent;
-
-    @OneToMany
-    @JoinColumn(name="user_id", referencedColumnName="user_id")
-    private Set<RankWidgetEntity> rankWidgets;
+    @Column(name = "name")
+    private String name;
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -51,4 +40,5 @@ public class UserEntity {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
 }

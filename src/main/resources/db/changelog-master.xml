@@ -8,4 +8,6 @@
     http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
     http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-3.8.xsd ">
     <include file="db/migrations/001_create_users_table.xml"/>
+    <include file="db/migrations/002_create_websites_table.xml"/>
+    <include file="db/migrations/003_create_rank_widgets.xml"/>
 </databaseChangeLog>
