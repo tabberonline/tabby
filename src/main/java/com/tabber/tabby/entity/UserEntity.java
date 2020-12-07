@@ -37,9 +37,9 @@ public class UserEntity {
     @Column(name = "portfolio_present")
     private Boolean portfolioPresent;
 
-//    @OneToMany(cascade=CascadeType.ALL)
-//    @JoinColumn(name = "fk_user_id")
-//    private Set<RankWidgetEntity> rankWidgets=new HashSet<RankWidgetEntity>();
+    @OneToMany
+    @JoinColumn(name = "widget_user_id",referencedColumnName = "user_id")
+    private List<RankWidgetEntity> rankWidgets;
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)

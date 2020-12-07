@@ -1,9 +1,6 @@
 package com.tabber.tabby.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -14,18 +11,19 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "users")
+@Table(name = "rank_widgets")
 @Builder(toBuilder = true)
 public class RankWidgetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+
     @Column(name = "id")
     private Long rankWidgetId;
 
     @Column(name = "website_id")
     private Integer websiteId;
 
-    @Column(name = "user_id")
+    @Column(name = "widget_user_id")
     private Long userId;
 
     @Column(name = "rank")

@@ -6,9 +6,7 @@
     <changeSet author="mandeep.sidhu2@gmail.com" id="003_001_create_rank_widgets_table">
         <createTable tableName="rank_widgets">
             <column name="id" type="BIGINT" />
-            <column name="user_id" type="BIGINT" >
-                <constraints nullable="false" foreignKeyName="fk_user_id" references="users(user_id)"/>
-            </column>
+            <column name="widget_user_id" type="BIGINT" />
             <column name="website_id" type="INT" />
             <column name="rank" type="INT" />
             <column name="website_username" type="VARCHAR"/>
