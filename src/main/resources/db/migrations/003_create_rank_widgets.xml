@@ -3,10 +3,12 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="mandeep.sidhu2@gmail.com" id="002_001_create_websites_table">
+    <changeSet author="mandeep.sidhu2@gmail.com" id="003_001_create_rank_widgets_table">
         <createTable tableName="rank_widgets">
             <column name="id" type="BIGINT" />
-            <column name="user_id" type="BIGINT" />
+            <column name="user_id" type="BIGINT" >
+                <constraints nullable="false" foreignKeyName="fk_user_id" references="users(user_id)"/>
+            </column>
             <column name="website_id" type="INT" />
             <column name="rank" type="INT" />
             <column name="website_username" type="VARCHAR"/>

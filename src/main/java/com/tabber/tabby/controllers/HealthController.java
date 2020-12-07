@@ -25,17 +25,17 @@ public class HealthController {
 
     @RequestMapping(value = "/ping", method =RequestMethod.GET)
     public ResponseEntity<String> ping(){
-        UserEntity userEntity=userRepository.getTopByUserId(3l);
-        Set<RankWidgetEntity> rankWidgetEntities1 = userEntity.getRankWidgets();
-        RankWidgetEntity rankWidgetEntity = new RankWidgetEntity()
-                .toBuilder()
-                .rank(2)
-                .userId(3l)
-                .websiteId(2)
-                .websiteUsername("fewf")
-                .build();
-        rankWidgetRepository.saveAndFlush(rankWidgetEntity);
-        Set<RankWidgetEntity> rankWidgetEntities2 = userEntity.getRankWidgets();
+//        UserEntity userEntity=userRepository.getTopByUserId(3l);
+//        Set<RankWidgetEntity> rankWidgetEntities1 = userEntity.getRankWidgets();
+//        RankWidgetEntity rankWidgetEntity = new RankWidgetEntity()
+//                .toBuilder()
+//                .rank(2)
+//                .userId(3l)
+//                .websiteId(2)
+//                .websiteUsername("fewf")
+//                .build();
+//        rankWidgetRepository.saveAndFlush(rankWidgetEntity);
+//        Set<RankWidgetEntity> rankWidgetEntities2 = userEntity.getRankWidgets();
         return new ResponseEntity<>("Pong", HttpStatus.OK);
     }
 

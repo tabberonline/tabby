@@ -4,8 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
 
 @Data
 @Entity
@@ -38,9 +37,9 @@ public class UserEntity {
     @Column(name = "portfolio_present")
     private Boolean portfolioPresent;
 
-    @OneToMany
-    @JoinColumn(name="user_id", referencedColumnName="user_id")
-    private Set<RankWidgetEntity> rankWidgets;
+//    @OneToMany(cascade=CascadeType.ALL)
+//    @JoinColumn(name = "fk_user_id")
+//    private Set<RankWidgetEntity> rankWidgets=new HashSet<RankWidgetEntity>();
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
