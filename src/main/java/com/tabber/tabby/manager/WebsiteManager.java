@@ -14,7 +14,7 @@ public class WebsiteManager {
     @Autowired
     WebsiteRepository websiteRepository;
 
-    @Cacheable(value = TabbyConstants.WEBSITE,key="#websiteId", unless="#result == null")
+    @Cacheable(value = TabbyConstants.WEBSITE,key="#websiteId.toString()")
     public WebsiteEntity findWebsiteById(Integer websiteId){
         if(websiteId==null)
             return null;

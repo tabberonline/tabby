@@ -3,6 +3,7 @@ package com.tabber.tabby.controllers;
 import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.entity.WebsiteEntity;
+import com.tabber.tabby.manager.RedisServiceManager;
 import com.tabber.tabby.manager.WebsiteManager;
 import com.tabber.tabby.respository.RankWidgetRepository;
 import com.tabber.tabby.respository.UserRepository;
@@ -29,6 +30,8 @@ public class HealthController {
 //    RankWidgetRepository rankWidgetRepository;
 
     @Autowired
+    RedisServiceManager redisServiceManager;
+    @Autowired
     WebsiteService websiteService;
 
     @Autowired
@@ -38,6 +41,8 @@ public class HealthController {
     WebsiteRepository websiteRepository;
     @RequestMapping(value = "/ping", method =RequestMethod.GET)
     public ResponseEntity<String> ping(){
+        redisServiceManager.setWithExpiry("q1","q2",600);
+        String a=redisServiceManager.getValueForKey("q1");
 //        UserEntity userEntity=userRepository.getTopByUserId(1l);
 //        List<RankWidgetEntity> rankWidgetEntities1 = userEntity.getRankWidgets();
 //        RankWidgetEntity rankWidgetEntity = new RankWidgetEntity()

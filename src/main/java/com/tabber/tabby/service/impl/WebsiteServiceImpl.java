@@ -20,22 +20,15 @@ public class WebsiteServiceImpl implements WebsiteService {
 
     private static final Logger logger = Logger.getLogger(WebsiteServiceImpl.class.getName());
 
-    @Cacheable(value = TabbyConstants.WEBSITE,key="#websiteId")
-    public String findWebsiteById(Integer websiteId){
-
-        return "websiteRepository.getTopById(websiteId)";
-    }
-
     @Override
     public WebsiteEntity getWebsiteById(Integer websiteId){
-//        WebsiteEntity websiteEntity = null;
-//        try{
-     //       websiteEntity = websiteManager.findWebsiteById(websiteId);
-//        }
-//        catch (Exception ex){
-//            logger.log(Level.INFO,"Cannot get website due to error: {}",ex.toString());
-//        }
-//        return websiteEntity;
-        return websiteManager.findWebsiteById(websiteId);
+        WebsiteEntity websiteEntity = null;
+        try{
+            websiteEntity = websiteManager.findWebsiteById(websiteId);
+        }
+        catch (Exception ex){
+            logger.log(Level.INFO,"Cannot get website due to error: {}",ex.toString());
+        }
+        return websiteEntity;
     }
 }
