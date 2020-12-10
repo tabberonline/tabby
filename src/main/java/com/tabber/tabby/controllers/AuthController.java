@@ -1,5 +1,6 @@
 package com.tabber.tabby.controllers;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.tabber.tabby.exceptions.UnauthorisedException;
 import com.tabber.tabby.service.AuthService;
 import org.json.JSONObject;
@@ -7,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,19 +23,19 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("login")
-    public ResponseEntity<JSONObject> login(@RequestParam String idTokenString) throws UnauthorisedException {
+    public ResponseEntity<Map<String, String>> login(@RequestParam String idTokenString) throws UnauthorisedException {
         String accessToken = null;
-        JSONObject jsonObject = new JSONObject();
+        HashMap<String, String> map = new HashMap<>();
         try {
             accessToken = authService.login(idTokenString);
         }
         catch (Exception ex){
             logger.log(Level.WARNING,"Unable to verify user for identity token :{}",idTokenString.concat("for token ").concat(ex.toString()));
-            jsonObject.put("response","Forbidden");
-            return new ResponseEntity<JSONObject>(jsonObject, HttpStatus.FORBIDDEN);
+            map.put("response","Forbidden");
+            return new ResponseEntity<>(map, HttpStatus.FORBIDDEN);
         }
-        jsonObject.put("access_token",accessToken);
-        return new ResponseEntity<>(jsonObject, HttpStatus.OK);
+        map.put("access_token",accessToken);
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
     @PostMapping("hello")
