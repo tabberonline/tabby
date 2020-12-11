@@ -3,19 +3,21 @@
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
                    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.5.xsd">
-    <changeSet author="mandeep.sidhu2@gmail.com" id="003_001_create_rank_widgets_table">
-        <createTable tableName="rank_widgets">
-            <column name="id" type="BIGINT" />
+    <changeSet author="mandeep.sidhu2@gmail.com" id="005_001_create_contest_widgets_table">
+        <createTable tableName="contest_widgets">
+            <column name="id" type="BIGINT"/>
             <column name="website_id" type="INT" />
             <column name="rank" type="INT" />
             <column name="website_username" type="VARCHAR"/>
+            <column name="contest_name" type="VARCHAR"/>
             <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
             <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
         </createTable>
     </changeSet>
-    <changeSet author="mandeep.sidhu2@gmail.com" id="003_002_notNullConstraint_rank_widget">
-        <addNotNullConstraint schemaName="public" tableName="rank_widgets" columnName="website_id" columnDataType="INT" />
-        <addNotNullConstraint schemaName="public" tableName="rank_widgets" columnName="rank" columnDataType="INT" />
-        <addNotNullConstraint schemaName="public" tableName="rank_widgets" columnName="website_username" columnDataType="VARCHAR" />
+    <changeSet author="mandeep.sidhu2@gmail.com" id="005_002_notNullConstraint_contest_widget">
+        <addNotNullConstraint schemaName="public" tableName="contest_widgets" columnName="website_id" columnDataType="INT" />
+        <addNotNullConstraint schemaName="public" tableName="contest_widgets" columnName="rank" columnDataType="INT" />
+        <addNotNullConstraint schemaName="public" tableName="contest_widgets" columnName="website_username" columnDataType="VARCHAR" />
+        <addNotNullConstraint schemaName="public" tableName="contest_widgets" columnName="contest_name" columnDataType="VARCHAR" />
     </changeSet>
 </databaseChangeLog>

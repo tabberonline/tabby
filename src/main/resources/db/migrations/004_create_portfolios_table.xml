@@ -12,4 +12,8 @@
             <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
         </createTable>
     </changeSet>
+    <changeSet author="mandeep.sidhu2@gmail.com" id="004_002_notNullConstraint_portfolios">
+        <addNotNullConstraint schemaName="public" tableName="portfolios" columnName="title" columnDataType="VARCHAR" />
+        <addNotNullConstraint schemaName="public" tableName="portfolios" columnName="description" columnDataType="VARCHAR" />
+    </changeSet>
 </databaseChangeLog>

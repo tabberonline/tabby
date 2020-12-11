@@ -19,7 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping(value = URIEndpoints.WIDGET)
+@RequestMapping(value = URIEndpoints.RANK_WIDGET)
 public class RankWidgetController {
 
     private static final Logger logger = Logger.getLogger(RankWidgetController.class.getName());
