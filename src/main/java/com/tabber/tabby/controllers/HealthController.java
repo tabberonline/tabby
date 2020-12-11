@@ -15,6 +15,7 @@ import com.tabber.tabby.service.WebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -51,24 +52,26 @@ public class HealthController {
     UserRepository userRepository;
     @GetMapping(value = "ping")
     public ResponseEntity<String> ping(){
-        UserEntity userEntity=userService.getUserFromEmail("mandeep.sidhu2@gmail.com");
-        List<RankWidgetEntity> rankWidgetEntities = userEntity.getRankWidgets();
-        RankWidgetEntity rankWidgetEntity=new RankWidgetEntity().toBuilder()
-                .rank(2)
-                .websiteId(1)
-                .userId(userEntity.getUserId())
-                .build();
-        rankWidgetRepository.save(rankWidgetEntity);
-        UserEntity userEntity1=userService.getUserFromEmail("mandeep.sidhu2@gmail.com");
-//            PortfolioEntity portfolioEntity = new PortfolioEntity().toBuilder().title("we").description("efef").build();
-       PortfolioEntity portfolioEntity=
-               new PortfolioEntity().toBuilder().title("we").
-                       user(userEntity)
-                       .description("efef").build();
-       portfolioRepository.saveAndFlush(portfolioEntity);
-    //    userEntity1.setPortfolio(portfolioEntity);
-       // userService.save(userEntity1);
-         userEntity1=userService.getUserFromEmail("mandeep.sidhu2@gmail.com");
+        String sub=SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        UserEntity userEntity=userRepository.getTopBySub(sub);
+//        UserEntity userEntity=userService.getUserFromEmail("mandeep.sidhu2@gmail.com");
+//        List<RankWidgetEntity> rankWidgetEntities = userEntity.getRankWidgets();
+//        RankWidgetEntity rankWidgetEntity=new RankWidgetEntity().toBuilder()
+//                .rank(2)
+//                .websiteId(1)
+//                .userId(userEntity.getUserId())
+//                .build();
+//        rankWidgetRepository.save(rankWidgetEntity);
+//        UserEntity userEntity1=userService.getUserFromEmail("mandeep.sidhu2@gmail.com");
+////            PortfolioEntity portfolioEntity = new PortfolioEntity().toBuilder().title("we").description("efef").build();
+//       PortfolioEntity portfolioEntity=
+//               new PortfolioEntity().toBuilder().title("we").
+//                       user(userEntity)
+//                       .description("efef").build();
+//       portfolioRepository.saveAndFlush(portfolioEntity);
+//    //    userEntity1.setPortfolio(portfolioEntity);
+//       // userService.save(userEntity1);
+//         userEntity1=userService.getUserFromEmail("mandeep.sidhu2@gmail.com");
         return new ResponseEntity<>("Pong", HttpStatus.OK);
     }
 

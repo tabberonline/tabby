@@ -47,7 +47,8 @@ public class AuthServiceImpl implements AuthService {
             throw new UnauthorisedException("Id token is null");
 
         logger.log(Level.INFO,"User Info :{}",payload);
-        UserEntity userEntity = userService.getUserFromEmail(payload.getEmail());
+        UserEntity userEntity = userService.getUserFromSub(payload.getSubject());
+        Long userId ;
         if(userEntity == null) {
             userEntity = new UserEntity()
                     .toBuilder()
@@ -58,9 +59,12 @@ public class AuthServiceImpl implements AuthService {
                     .name((String) payload.get("name"))
                     .portfolioPresent(false)
                     .build();
-            userService.save(userEntity);
+            userId = userService.save(userEntity);
         }
-        String token = jwtService.getJWTToken(userEntity.getSub());
+        else {
+            userId = userEntity.getUserId();
+        }
+        String token = jwtService.getJWTToken(userEntity.getSub(),userId,payload.getEmail());
         return token;
     }
 }
