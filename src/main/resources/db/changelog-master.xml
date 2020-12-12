@@ -10,4 +10,6 @@
     <include file="db/migrations/001_create_users_table.xml"/>
     <include file="db/migrations/002_create_websites_table.xml"/>
     <include file="db/migrations/003_create_rank_widgets.xml"/>
+    <include file="db/migrations/004_create_portfolios_table.xml"/>
+    <include file="db/migrations/005_create_contest_widget.xml"/>
 </databaseChangeLog>

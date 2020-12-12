@@ -12,13 +12,13 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "rank_widgets")
+@Table(name = "contest_widgets")
 @Builder(toBuilder = true)
-public class RankWidgetEntity {
+public class ContestWidgetEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long rankWidgetId;
+    private Long contestWidgetId;
 
     @Column(name = "website_id")
     private Integer websiteId;
@@ -26,10 +26,13 @@ public class RankWidgetEntity {
     @Column(name = "rank")
     private Integer rank;
 
+    @Column(name = "contest_name")
+    private String contestName;
+
     @Column(name = "website_username")
     private String websiteUsername;
 
-    @Column(name ="rank_widget_user_id")
+    @Column(name ="contest_widget_user_id")
     private Long userId;
 
     @Column(name="created_at")

@@ -38,8 +38,15 @@ public class UserEntity {
     private Boolean portfolioPresent;
 
     @OneToMany
-    @JoinColumn(name = "widget_user_id",referencedColumnName = "user_id")
+    @JoinColumn(name = "rank_widget_user_id")
     private List<RankWidgetEntity> rankWidgets;
+
+    @OneToMany
+    @JoinColumn(name = "contest_widget_user_id")
+    private List<ContestWidgetEntity> contestWidgets;
+
+    @OneToOne(mappedBy = "user")
+    private PortfolioEntity portfolio;
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)

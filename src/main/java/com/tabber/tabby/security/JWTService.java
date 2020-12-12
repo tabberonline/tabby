@@ -1,6 +1,8 @@
 package com.tabber.tabby.security;
 
 import com.tabber.tabby.constants.AuthConstants;
+import com.tabber.tabby.constants.TabbyConstants;
+import com.tabber.tabby.enums.UserRoles;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.GrantedAuthority;
@@ -13,14 +15,18 @@ import java.util.stream.Collectors;
 
 @Service
 public class JWTService {
-    public String getJWTToken(String username) {
+    public String getJWTToken(String sub,Long userId,String email) {
+        UserRoles userRole = UserRoles.USER;
+        if(TabbyConstants.admins.contains(email)){
+            userRole = UserRoles.ADMIN;
+        }
         List<GrantedAuthority> grantedAuthorities = AuthorityUtils
-                .commaSeparatedStringToAuthorityList("ROLE_USER");
+                .commaSeparatedStringToAuthorityList(userRole.name());
 
         String token = Jwts
                 .builder()
-                .setId("softtekJWT")
-                .setSubject(username)
+                .setId(sub)
+                .setSubject(userId.toString())
                 .claim("authorities",
                         grantedAuthorities.stream()
                                 .map(GrantedAuthority::getAuthority)

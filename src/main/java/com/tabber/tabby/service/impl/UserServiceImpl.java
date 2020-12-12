@@ -12,14 +12,20 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Override
-    public void save(UserEntity userEntity){
-        if(userEntity==null) return;
+    public Long save(UserEntity userEntity){
+        if(userEntity==null) return null;
         userRepository.saveAndFlush(userEntity);
+        return userEntity.getUserId();
     }
 
     @Override
     public UserEntity getUserFromUserId(Long userId){
         return userRepository.getTopByUserId(userId);
+    }
+
+    @Override
+    public UserEntity getUserFromSub(String sub){
+        return userRepository.getTopBySub(sub);
     }
 
     @Override

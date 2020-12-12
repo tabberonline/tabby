@@ -12,25 +12,23 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "rank_widgets")
+@Table(name = "portfolios")
 @Builder(toBuilder = true)
-public class RankWidgetEntity {
+public class PortfolioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    private Long rankWidgetId;
+    private Long portfolioId;
 
-    @Column(name = "website_id")
-    private Integer websiteId;
+    @Column(name = "title")
+    private String title;
 
-    @Column(name = "rank")
-    private Integer rank;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "portfolio_user_id")
+    private UserEntity user;
 
-    @Column(name = "website_username")
-    private String websiteUsername;
-
-    @Column(name ="rank_widget_user_id")
-    private Long userId;
+    @Column(name = "description")
+    private String description;
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
