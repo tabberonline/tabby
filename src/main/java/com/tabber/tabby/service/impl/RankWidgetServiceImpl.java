@@ -53,6 +53,17 @@ public class RankWidgetServiceImpl implements RankWidgetService {
         return rankWidget;
     }
 
+    @Override
+    public RankWidgetEntity deleteRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetNotExistsException{
+        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userId,rankWidgetRequest);
+        if(rankWidget==null){
+            throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
+        }
+        rankWidgetRepository.delete(rankWidget);
+        return rankWidget;
+    }
+
+
     private RankWidgetEntity rankWidgetExistsForWebsite(Long userId,RankWidgetRequest rankWidgetRequest){
         UserEntity userEntity = userService.getUserFromUserId(userId);
         List<RankWidgetEntity> rankWidgetEntities = userEntity.getRankWidgets();

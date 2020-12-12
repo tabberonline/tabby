@@ -46,11 +46,27 @@ public class RankWidgetController {
     @PutMapping(value = URIEndpoints.UPDATE_WIDGET,produces = "application/json")
     public ResponseEntity<RankWidgetEntity>  updateRankWidget(
             @RequestBody RankWidgetRequest rankWidgetRequest) throws RankWidgetNotExistsException {
-        logger.log(Level.INFO,"Update widget request for rank widget",rankWidgetRequest);
+        logger.log(Level.INFO,"Update widget request for rank widget:{}",rankWidgetRequest);
         RankWidgetEntity rankWidgetEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             rankWidgetEntity = rankWidgetService.updateRankWidget(rankWidgetRequest,userId);
+        }
+        catch (Exception ex){
+            logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
+            throw ex;
+        }
+        return new ResponseEntity<>(rankWidgetEntity, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = URIEndpoints.DELETE_WIDGET,produces = "application/json")
+    public ResponseEntity<RankWidgetEntity>  deleteRankWidget(
+            @RequestBody RankWidgetRequest rankWidgetRequest) throws RankWidgetNotExistsException {
+        logger.log(Level.INFO,"Delete widget request for rank widget:{}",rankWidgetRequest);
+        RankWidgetEntity rankWidgetEntity = null;
+        try {
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            rankWidgetEntity = rankWidgetService.deleteRankWidget(rankWidgetRequest,userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
