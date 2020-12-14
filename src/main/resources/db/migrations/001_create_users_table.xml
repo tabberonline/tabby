@@ -11,7 +11,7 @@
             <column name="name" type="VARCHAR" />
             <column name="email" type="VARCHAR" />
             <column name="picture_url" type="VARCHAR" />
-            <column name="portfolio_present" type="BOOLEAN" />
+            <column name="resume_present" type="BOOLEAN" />
             <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
             <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
         </createTable>

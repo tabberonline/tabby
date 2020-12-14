@@ -8,4 +8,5 @@ public interface UserService {
     UserEntity getUserFromUserId(Long userId);
     UserEntity getUserFromSub(String sub);
     UserEntity getUserFromEmail(String email);
+    Boolean setResumePresent(UserEntity userEntity);
 }

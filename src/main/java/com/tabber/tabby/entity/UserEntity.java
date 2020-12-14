@@ -34,8 +34,8 @@ public class UserEntity {
     @Column(name = "locale")
     private String locale;
 
-    @Column(name = "portfolio_present")
-    private Boolean portfolioPresent;
+    @Column(name = "resume_present")
+    private Boolean resumePresent;
 
     @OneToMany
     @JoinColumn(name = "rank_widget_user_id")

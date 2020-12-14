@@ -24,7 +24,8 @@ public class RankWidgetServiceImpl implements RankWidgetService {
 
     @Override
     public RankWidgetEntity createRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetExistsException {
-        if(rankWidgetExistsForWebsite(userId,rankWidgetRequest)!=null){
+        UserEntity userEntity = userService.getUserFromUserId(userId);
+        if(rankWidgetExistsForWebsite(userEntity,rankWidgetRequest)!=null){
             throw new RankWidgetExistsException("Exists for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
         RankWidgetEntity rankWidgetEntity = new RankWidgetEntity()
@@ -35,12 +36,14 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .userId(userId)
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidgetEntity);
+        userService.setResumePresent(userEntity);
         return rankWidgetEntity;
     }
 
     @Override
     public RankWidgetEntity updateRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetNotExistsException{
-        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userId,rankWidgetRequest);
+        UserEntity userEntity = userService.getUserFromUserId(userId);
+        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userEntity,rankWidgetRequest);
         if(rankWidget==null){
             throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
@@ -55,17 +58,18 @@ public class RankWidgetServiceImpl implements RankWidgetService {
 
     @Override
     public RankWidgetEntity deleteRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetNotExistsException{
-        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userId,rankWidgetRequest);
+        UserEntity userEntity = userService.getUserFromUserId(userId);
+        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userEntity,rankWidgetRequest);
         if(rankWidget==null){
             throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
         rankWidgetRepository.delete(rankWidget);
+        userService.setResumePresent(userEntity);
         return rankWidget;
     }
 
 
-    private RankWidgetEntity rankWidgetExistsForWebsite(Long userId,RankWidgetRequest rankWidgetRequest){
-        UserEntity userEntity = userService.getUserFromUserId(userId);
+    private RankWidgetEntity rankWidgetExistsForWebsite(UserEntity userEntity,RankWidgetRequest rankWidgetRequest){
         List<RankWidgetEntity> rankWidgetEntities = userEntity.getRankWidgets();
         for(RankWidgetEntity rankWidget:rankWidgetEntities){
             if(rankWidget.getWebsiteId().equals(rankWidgetRequest.getWebsiteId())){

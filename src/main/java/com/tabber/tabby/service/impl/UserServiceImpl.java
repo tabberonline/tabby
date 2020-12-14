@@ -18,6 +18,7 @@ public class UserServiceImpl implements UserService {
         return userEntity.getUserId();
     }
 
+
     @Override
     public UserEntity getUserFromUserId(Long userId){
         return userRepository.getTopByUserId(userId);
@@ -31,5 +32,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity getUserFromEmail(String email){
         return userRepository.getTopByEmailId(email);
+    }
+
+    @Override
+    public Boolean setResumePresent(UserEntity userEntity){
+        if(userEntity.getPortfolio() == null && userEntity.getContestWidgets().size() == 0
+        && userEntity.getRankWidgets().size()==0 && userEntity.getResumePresent()){
+            userEntity.setResumePresent(false);
+            userRepository.saveAndFlush(userEntity);
+            return true;
+        }
+        else if(!(userEntity.getPortfolio() == null && userEntity.getContestWidgets().size() == 0
+                && userEntity.getRankWidgets().size()==0 ) && !userEntity.getResumePresent()){
+            userEntity.setResumePresent(true);
+            userRepository.saveAndFlush(userEntity);
+            return true;
+        }
+        return false;
     }
 }

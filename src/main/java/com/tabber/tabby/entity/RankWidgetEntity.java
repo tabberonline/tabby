@@ -32,6 +32,9 @@ public class RankWidgetEntity {
     @Column(name ="rank_widget_user_id")
     private Long userId;
 
+    @Column(name = "invisible")
+    private Boolean invisible = false;
+
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
