@@ -57,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
                     .pictureUrl((String) payload.get("picture"))
                     .locale((String) payload.get("locale"))
                     .name((String) payload.get("name"))
-                    .portfolioPresent(false)
+                    .resumePresent(false)
                     .build();
             userId = userService.save(userEntity);
         }

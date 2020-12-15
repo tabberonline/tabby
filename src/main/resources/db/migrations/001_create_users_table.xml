@@ -31,7 +31,7 @@
     </changeSet>
     <changeSet author="mandeep.sidhu2@gmail.com" id="001_005_notNullConstraint_users">
         <addNotNullConstraint schemaName="public" tableName="users" columnName="user_id" columnDataType="BIGINT" />
-        <addNotNullConstraint schemaName="public" tableName="users" columnName="portfolio_present" columnDataType="VARCHAR" />
+        <addNotNullConstraint schemaName="public" tableName="users" columnName="resume_present" columnDataType="VARCHAR" />
         <addNotNullConstraint schemaName="public" tableName="users" columnName="email" columnDataType="VARCHAR" />
     </changeSet>
     <changeSet author="mandeep.sidhu2@gmail.com" id="001_006_index_users">
