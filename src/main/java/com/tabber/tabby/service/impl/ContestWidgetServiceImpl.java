@@ -38,6 +38,7 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
                 .contestName(contestWidgetRequest.getContestName())
                 .build();
         contestWidgetRepository.saveAndFlush(contestWidgetEntity);
+        userEntity.getContestWidgets().add(contestWidgetEntity);
         userService.setResumePresent(userEntity);
         return contestWidgetEntity;
     }
@@ -66,6 +67,7 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
             throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestWidgetRequest.getWebsiteId());
         }
         contestWidgetRepository.delete(contestWidget);
+        userEntity.getContestWidgets().remove(contestWidget);
         userService.setResumePresent(userEntity);
         return contestWidget;
     }

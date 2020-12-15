@@ -10,7 +10,6 @@ import com.tabber.tabby.service.RankWidgetService;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -36,6 +35,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .userId(userId)
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidgetEntity);
+        userEntity.getRankWidgets().add(rankWidgetEntity);
         userService.setResumePresent(userEntity);
         return rankWidgetEntity;
     }
@@ -64,6 +64,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
             throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
         rankWidgetRepository.delete(rankWidget);
+        userEntity.getRankWidgets().remove(rankWidget);
         userService.setResumePresent(userEntity);
         return rankWidget;
     }
