@@ -25,7 +25,7 @@ public class ContestWidgetController {
     @Autowired
     ContestWidgetService contestWidgetService;
 
-    @PostMapping(value = URIEndpoints.CREATE_WIDGET,produces = "application/json")
+    @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<ContestWidgetEntity> createRankWidget(
             @RequestBody @Validated ContestWidgetRequest contestWidgetRequest) throws ContestWidgetExistsException {
         logger.log(Level.INFO,"Create widget request for contest widget",contestWidgetRequest);
@@ -41,7 +41,7 @@ public class ContestWidgetController {
         return new ResponseEntity<>(contestWidgetEntity, HttpStatus.OK);
     }
 
-    @PutMapping(value = URIEndpoints.UPDATE_WIDGET,produces = "application/json")
+    @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
     public ResponseEntity<ContestWidgetEntity>  updateRankWidget(
             @RequestBody ContestWidgetRequest contestWidgetRequest) throws ContestWidgetNotExistsException {
         logger.log(Level.INFO,"Update widget request for rank widget",contestWidgetRequest);

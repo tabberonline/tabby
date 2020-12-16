@@ -27,7 +27,7 @@ public class RankWidgetController {
     @Autowired
     RankWidgetService rankWidgetService;
 
-    @PostMapping(value = URIEndpoints.CREATE_WIDGET,produces = "application/json")
+    @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<RankWidgetEntity> createRankWidget(
             @RequestBody @Validated RankWidgetRequest rankWidgetRequest) throws RankWidgetExistsException {
         logger.log(Level.INFO,"Create widget request for rank widget",rankWidgetRequest);
@@ -43,7 +43,7 @@ public class RankWidgetController {
         return new ResponseEntity<>(rankWidgetEntity, HttpStatus.OK);
     }
 
-    @PutMapping(value = URIEndpoints.UPDATE_WIDGET,produces = "application/json")
+    @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
     public ResponseEntity<RankWidgetEntity>  updateRankWidget(
             @RequestBody RankWidgetRequest rankWidgetRequest) throws RankWidgetNotExistsException {
         logger.log(Level.INFO,"Update widget request for rank widget:{}",rankWidgetRequest);
@@ -59,7 +59,7 @@ public class RankWidgetController {
         return new ResponseEntity<>(rankWidgetEntity, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = URIEndpoints.DELETE_WIDGET,produces = "application/json")
+    @DeleteMapping(value = URIEndpoints.DELETE,produces = "application/json")
     public ResponseEntity<RankWidgetEntity>  deleteRankWidget(
             @RequestBody RankWidgetRequest rankWidgetRequest) throws RankWidgetNotExistsException {
         logger.log(Level.INFO,"Delete widget request for rank widget:{}",rankWidgetRequest);
