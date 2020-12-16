@@ -1,1 +1,1 @@
-web: java -jar -Dspring.profiles.active=prod target/tabby-0.0.1-SNAPSHOT.jar
+web: java -jar -Dspring.profiles.active=prod target/tabby-0.0.1-SNAPSHOT.jar -Dserver.port=$PORT
