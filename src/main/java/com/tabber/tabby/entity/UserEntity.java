@@ -1,5 +1,6 @@
 package com.tabber.tabby.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -45,7 +46,8 @@ public class UserEntity {
     @JoinColumn(name = "contest_widget_user_id")
     private List<ContestWidgetEntity> contestWidgets;
 
-    @OneToOne(mappedBy = "user")
+    @JsonManagedReference
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
     private PortfolioEntity portfolio;
 
     @Column(name="created_at")
