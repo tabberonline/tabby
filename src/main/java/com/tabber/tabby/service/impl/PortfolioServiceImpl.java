@@ -33,6 +33,8 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .user(user)
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
+        user.setPortfolio(portfolioEntity);
+        userService.setResumePresent(user);
         return portfolioEntity;
     }
 
