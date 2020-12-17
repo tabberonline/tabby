@@ -17,8 +17,8 @@ import java.util.*;
 public class UserEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonProperty("user_id")
     private Long userId;
 

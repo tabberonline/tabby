@@ -19,9 +19,9 @@ import java.util.Date;
 @Builder(toBuilder = true)
 public class PortfolioEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     @JsonProperty("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long portfolioId;
 
     @Column(name = "title")

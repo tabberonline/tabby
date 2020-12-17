@@ -17,9 +17,9 @@ import java.util.Date;
 @Builder(toBuilder = true)
 public class ContestWidgetEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     @JsonProperty("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contestWidgetId;
 
     @Column(name = "website_id")

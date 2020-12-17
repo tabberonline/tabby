@@ -11,4 +11,8 @@
             <column name="value" type="JSONB" />
         </createTable>
     </changeSet>
+    <changeSet author="mandeep.sidhu2@gmail.com" id="006_002_add_auto_incrementing">
+        <addAutoIncrement columnDataType="INT" columnName="id" incrementBy="1"
+                          schemaName="public" startWith="0" tableName="frontend_configurations"/>
+    </changeSet>
 </databaseChangeLog>

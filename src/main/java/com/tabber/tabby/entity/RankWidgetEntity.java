@@ -17,9 +17,9 @@ import java.util.Date;
 @Builder(toBuilder = true)
 public class RankWidgetEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     @JsonProperty("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long rankWidgetId;
 
     @Column(name = "website_id")

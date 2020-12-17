@@ -19,9 +19,9 @@ import javax.persistence.*;
 @TypeDef(name = "jsonb-node", typeClass = JsonNodeBinaryType.class)
 public class FrontendConfigurationEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     @JsonProperty("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "page_type")

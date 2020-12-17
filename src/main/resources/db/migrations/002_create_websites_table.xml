@@ -13,4 +13,8 @@
             <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
         </createTable>
     </changeSet>
+    <changeSet author="mandeep.sidhu2@gmail.com" id="002_002_add_auto_incrementing">
+        <addAutoIncrement columnDataType="INT" columnName="id" incrementBy="1"
+                          schemaName="public" startWith="0" tableName="websites"/>
+    </changeSet>
 </databaseChangeLog>

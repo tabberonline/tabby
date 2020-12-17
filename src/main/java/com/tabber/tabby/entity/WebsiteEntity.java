@@ -19,9 +19,9 @@ import java.util.Date;
 @Builder(toBuilder = true)
 public class WebsiteEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     @JsonProperty("id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer websiteId;
 
     @Column(name = "deep_link")

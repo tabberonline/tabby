@@ -21,4 +21,8 @@
         <addNotNullConstraint schemaName="public" tableName="contest_widgets" columnName="website_username" columnDataType="VARCHAR" />
         <addNotNullConstraint schemaName="public" tableName="contest_widgets" columnName="contest_name" columnDataType="VARCHAR" />
     </changeSet>
+    <changeSet author="mandeep.sidhu2@gmail.com" id="005_003_add_auto_incrementing">
+        <addAutoIncrement columnDataType="BIGINT" columnName="id" incrementBy="1"
+                          schemaName="public" startWith="0" tableName="contest_widgets"/>
+    </changeSet>
 </databaseChangeLog>
