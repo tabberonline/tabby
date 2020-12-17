@@ -2,8 +2,12 @@ package com.tabber.tabby.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
 import lombok.*;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
+
 import javax.persistence.*;
 
 @Getter
@@ -13,6 +17,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Table(name = "frontend_configurations")
 @Builder(toBuilder = true)
+@TypeDef(name = "jsonb-node", typeClass = JsonNodeBinaryType.class)
 public class FrontendConfigurationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,11 +30,11 @@ public class FrontendConfigurationEntity {
     private String pageType;
 
     @JsonProperty("key")
-    @Type(type = "jsonb")
-    @Column(name = "key",columnDefinition = "jsonb")
+    @Column(name = "key")
     private String key;
 
-    @Column(name = "value")
+    @Column(name = "value",columnDefinition = "jsonb")
+    @Type(type = "jsonb-node")
     @JsonProperty("value")
     private JsonNode value;
 

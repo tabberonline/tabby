@@ -17,7 +17,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
-                .antMatchers(HttpMethod.POST,"/test").hasAuthority("ADMIN")
+                .antMatchers(HttpMethod.POST,"/admin").hasAuthority("ADMIN")
                 .anyRequest().authenticated();
     }
 }
