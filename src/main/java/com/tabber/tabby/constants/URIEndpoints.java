@@ -4,6 +4,7 @@ public interface URIEndpoints {
     String RANK_WIDGET = "/rankwidget";
     String CONTEST_WIDGET = "/contestwidget";
     String USER = "/user";
+    String USER_INFO = "/info";
     String RESUME = "/resume";
     String PORTFOLIO = "/portfolio";
     String CREATE = "/create";

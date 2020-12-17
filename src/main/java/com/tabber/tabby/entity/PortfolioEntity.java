@@ -2,6 +2,7 @@ package com.tabber.tabby.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -20,26 +21,32 @@ public class PortfolioEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @JsonProperty("id")
     private Long portfolioId;
 
     @Column(name = "title")
+    @JsonProperty("title")
     private String title;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "portfolio_user_id")
+    @JsonProperty("portfolio_user_id")
     private UserEntity user;
 
     @Column(name = "description")
+    @JsonProperty("description")
     private String description;
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @JsonProperty("created_at")
     private Date createdAt;
 
     @Column(name="updated_at")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("updated_at")
     private Date updatedAt;
 }

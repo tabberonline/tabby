@@ -1,5 +1,6 @@
 package com.tabber.tabby.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,25 +21,31 @@ public class WebsiteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @JsonProperty("id")
     private Integer websiteId;
 
     @Column(name = "deep_link")
+    @JsonProperty("deep_link")
     private String deepLink;
 
     @Column(name = "picture_url")
+    @JsonProperty("picture_url")
     private String pictureUrl;
 
     @Column(name = "name")
+    @JsonProperty("name")
     private String name;
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
+    @JsonProperty("created_at")
     private Date createdAt;
 
     @Column(name="updated_at")
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
+    @JsonProperty("updated_at")
     private Date updatedAt;
 
 }
