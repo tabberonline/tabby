@@ -16,4 +16,8 @@
         <addNotNullConstraint schemaName="public" tableName="portfolios" columnName="title" columnDataType="VARCHAR" />
         <addNotNullConstraint schemaName="public" tableName="portfolios" columnName="description" columnDataType="VARCHAR" />
     </changeSet>
+    <changeSet author="mandeep.sidhu2@gmail.com" id="004_003_add_auto_incrementing">
+        <addAutoIncrement columnDataType="BIGINT" columnName="id" incrementBy="1"
+                          schemaName="public" startWith="0" tableName="portfolios"/>
+    </changeSet>
 </databaseChangeLog>

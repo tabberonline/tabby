@@ -19,4 +19,8 @@
         <addNotNullConstraint schemaName="public" tableName="rank_widgets" columnName="rank" columnDataType="INT" />
         <addNotNullConstraint schemaName="public" tableName="rank_widgets" columnName="website_username" columnDataType="VARCHAR" />
     </changeSet>
+    <changeSet author="mandeep.sidhu2@gmail.com" id="003_003_add_auto_incrementing">
+        <addAutoIncrement columnDataType="BIGINT" columnName="id" incrementBy="1"
+                          schemaName="public" startWith="0" tableName="rank_widgets"/>
+    </changeSet>
 </databaseChangeLog>
