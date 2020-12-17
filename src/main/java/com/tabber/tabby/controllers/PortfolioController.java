@@ -5,8 +5,6 @@ import com.tabber.tabby.dto.PortfolioRequest;
 import com.tabber.tabby.entity.PortfolioEntity;
 import com.tabber.tabby.exceptions.PortfolioExistsException;
 import com.tabber.tabby.exceptions.PortfolioNotExistsException;
-import com.tabber.tabby.exceptions.RankWidgetExistsException;
-import com.tabber.tabby.exceptions.RankWidgetNotExistsException;
 import com.tabber.tabby.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

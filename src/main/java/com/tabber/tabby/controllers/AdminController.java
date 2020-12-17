@@ -1,23 +1,17 @@
 package com.tabber.tabby.controllers;
 
 import com.tabber.tabby.constants.URIEndpoints;
-import com.tabber.tabby.dto.PortfolioRequest;
 import com.tabber.tabby.dto.admin.FrontendConfigRequest;
 import com.tabber.tabby.entity.FrontendConfigurationEntity;
-import com.tabber.tabby.entity.PortfolioEntity;
 import com.tabber.tabby.exceptions.FrontendConfigurationExistsException;
 import com.tabber.tabby.exceptions.FrontendConfigurationNotExistsException;
-import com.tabber.tabby.exceptions.PortfolioExistsException;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.logging.Level;
 
 @RequestMapping(URIEndpoints.ADMIN)
 @RestController

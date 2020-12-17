@@ -3,14 +3,12 @@ package com.tabber.tabby.controllers;
 import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.UserBasicRespone;
 import com.tabber.tabby.entity.UserEntity;
-import com.tabber.tabby.exceptions.RankWidgetExistsException;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
