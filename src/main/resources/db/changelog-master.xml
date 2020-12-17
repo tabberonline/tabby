@@ -12,4 +12,5 @@
     <include file="db/migrations/003_create_rank_widgets.xml"/>
     <include file="db/migrations/004_create_portfolios_table.xml"/>
     <include file="db/migrations/005_create_contest_widget.xml"/>
+    <include file="db/migrations/006_create_frontend_configurations_table.xml"/>
 </databaseChangeLog>

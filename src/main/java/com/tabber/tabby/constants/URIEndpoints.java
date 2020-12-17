@@ -11,4 +11,13 @@ public interface URIEndpoints {
     String UPDATE = "/update";
     String DELETE = "/delete";
 
+    // admin
+    String ADMIN = "/admin";
+    String FRONTEND_CONFIG_ALL ="/fe/all";
+    String FRONTEND_CONFIG_GET ="/fe/get";
+    String FRONTEND_CONFIG_CREATE ="/fe/create";
+    String FRONTEND_CONFIG_UPDATE ="/fe/update";
+    String FRONTEND_CONFIG_DELETE ="/fe/delete";
+
+
 }
