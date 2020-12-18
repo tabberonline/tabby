@@ -74,8 +74,7 @@ public class AdminController {
     }
 
     @GetMapping(value = URIEndpoints.FRONTEND_CONFIG_ALL,produces = "application/json")
-    public ResponseEntity<List<FrontendConfigurationEntity>> getAllFeConfigurations(
-            @RequestParam(value = "page_type") String pageType,@RequestParam(value = "key") String key) {
+    public ResponseEntity<List<FrontendConfigurationEntity>> getAllFeConfigurations() {
         List<FrontendConfigurationEntity> frontendConfigurationEntities=
                 frontendConfigurationRepository.getAll();
         return new ResponseEntity<>(frontendConfigurationEntities,HttpStatus.OK);

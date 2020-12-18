@@ -60,7 +60,7 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
     }
 
     @Override
-    public ContestWidgetEntity deleteRankWidget(ContestWidgetRequest contestWidgetRequest, Long userId) throws ContestWidgetNotExistsException {
+    public ContestWidgetEntity deleteContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId) throws ContestWidgetNotExistsException {
         UserEntity userEntity = userService.getUserFromUserId(userId);
         ContestWidgetEntity contestWidget = contestWidgetExistsForWebsite(userEntity,contestWidgetRequest);
         if(contestWidget==null){

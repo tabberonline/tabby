@@ -2,9 +2,12 @@ package com.tabber.tabby.controllers;
 
 import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.ContestWidgetRequest;
+import com.tabber.tabby.dto.RankWidgetRequest;
 import com.tabber.tabby.entity.ContestWidgetEntity;
+import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.exceptions.ContestWidgetExistsException;
 import com.tabber.tabby.exceptions.ContestWidgetNotExistsException;
+import com.tabber.tabby.exceptions.RankWidgetNotExistsException;
 import com.tabber.tabby.service.ContestWidgetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +52,22 @@ public class ContestWidgetController {
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             contestWidgetEntity = contestWidgetService.updateContestWidget(contestWidgetRequest,userId);
+        }
+        catch (Exception ex){
+            logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
+            throw ex;
+        }
+        return new ResponseEntity<>(contestWidgetEntity, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = URIEndpoints.DELETE,produces = "application/json")
+    public ResponseEntity<ContestWidgetEntity>  deleteRankWidget(
+            @RequestBody ContestWidgetRequest contestWidgetRequest) throws ContestWidgetNotExistsException {
+        logger.log(Level.INFO,"Delete widget request for contest widget:{}",contestWidgetRequest);
+        ContestWidgetEntity contestWidgetEntity = null;
+        try {
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            contestWidgetEntity = contestWidgetService.deleteContestWidget(contestWidgetRequest,userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
