@@ -42,12 +42,13 @@ public class ContestWidgetController {
 
     @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
     public ResponseEntity<ContestWidgetEntity>  updateRankWidget(
-            @RequestBody ContestWidgetRequest contestWidgetRequest) throws ContestWidgetNotExistsException {
+            @RequestBody ContestWidgetRequest contestWidgetRequest,
+            @RequestParam("id") Long id) throws ContestWidgetNotExistsException {
         logger.log(Level.INFO,"Update widget request for rank widget",contestWidgetRequest);
         ContestWidgetEntity contestWidgetEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            contestWidgetEntity = contestWidgetService.updateContestWidget(contestWidgetRequest,userId);
+            contestWidgetEntity = contestWidgetService.updateContestWidget(contestWidgetRequest,id,userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());

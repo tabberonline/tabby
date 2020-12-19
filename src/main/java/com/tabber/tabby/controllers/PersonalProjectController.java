@@ -42,12 +42,13 @@ public class PersonalProjectController {
 
     @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
     public ResponseEntity<PersonalProjectEntity>  updateRankWidget(
-            @RequestBody PersonalProjectRequest personalProjectRequest) throws PersonalProjectNotExistsException {
+            @RequestBody PersonalProjectRequest personalProjectRequest,
+            @RequestParam("id") Long id) throws PersonalProjectNotExistsException {
         logger.log(Level.INFO,"Update widget request for rank widget:{}",personalProjectRequest);
         PersonalProjectEntity personalProjectEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            personalProjectEntity = personalProjectService.updatePersonalProject(personalProjectRequest,userId);
+            personalProjectEntity = personalProjectService.updatePersonalProject(personalProjectRequest,id,userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot update project due to exception: {}",ex.toString());
