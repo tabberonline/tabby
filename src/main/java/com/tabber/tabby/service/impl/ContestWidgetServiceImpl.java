@@ -3,15 +3,12 @@ package com.tabber.tabby.service.impl;
 import com.tabber.tabby.dto.ContestWidgetRequest;
 import com.tabber.tabby.entity.ContestWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
-import com.tabber.tabby.exceptions.ContestWidgetExistsException;
 import com.tabber.tabby.exceptions.ContestWidgetNotExistsException;
 import com.tabber.tabby.respository.ContestWidgetRepository;
 import com.tabber.tabby.service.ContestWidgetService;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ContestWidgetServiceImpl implements ContestWidgetService {
@@ -40,6 +37,10 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
     }
     @Override
     public ContestWidgetEntity updateContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId) throws ContestWidgetNotExistsException{
+        if(contestWidgetRequest.getId() == null){
+            throw new ContestWidgetNotExistsException("Widget Id not specified");
+
+        }
         ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestWidgetRequest.getId());
         if(contestWidget==null){
             throw new ContestWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestWidgetRequest.getWebsiteId());
@@ -55,11 +56,14 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
     }
 
     @Override
-    public ContestWidgetEntity deleteContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId) throws ContestWidgetNotExistsException {
+    public ContestWidgetEntity deleteContestWidget(Long contestId, Long userId) throws ContestWidgetNotExistsException {
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestWidgetRequest.getId());
+        if(contestId == null){
+            throw new ContestWidgetNotExistsException("Widget Id not specified");
+        }
+        ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestId);
         if(contestWidget==null){
-            throw new ContestWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestWidgetRequest.getWebsiteId());
+            throw new ContestWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestId);
         }
         contestWidgetRepository.delete(contestWidget);
         userEntity.getContestWidgets().remove(contestWidget);

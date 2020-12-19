@@ -1,14 +1,10 @@
 package com.tabber.tabby.service.impl;
 
-import com.tabber.tabby.constants.TabbyConstants;
-import com.tabber.tabby.controllers.AuthController;
 import com.tabber.tabby.entity.WebsiteEntity;
 import com.tabber.tabby.manager.WebsiteManager;
 import com.tabber.tabby.service.WebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

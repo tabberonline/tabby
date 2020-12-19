@@ -35,6 +35,9 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
 
     @Override
     public PersonalProjectEntity updatePersonalProject(PersonalProjectRequest personalProjectRequest, Long userId) throws PersonalProjectNotExistsException {
+        if(personalProjectRequest.getId()==null){
+            throw new PersonalProjectNotExistsException("Project id not specified");
+        }
         PersonalProjectEntity personalProject = personalProjectRepository.getTopByProjectId(personalProjectRequest.getId());
         if(personalProject == null)
             throw new PersonalProjectNotExistsException("Project doesn't exist exception");
@@ -47,10 +50,13 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
     }
 
     @Override
-    public PersonalProjectEntity deletePersonalProject(PersonalProjectRequest personalProject, Long userId) throws PersonalProjectNotExistsException{
+    public PersonalProjectEntity deletePersonalProject(Long projectId, Long userId) throws PersonalProjectNotExistsException{
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        PersonalProjectEntity personalProjectEntity = personalProjectRepository.getTopByProjectId(userId);
-        if(personalProject==null){
+        if(projectId == null){
+            throw new PersonalProjectNotExistsException("Project id not specified");
+        }
+        PersonalProjectEntity personalProjectEntity = personalProjectRepository.getTopByProjectId(projectId);
+        if(personalProjectEntity==null){
             throw new PersonalProjectNotExistsException("Doesn't exist for user ");
         }
         personalProjectRepository.delete(personalProjectEntity);

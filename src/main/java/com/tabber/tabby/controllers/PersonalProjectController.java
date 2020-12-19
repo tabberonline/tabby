@@ -58,12 +58,12 @@ public class PersonalProjectController {
 
     @DeleteMapping(value = URIEndpoints.DELETE,produces = "application/json")
     public ResponseEntity<PersonalProjectEntity>  deleteRankWidget(
-            @RequestBody PersonalProjectRequest personalProjectRequest) throws PersonalProjectNotExistsException {
-        logger.log(Level.INFO,"Delete widget request for rank widget:{}",personalProjectRequest);
+            @RequestParam("id") Long id) throws PersonalProjectNotExistsException {
+        logger.log(Level.INFO,"Delete widget request project:{}",id);
         PersonalProjectEntity personalProjectEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            personalProjectEntity = personalProjectService.deletePersonalProject(personalProjectRequest,userId);
+            personalProjectEntity = personalProjectService.deletePersonalProject(id,userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot update project due to exception: {}",ex.toString());

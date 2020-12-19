@@ -10,5 +10,5 @@ public interface ContestWidgetService {
 
     ContestWidgetEntity updateContestWidget(ContestWidgetRequest rankWidgetRequest, Long userId) throws ContestWidgetNotExistsException;
 
-    ContestWidgetEntity deleteContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId) throws ContestWidgetNotExistsException;
+    ContestWidgetEntity deleteContestWidget(Long contestId, Long userId) throws ContestWidgetNotExistsException;
 }
