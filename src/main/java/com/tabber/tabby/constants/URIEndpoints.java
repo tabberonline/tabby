@@ -7,6 +7,7 @@ public interface URIEndpoints {
     String USER = "/user";
     String USER_INFO = "/info";
     String RESUME = "/resume";
+    String GUEST_RESUME = "/guest/resume";
     String PORTFOLIO = "/portfolio";
     String CREATE = "/create";
     String UPDATE = "/update";
