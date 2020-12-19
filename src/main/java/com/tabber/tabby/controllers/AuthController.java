@@ -36,13 +36,4 @@ public class AuthController {
         return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
-    @PostMapping("hello")
-    public String helloWorld(@RequestParam(value="name", defaultValue="World") String name) {
-        return "Hello "+name+"!!";
-    }
-
-    @RequestMapping("test")
-    public String test() {
-        return "Hello ";
-    }
 }

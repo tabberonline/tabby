@@ -3,6 +3,7 @@ package com.tabber.tabby.constants;
 public interface URIEndpoints {
     String RANK_WIDGET = "/rankwidget";
     String CONTEST_WIDGET = "/contestwidget";
+    String PERSONAL_PROJECT = "/personalproject";
     String USER = "/user";
     String USER_INFO = "/info";
     String RESUME = "/resume";
@@ -10,6 +11,7 @@ public interface URIEndpoints {
     String CREATE = "/create";
     String UPDATE = "/update";
     String DELETE = "/delete";
+    String EMAIL_TABBER = "/email";
 
     // admin
     String ADMIN = "/admin";

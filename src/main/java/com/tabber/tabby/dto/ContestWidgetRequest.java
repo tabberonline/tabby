@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder(toBuilder = true)
 public class ContestWidgetRequest {
 
+    @JsonProperty("id")
+    Long id;
+
     @JsonProperty("website_id")
     Integer websiteId;
 
