@@ -11,6 +11,7 @@ public interface URIEndpoints {
     String CREATE = "/create";
     String UPDATE = "/update";
     String DELETE = "/delete";
+    String EMAIL_TABBER = "/email";
 
     // admin
     String ADMIN = "/admin";

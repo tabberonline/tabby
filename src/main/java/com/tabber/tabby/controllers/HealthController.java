@@ -14,7 +14,6 @@ public class HealthController {
     EmailService emailService;
     @GetMapping(value = "ping")
     public ResponseEntity<String> ping(){
-        emailService.sendMail("mandeep.sidhu2@gmail.com","test","lo lol lo l");
         return new ResponseEntity<>("Pong", HttpStatus.OK);
     }
 }

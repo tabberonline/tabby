@@ -16,9 +16,7 @@ public class EmailService {
     }
 
     public void sendMail(String toEmail, String subject, String message) {
-
         var mailMessage = new SimpleMailMessage();
-
         mailMessage.setTo(toEmail);
         mailMessage.setSubject(subject);
         mailMessage.setText(message);
