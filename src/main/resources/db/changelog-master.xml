@@ -13,4 +13,5 @@
     <include file="db/migrations/004_create_portfolios_table.xml"/>
     <include file="db/migrations/005_create_contest_widget.xml"/>
     <include file="db/migrations/006_create_frontend_configurations_table.xml"/>
+    <include file="db/migrations/007_create_personal_projects_table.xml"/>
 </databaseChangeLog>

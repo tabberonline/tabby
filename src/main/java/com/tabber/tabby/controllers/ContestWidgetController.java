@@ -30,7 +30,7 @@ public class ContestWidgetController {
 
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<ContestWidgetEntity> createRankWidget(
-            @RequestBody @Validated ContestWidgetRequest contestWidgetRequest) throws ContestWidgetExistsException {
+            @RequestBody @Validated ContestWidgetRequest contestWidgetRequest) throws Exception {
         logger.log(Level.INFO,"Create widget request for contest widget",contestWidgetRequest);
         ContestWidgetEntity contestWidgetEntity = null;
         try {
