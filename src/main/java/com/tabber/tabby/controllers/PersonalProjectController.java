@@ -25,7 +25,7 @@ public class PersonalProjectController {
     PersonalProjectService personalProjectService;
 
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
-    public ResponseEntity<PersonalProjectEntity> createRankWidget(
+    public ResponseEntity<PersonalProjectEntity> createPersonalProject(
             @RequestBody @Validated PersonalProjectRequest personalProjectRequest) throws Exception {
         logger.log(Level.INFO,"Create widget request for rank widget",personalProjectRequest);
         PersonalProjectEntity personalProjectEntity = null;
@@ -41,7 +41,7 @@ public class PersonalProjectController {
     }
 
     @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
-    public ResponseEntity<PersonalProjectEntity>  updateRankWidget(
+    public ResponseEntity<PersonalProjectEntity>  updatePersonalProject(
             @RequestBody PersonalProjectRequest personalProjectRequest,
             @RequestParam("id") Long id) throws PersonalProjectNotExistsException {
         logger.log(Level.INFO,"Update widget request for rank widget:{}",personalProjectRequest);
@@ -58,7 +58,7 @@ public class PersonalProjectController {
     }
 
     @DeleteMapping(value = URIEndpoints.DELETE,produces = "application/json")
-    public ResponseEntity<PersonalProjectEntity>  deleteRankWidget(
+    public ResponseEntity<PersonalProjectEntity>  deletePersonalProject(
             @RequestParam("id") Long id) throws PersonalProjectNotExistsException {
         logger.log(Level.INFO,"Delete widget request project:{}",id);
         PersonalProjectEntity personalProjectEntity = null;
