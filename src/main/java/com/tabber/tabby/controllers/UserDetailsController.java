@@ -21,6 +21,19 @@ public class UserDetailsController {
     @Autowired
     UserService userService;
 
+    @GetMapping(value = URIEndpoints.GUEST_RESUME,produces = "application/json")
+    public ResponseEntity<UserEntity> getGuestUserResume(@RequestParam("id") Long userId) throws Exception {
+        UserEntity userEntity = null;
+        try {
+            userEntity = userService.getUserFromUserId(userId);
+        }
+        catch (Exception ex){
+            logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
+            throw ex;
+        }
+        return new ResponseEntity<>(userEntity, HttpStatus.OK);
+    }
+
     @GetMapping(value = URIEndpoints.RESUME,produces = "application/json")
     public ResponseEntity<UserEntity> getUserResume() throws Exception {
         UserEntity userEntity = null;

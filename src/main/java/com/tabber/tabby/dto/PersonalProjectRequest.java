@@ -14,9 +14,6 @@ public class PersonalProjectRequest {
     @JsonProperty("title")
     String title;
 
-    @JsonProperty("id")
-    Long id;
-
     @JsonProperty("link")
     String link;
 }

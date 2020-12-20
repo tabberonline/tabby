@@ -25,7 +25,7 @@ public class PersonalProjectController {
     PersonalProjectService personalProjectService;
 
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
-    public ResponseEntity<PersonalProjectEntity> createRankWidget(
+    public ResponseEntity<PersonalProjectEntity> createPersonalProject(
             @RequestBody @Validated PersonalProjectRequest personalProjectRequest) throws Exception {
         logger.log(Level.INFO,"Create widget request for rank widget",personalProjectRequest);
         PersonalProjectEntity personalProjectEntity = null;
@@ -41,13 +41,14 @@ public class PersonalProjectController {
     }
 
     @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
-    public ResponseEntity<PersonalProjectEntity>  updateRankWidget(
-            @RequestBody PersonalProjectRequest personalProjectRequest) throws PersonalProjectNotExistsException {
+    public ResponseEntity<PersonalProjectEntity>  updatePersonalProject(
+            @RequestBody PersonalProjectRequest personalProjectRequest,
+            @RequestParam("id") Long id) throws PersonalProjectNotExistsException {
         logger.log(Level.INFO,"Update widget request for rank widget:{}",personalProjectRequest);
         PersonalProjectEntity personalProjectEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            personalProjectEntity = personalProjectService.updatePersonalProject(personalProjectRequest,userId);
+            personalProjectEntity = personalProjectService.updatePersonalProject(personalProjectRequest,id,userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot update project due to exception: {}",ex.toString());
@@ -57,7 +58,7 @@ public class PersonalProjectController {
     }
 
     @DeleteMapping(value = URIEndpoints.DELETE,produces = "application/json")
-    public ResponseEntity<PersonalProjectEntity>  deleteRankWidget(
+    public ResponseEntity<PersonalProjectEntity>  deletePersonalProject(
             @RequestParam("id") Long id) throws PersonalProjectNotExistsException {
         logger.log(Level.INFO,"Delete widget request project:{}",id);
         PersonalProjectEntity personalProjectEntity = null;

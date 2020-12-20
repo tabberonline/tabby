@@ -36,12 +36,12 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
         return contestWidgetEntity;
     }
     @Override
-    public ContestWidgetEntity updateContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId) throws ContestWidgetNotExistsException{
-        if(contestWidgetRequest.getId() == null){
+    public ContestWidgetEntity updateContestWidget(ContestWidgetRequest contestWidgetRequest,Long contestId ,Long userId) throws ContestWidgetNotExistsException{
+        if(contestId == null){
             throw new ContestWidgetNotExistsException("Widget Id not specified");
 
         }
-        ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestWidgetRequest.getId());
+        ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestId);
         if(contestWidget==null){
             throw new ContestWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestWidgetRequest.getWebsiteId());
         }

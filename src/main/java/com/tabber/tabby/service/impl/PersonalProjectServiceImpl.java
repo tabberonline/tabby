@@ -34,11 +34,11 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
     }
 
     @Override
-    public PersonalProjectEntity updatePersonalProject(PersonalProjectRequest personalProjectRequest, Long userId) throws PersonalProjectNotExistsException {
-        if(personalProjectRequest.getId()==null){
+    public PersonalProjectEntity updatePersonalProject(PersonalProjectRequest personalProjectRequest, Long projectId, Long userId) throws PersonalProjectNotExistsException {
+        if(projectId==null){
             throw new PersonalProjectNotExistsException("Project id not specified");
         }
-        PersonalProjectEntity personalProject = personalProjectRepository.getTopByProjectId(personalProjectRequest.getId());
+        PersonalProjectEntity personalProject = personalProjectRepository.getTopByProjectId(projectId);
         if(personalProject == null)
             throw new PersonalProjectNotExistsException("Project doesn't exist exception");
         personalProject = personalProject.toBuilder()
