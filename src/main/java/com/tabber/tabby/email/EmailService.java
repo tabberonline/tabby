@@ -47,8 +47,6 @@ public class EmailService {
             helper.setTo(toEmail);
             helper.setText(message);
             javaMailSender.send(mailMessage);
-            UserEntity userEntity=userRepository.getTopByUserId(1l);
-            sendMailWithTemplate(userEntity);
         }
         catch (Exception ex){
         }
