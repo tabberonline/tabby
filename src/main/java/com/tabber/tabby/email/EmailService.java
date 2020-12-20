@@ -1,5 +1,7 @@
 package com.tabber.tabby.email;
 
+import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
@@ -28,6 +30,9 @@ public class EmailService {
     @Autowired
     private SpringTemplateEngine templateEngine;
 
+    @Autowired
+    UserRepository userRepository;
+
     public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
@@ -36,31 +41,36 @@ public class EmailService {
     public void sendMail(String toEmail, String subject, String message) {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         try {
-            mailMessage.setSubject(subject, "UTF-8");
-            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true,StandardCharsets.UTF_8.name());
-            helper.setFrom("tabberonline@gmail.com");
-            helper.setTo(toEmail);
-            helper.setText(message);
-            javaMailSender.send(mailMessage);
+//            mailMessage.setSubject(subject, "UTF-8");
+//            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true,StandardCharsets.UTF_8.name());
+//            helper.setFrom("tabberonline@gmail.com");
+//            helper.setTo(toEmail);
+//            helper.setText(message);
+//            javaMailSender.send(mailMessage);
+            UserEntity userEntity=userRepository.getTopByUserId(1l);
+            sendMailWithTemplate(userEntity);
         }
         catch (Exception ex){
-
         }
     }
 
-    public void sendMailWithTemplate(String toEmail) {
+    public void sendMailWithTemplate(UserEntity userEntity) {
+
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         try {
             Map<String,Object> model =new HashMap<String,Object>();
-            model.put("name","Mandeep Sidhu");
+            model.put("name",userEntity.getName());
+            model.put("email",userEntity.getEmail());
+            model.put("title",userEntity.getPortfolio().getTitle());
+            model.put("description",userEntity.getPortfolio().getDescription());
+
             Context context = new Context();
             context.setVariables(model);
 
             mailMessage.setSubject("Visit my Tabber Profile", "UTF-8");
             String html = templateEngine.process("sample",context);
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true,StandardCharsets.UTF_8.name());
-            helper.setFrom("tabberonline@gmail.com");
-            helper.setTo(toEmail);
+            helper.setTo("tabberonline@gmail.com");
             helper.setText(html, true);
             javaMailSender.send(mailMessage);
         }
@@ -69,29 +79,3 @@ public class EmailService {
         }
     }
 }
-
-
-
-//    public void sendMail(String toEmail, String subject, String message) {
-//        String escaped = HtmlUtils.htmlEscape(message);
-//        MimeMessage mailMessage = javaMailSender.createMimeMessage();
-//        try {
-//            mailMessage.setSubject(subject, "UTF-8");
-//
-//            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true);
-//            helper.setFrom("tabberonline@gmail.com");
-//            helper.setTo(toEmail);
-//            // helper.setText(message, true);
-//            // helper.setText("<html><body><h1>Test h ye</h1><p>ggering deferred initialization of Spring Data</p></body></html>", true);
-//            helper.setText(escaped);
-//
-////            var mailMessage = new SimpleMailMessage();
-////            mailMessage.setTo(toEmail);
-////            mailMessage.setSubject(subject);
-////            mailMessage.setText(escaped);
-//            javaMailSender.send(mailMessage);
-//        }
-//        catch (Exception ex){
-//
-//        }
-//    }
