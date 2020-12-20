@@ -34,7 +34,21 @@ public class EmailService {
 
 
     public void sendMail(String toEmail, String subject, String message) {
-        String escaped = HtmlUtils.htmlEscape(message);
+        MimeMessage mailMessage = javaMailSender.createMimeMessage();
+        try {
+            mailMessage.setSubject(subject, "UTF-8");
+            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true,StandardCharsets.UTF_8.name());
+            helper.setFrom("tabberonline@gmail.com");
+            helper.setTo(toEmail);
+            helper.setText(message);
+            javaMailSender.send(mailMessage);
+        }
+        catch (Exception ex){
+
+        }
+    }
+
+    public void sendMailWithTemplate(String toEmail) {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         try {
             Map<String,Object> model =new HashMap<String,Object>();
@@ -42,7 +56,7 @@ public class EmailService {
             Context context = new Context();
             context.setVariables(model);
 
-            mailMessage.setSubject(subject, "UTF-8");
+            mailMessage.setSubject("Visit my Tabber Profile", "UTF-8");
             String html = templateEngine.process("sample",context);
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true,StandardCharsets.UTF_8.name());
             helper.setFrom("tabberonline@gmail.com");
