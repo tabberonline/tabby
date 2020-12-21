@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface TabbyConstants {
     String WEBSITE = "WEBSITE";
-    List<String> admins = Arrays.asList("mandeep.sidhu2@gmail.com");
+    List<String> admins = Arrays.asList("mandeep.sidhu2@gmail.com","vikrant.negi74@gmail.com");
 
 }
