@@ -24,7 +24,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
     @Override
     public RankWidgetEntity createRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetExistsException {
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        if(rankWidgetExistsForWebsite(userEntity,rankWidgetRequest)!=null){
+        if(rankWidgetExistsForWebsite(userEntity,rankWidgetRequest.getWebsiteId())!=null){
             throw new RankWidgetExistsException("Exists for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
         RankWidgetEntity rankWidgetEntity = new RankWidgetEntity()
@@ -43,7 +43,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
     @Override
     public RankWidgetEntity updateRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetNotExistsException{
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userEntity,rankWidgetRequest);
+        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userEntity,rankWidgetRequest.getWebsiteId());
         if(rankWidget==null){
             throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
@@ -57,11 +57,11 @@ public class RankWidgetServiceImpl implements RankWidgetService {
     }
 
     @Override
-    public RankWidgetEntity deleteRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetNotExistsException{
+    public RankWidgetEntity deleteRankWidget(Integer websiteId, Long userId) throws RankWidgetNotExistsException{
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userEntity,rankWidgetRequest);
+        RankWidgetEntity rankWidget = rankWidgetExistsForWebsite(userEntity,websiteId);
         if(rankWidget==null){
-            throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
+            throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+websiteId);
         }
         rankWidgetRepository.delete(rankWidget);
         userEntity.getRankWidgets().remove(rankWidget);
@@ -70,10 +70,10 @@ public class RankWidgetServiceImpl implements RankWidgetService {
     }
 
 
-    private RankWidgetEntity rankWidgetExistsForWebsite(UserEntity userEntity,RankWidgetRequest rankWidgetRequest){
+    private RankWidgetEntity rankWidgetExistsForWebsite(UserEntity userEntity,Integer websiteId){
         List<RankWidgetEntity> rankWidgetEntities = userEntity.getRankWidgets();
         for(RankWidgetEntity rankWidget:rankWidgetEntities){
-            if(rankWidget.getWebsiteId().equals(rankWidgetRequest.getWebsiteId())){
+            if(rankWidget.getWebsiteId().equals(websiteId)){
                 return rankWidget;
             }
         }
