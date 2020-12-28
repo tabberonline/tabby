@@ -44,6 +44,7 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         personalProject = personalProject.toBuilder()
                 .title(personalProjectRequest.getTitle())
                 .link(personalProjectRequest.getLink())
+                .invisible(personalProjectRequest.getInvisible())
                 .build();
         personalProjectRepository.saveAndFlush(personalProject);
         return personalProject;

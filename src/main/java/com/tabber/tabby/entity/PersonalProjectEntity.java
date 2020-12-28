@@ -35,6 +35,10 @@ public class PersonalProjectEntity {
     @JsonProperty("link")
     private String link;
 
+    @Column(name = "invisible")
+    @JsonProperty("invisible")
+    private Boolean invisible = false;
+
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp

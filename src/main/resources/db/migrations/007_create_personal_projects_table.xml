@@ -8,6 +8,7 @@
             <column name="id" type="INT" />
             <column name="link" type="VARCHAR" />
             <column name="title" type="VARCHAR" />
+            <column name="invisible" type="BOOLEAN" />
             <column name="created_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
             <column name="updated_at" type="TIMESTAMP(6) WITHOUT TIME ZONE" />
         </createTable>

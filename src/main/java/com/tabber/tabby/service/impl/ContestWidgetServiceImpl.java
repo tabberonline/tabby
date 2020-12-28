@@ -50,6 +50,7 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
                 .websiteId(contestWidgetRequest.getWebsiteId())
                 .websiteUsername(contestWidgetRequest.getUsername())
                 .contestName(contestWidgetRequest.getContestName())
+                .invisible(contestWidgetRequest.getInvisible())
                 .build();
         contestWidgetRepository.saveAndFlush(contestWidget);
         return contestWidget;

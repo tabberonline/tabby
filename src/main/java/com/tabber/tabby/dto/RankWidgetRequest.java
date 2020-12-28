@@ -15,6 +15,10 @@ public class RankWidgetRequest {
     @JsonProperty("rank")
     Integer rank;
 
+    // only used while updating, not creating
+    @JsonProperty("invisible")
+    Boolean invisible = false;
+
     @JsonProperty("username")
     String username;
 }

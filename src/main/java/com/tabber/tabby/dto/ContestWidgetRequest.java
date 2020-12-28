@@ -21,6 +21,10 @@ public class ContestWidgetRequest {
     @JsonProperty("username")
     String username;
 
+    // only used while updating, not creating
+    @JsonProperty("invisible")
+    Boolean invisible = false;
+
     @JsonProperty("contest_name")
     String contestName;
 }

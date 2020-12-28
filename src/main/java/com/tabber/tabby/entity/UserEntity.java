@@ -46,17 +46,17 @@ public class UserEntity {
     @Column(name = "resume_present")
     private Boolean resumePresent;
 
-    @JsonProperty("rank_widget_user_id")
+    @JsonProperty("rank_widgets")
     @OneToMany
     @JoinColumn(name = "rank_widget_user_id")
     private List<RankWidgetEntity> rankWidgets;
 
-    @JsonProperty("contest_widget_user_id")
+    @JsonProperty("contest_widgets")
     @OneToMany
     @JoinColumn(name = "contest_widget_user_id")
     private List<ContestWidgetEntity> contestWidgets;
 
-    @JsonProperty("personal_project_user_id")
+    @JsonProperty("personal_projects")
     @OneToMany
     @JoinColumn(name = "personal_project_user_id")
     private List<PersonalProjectEntity> personalProjects;

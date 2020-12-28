@@ -51,6 +51,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .rank(rankWidgetRequest.getRank())
                 .websiteId(rankWidgetRequest.getWebsiteId())
                 .websiteUsername(rankWidgetRequest.getUsername())
+                .invisible(rankWidgetRequest.getInvisible())
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidget);
         return rankWidget;
