@@ -5,8 +5,8 @@ import liquibase.pro.packaged.L;
 
 public interface UserService {
     Long save(UserEntity userEntity);
+    void updateCache(UserEntity userEntity);
     UserEntity getUserFromUserId(Long userId);
     UserEntity getUserFromSub(String sub);
-    UserEntity getUserFromEmail(String email);
-    Boolean setResumePresent(UserEntity userEntity);
+    UserEntity setResumePresent(UserEntity userEntity);
 }

@@ -29,7 +29,8 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
                 .build();
         personalProjectRepository.saveAndFlush(personalProjectEntity);
         userEntity.getPersonalProjects().add(personalProjectEntity);
-        userService.setResumePresent(userEntity);
+        userEntity = userService.setResumePresent(userEntity);
+        userService.updateCache(userEntity);
         return personalProjectEntity;
     }
 
@@ -38,15 +39,19 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         if(projectId==null){
             throw new PersonalProjectNotExistsException("Project id not specified");
         }
+        UserEntity userEntity = userService.getUserFromUserId(userId);
         PersonalProjectEntity personalProject = personalProjectRepository.getTopByProjectId(projectId);
         if(personalProject == null)
             throw new PersonalProjectNotExistsException("Project doesn't exist exception");
+        userEntity.getPersonalProjects().remove(personalProject);
         personalProject = personalProject.toBuilder()
                 .title(personalProjectRequest.getTitle())
                 .link(personalProjectRequest.getLink())
                 .invisible(personalProjectRequest.getInvisible())
                 .build();
         personalProjectRepository.saveAndFlush(personalProject);
+        userEntity.getPersonalProjects().add(personalProject);
+        userService.updateCache(userEntity);
         return personalProject;
     }
 
@@ -61,8 +66,9 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
             throw new PersonalProjectNotExistsException("Doesn't exist for user ");
         }
         personalProjectRepository.delete(personalProjectEntity);
-        userEntity.getRankWidgets().remove(personalProjectEntity);
-        userService.setResumePresent(userEntity);
+        userEntity.getPersonalProjects().remove(personalProjectEntity);
+        userEntity = userService.setResumePresent(userEntity);
+        userService.updateCache(userEntity);
         return personalProjectEntity;
     }
 

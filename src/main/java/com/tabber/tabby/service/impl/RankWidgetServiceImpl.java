@@ -36,7 +36,8 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidgetEntity);
         userEntity.getRankWidgets().add(rankWidgetEntity);
-        userService.setResumePresent(userEntity);
+        userEntity = userService.setResumePresent(userEntity);
+        userService.updateCache(userEntity);
         return rankWidgetEntity;
     }
 
@@ -47,6 +48,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
         if(rankWidget==null){
             throw new RankWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
+        userEntity.getRankWidgets().remove(rankWidget);
         rankWidget = rankWidget.toBuilder()
                 .rank(rankWidgetRequest.getRank())
                 .websiteId(rankWidgetRequest.getWebsiteId())
@@ -54,6 +56,8 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .invisible(rankWidgetRequest.getInvisible())
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidget);
+        userEntity.getRankWidgets().add(rankWidget);
+        userService.updateCache(userEntity);
         return rankWidget;
     }
 
@@ -66,7 +70,8 @@ public class RankWidgetServiceImpl implements RankWidgetService {
         }
         rankWidgetRepository.delete(rankWidget);
         userEntity.getRankWidgets().remove(rankWidget);
-        userService.setResumePresent(userEntity);
+        userEntity = userService.setResumePresent(userEntity);
+        userService.updateCache(userEntity);
         return rankWidget;
     }
 
