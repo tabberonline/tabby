@@ -19,6 +19,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET, "/ping").permitAll()
                 .antMatchers(HttpMethod.POST,"/email").permitAll()
                 .antMatchers(HttpMethod.GET,"/fe/get").permitAll()
+                .antMatchers(HttpMethod.GET,"/website").permitAll()
+                .antMatchers(HttpMethod.GET,"/website/all").permitAll()
                 .antMatchers(HttpMethod.GET,"/user/guest/resume").permitAll()
                 .antMatchers(HttpMethod.POST,"/admin/**").hasAuthority("ADMIN")
                 .antMatchers(HttpMethod.PUT,"/admin/**").hasAuthority("ADMIN")

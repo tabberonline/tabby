@@ -5,6 +5,7 @@ import com.tabber.tabby.dto.admin.FrontendConfigRequest;
 import com.tabber.tabby.entity.FrontendConfigurationEntity;
 import com.tabber.tabby.exceptions.FrontendConfigurationExistsException;
 import com.tabber.tabby.exceptions.FrontendConfigurationNotExistsException;
+import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,13 +19,16 @@ import java.util.List;
 public class AdminController {
 
     @Autowired
+    FrontendConfigManager frontendConfigManager;
+
+    @Autowired
     FrontendConfigurationRepository frontendConfigurationRepository;
 
     @PostMapping(value = URIEndpoints.FRONTEND_CONFIG_CREATE,produces = "application/json")
     public ResponseEntity<FrontendConfigurationEntity> createFeConfiguration(
             @RequestBody @Validated FrontendConfigRequest frontendConfigRequest) throws FrontendConfigurationExistsException {
         FrontendConfigurationEntity frontendConfigurationEntity=
-                frontendConfigurationRepository.getTopByPageTypeAndKey(frontendConfigRequest.getPageType(), frontendConfigRequest.getKey());
+                frontendConfigManager.findFeConfigurationByPageTypeAndKey(frontendConfigRequest.getPageType(), frontendConfigRequest.getKey());
         if(frontendConfigurationEntity != null){
             throw new FrontendConfigurationExistsException("Configuration already exists for this page type and key, try updating");
         }
@@ -41,7 +45,7 @@ public class AdminController {
     public ResponseEntity<FrontendConfigurationEntity> updateFeConfiguration(
             @RequestBody @Validated FrontendConfigRequest frontendConfigRequest) throws FrontendConfigurationNotExistsException {
         FrontendConfigurationEntity frontendConfigurationEntity=
-                frontendConfigurationRepository.getTopByPageTypeAndKey(frontendConfigRequest.getPageType(), frontendConfigRequest.getKey());
+                frontendConfigManager.findFeConfigurationByPageTypeAndKey(frontendConfigRequest.getPageType(), frontendConfigRequest.getKey());
         if(frontendConfigurationEntity == null){
             throw new FrontendConfigurationNotExistsException("Configuration doesn't exist for this page type and key, try creating first");
         }
@@ -54,7 +58,7 @@ public class AdminController {
     public ResponseEntity<FrontendConfigurationEntity> deleteFeConfiguration(
          @RequestParam(value = "page_type") String pageType,@RequestParam(value = "key") String key) throws FrontendConfigurationNotExistsException {
         FrontendConfigurationEntity frontendConfigurationEntity=
-                frontendConfigurationRepository.getTopByPageTypeAndKey(pageType, key);
+                frontendConfigManager.findFeConfigurationByPageTypeAndKey(pageType, key);
         if(frontendConfigurationEntity == null){
             throw new FrontendConfigurationNotExistsException("Configuration doesn't exist for this page type and key, try creating first");
         }
@@ -66,7 +70,7 @@ public class AdminController {
     public ResponseEntity<FrontendConfigurationEntity> getFeConfiguration(
             @RequestParam(value = "page_type") String pageType,@RequestParam(value = "key") String key) throws FrontendConfigurationNotExistsException {
         FrontendConfigurationEntity frontendConfigurationEntity=
-                frontendConfigurationRepository.getTopByPageTypeAndKey(pageType, key);
+                frontendConfigManager.findFeConfigurationByPageTypeAndKey(pageType, key);
         if(frontendConfigurationEntity == null){
             throw new FrontendConfigurationNotExistsException("Configuration doesn't exist for this page type and key, try creating first");
         }
@@ -76,7 +80,7 @@ public class AdminController {
     @GetMapping(value = URIEndpoints.FRONTEND_CONFIG_ALL,produces = "application/json")
     public ResponseEntity<List<FrontendConfigurationEntity>> getAllFeConfigurations() {
         List<FrontendConfigurationEntity> frontendConfigurationEntities=
-                frontendConfigurationRepository.getAll();
+                frontendConfigManager.findAllFEConfiguration();
         return new ResponseEntity<>(frontendConfigurationEntities,HttpStatus.OK);
     }
 }
