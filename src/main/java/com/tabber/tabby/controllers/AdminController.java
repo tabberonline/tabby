@@ -7,6 +7,7 @@ import com.tabber.tabby.exceptions.FrontendConfigurationExistsException;
 import com.tabber.tabby.exceptions.FrontendConfigurationNotExistsException;
 import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
+import com.tabber.tabby.utils.CacheClearUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
