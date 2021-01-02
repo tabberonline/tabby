@@ -3,6 +3,7 @@ package com.tabber.tabby.controllers;
 import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.entity.FrontendConfigurationEntity;
 import com.tabber.tabby.exceptions.FrontendConfigurationNotExistsException;
+import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,13 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class FrontendConfiguration {
 
     @Autowired
-    FrontendConfigurationRepository frontendConfigurationRepository;
+    FrontendConfigManager frontendConfigManager;
 
     @GetMapping(value = URIEndpoints.FRONTEND_CONFIG_GET,produces = "application/json")
     public ResponseEntity<FrontendConfigurationEntity> getFeConfiguration(
             @RequestParam(value = "page_type") String pageType, @RequestParam(value = "key") String key) throws FrontendConfigurationNotExistsException {
         FrontendConfigurationEntity frontendConfigurationEntity=
-                frontendConfigurationRepository.getTopByPageTypeAndKey(pageType, key);
+                frontendConfigManager.findFeConfigurationByPageTypeAndKey(pageType, key);
         if(frontendConfigurationEntity == null){
             throw new FrontendConfigurationNotExistsException("Configuration doesn't exist for this page type and key, try creating first");
         }

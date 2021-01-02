@@ -15,12 +15,12 @@ public class FrontendConfigManager {
     @Autowired
     FrontendConfigurationRepository frontendConfigurationRepository;
 
-    @Cacheable(value = TabbyConstants.FRONTEND_CONFIG,key="#pageType.concat('_').concat(#key)")
+    @Cacheable(value = TabbyConstants.FRONTEND_CONFIG,key="#pageType.concat('_').concat(#key)",unless = "#result == null")
     public FrontendConfigurationEntity findFeConfigurationByPageTypeAndKey(String pageType, String key){
         return frontendConfigurationRepository.getTopByPageTypeAndKey(pageType,key);
     }
 
-    @Cacheable(value = TabbyConstants.FRONTEND_CONFIG,key="'all'")
+    @Cacheable(value = TabbyConstants.FRONTEND_CONFIG,key="'all'",unless = "#result == null")
     public List<FrontendConfigurationEntity> findAllFEConfiguration(){
         return frontendConfigurationRepository.getAll();
     }

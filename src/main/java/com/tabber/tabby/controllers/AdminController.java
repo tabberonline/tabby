@@ -8,6 +8,7 @@ import com.tabber.tabby.exceptions.FrontendConfigurationNotExistsException;
 import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
 import com.tabber.tabby.utils.CacheClearUtil;
+import liquibase.pro.packaged.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,10 @@ public class AdminController {
 
     @Autowired
     FrontendConfigurationRepository frontendConfigurationRepository;
+
+    @Autowired
+    CacheClearUtil cacheClearUtil;
+
 
     @PostMapping(value = URIEndpoints.FRONTEND_CONFIG_CREATE,produces = "application/json")
     public ResponseEntity<FrontendConfigurationEntity> createFeConfiguration(
@@ -51,6 +56,7 @@ public class AdminController {
             throw new FrontendConfigurationNotExistsException("Configuration doesn't exist for this page type and key, try creating first");
         }
         frontendConfigurationEntity.setValue(frontendConfigRequest.getValue());
+        cacheClearUtil.clearFrontendCache(frontendConfigRequest.getKey(),frontendConfigRequest.getPageType());
         frontendConfigurationRepository.saveAndFlush(frontendConfigurationEntity);
         return new ResponseEntity<>(frontendConfigurationEntity,HttpStatus.OK);
     }
@@ -63,6 +69,7 @@ public class AdminController {
         if(frontendConfigurationEntity == null){
             throw new FrontendConfigurationNotExistsException("Configuration doesn't exist for this page type and key, try creating first");
         }
+        cacheClearUtil.clearFrontendCache(key,pageType);
         frontendConfigurationRepository.delete(frontendConfigurationEntity);
         return new ResponseEntity<>(frontendConfigurationEntity,HttpStatus.OK);
     }
