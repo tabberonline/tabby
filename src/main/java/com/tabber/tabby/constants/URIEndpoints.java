@@ -13,6 +13,8 @@ public interface URIEndpoints {
     String UPDATE = "/update";
     String DELETE = "/delete";
     String EMAIL_TABBER = "/email";
+    String WEBSITE = "/website";
+    String ALL_WEBSITE = "/website/all";
 
     // admin
     String ADMIN = "/admin";
@@ -21,6 +23,5 @@ public interface URIEndpoints {
     String FRONTEND_CONFIG_CREATE ="/fe/create";
     String FRONTEND_CONFIG_UPDATE ="/fe/update";
     String FRONTEND_CONFIG_DELETE ="/fe/delete";
-
 
 }

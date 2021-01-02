@@ -34,7 +34,8 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
         user.setPortfolio(portfolioEntity);
-        userService.setResumePresent(user);
+        user = userService.setResumePresent(user);
+        userService.updateCache(user);
         return portfolioEntity;
     }
 
@@ -50,6 +51,8 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .description(portfolioRequest.getDescription())
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
+        user.setPortfolio(portfolioEntity);
+        userService.updateCache(user);
         return portfolioEntity;
     }
 

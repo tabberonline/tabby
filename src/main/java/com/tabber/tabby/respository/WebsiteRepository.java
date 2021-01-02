@@ -5,8 +5,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface WebsiteRepository extends JpaRepository<WebsiteEntity,Integer> {
     @Query(value = "select * from websites where id=?1 limit 1",nativeQuery = true)
     WebsiteEntity getTopById(Integer id);
+
+    @Query(value = "select * from websites",nativeQuery = true)
+    List<WebsiteEntity> getAllWebsites();
 }

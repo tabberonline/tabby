@@ -32,19 +32,21 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
                 .build();
         contestWidgetRepository.saveAndFlush(contestWidgetEntity);
         userEntity.getContestWidgets().add(contestWidgetEntity);
-        userService.setResumePresent(userEntity);
+        userEntity = userService.setResumePresent(userEntity);
+        userService.updateCache(userEntity);
         return contestWidgetEntity;
     }
     @Override
     public ContestWidgetEntity updateContestWidget(ContestWidgetRequest contestWidgetRequest,Long contestId ,Long userId) throws ContestWidgetNotExistsException{
         if(contestId == null){
             throw new ContestWidgetNotExistsException("Widget Id not specified");
-
         }
+        UserEntity userEntity = userService.getUserFromUserId(userId);
         ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestId);
         if(contestWidget==null){
             throw new ContestWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestWidgetRequest.getWebsiteId());
         }
+        userEntity.getContestWidgets().remove(contestWidget);
         contestWidget = contestWidget.toBuilder()
                 .rank(contestWidgetRequest.getRank())
                 .websiteId(contestWidgetRequest.getWebsiteId())
@@ -53,6 +55,8 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
                 .invisible(contestWidgetRequest.getInvisible())
                 .build();
         contestWidgetRepository.saveAndFlush(contestWidget);
+        userEntity.getContestWidgets().add(contestWidget);
+        userService.updateCache(userEntity);
         return contestWidget;
     }
 
@@ -68,7 +72,8 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
         }
         contestWidgetRepository.delete(contestWidget);
         userEntity.getContestWidgets().remove(contestWidget);
-        userService.setResumePresent(userEntity);
+        userEntity = userService.setResumePresent(userEntity);
+        userService.updateCache(userEntity);
         return contestWidget;
     }
 
