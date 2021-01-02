@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.tabber.tabby.constants.AuthConstants;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -30,6 +31,13 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
+
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, Content-Type, Accept, Authorization, X-Requested-With, remember-me,  xsrf-token");
+        response.setHeader("Access-Control-Expose-Headers", "Location, xsrf-token");
+
         try {
             if (checkJWTToken(request, response)) {
                 Claims claims = validateToken(request);
@@ -41,7 +49,11 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
             }else {
                 SecurityContextHolder.clearContext();
             }
-            chain.doFilter(request, response);
+            if ("OPTIONS".equals(request.getMethod())) {
+                response.setStatus(HttpServletResponse.SC_OK);
+            } else {
+                chain.doFilter(request, response);
+            }
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException e) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
