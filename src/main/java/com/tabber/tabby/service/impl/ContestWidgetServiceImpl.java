@@ -1,5 +1,6 @@
 package com.tabber.tabby.service.impl;
 
+import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.ContestWidgetRequest;
 import com.tabber.tabby.entity.ContestWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
@@ -20,8 +21,11 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
     ContestWidgetRepository contestWidgetRepository;
 
     @Override
-    public ContestWidgetEntity createContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId) {
+    public ContestWidgetEntity createContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId)
+            throws Exception {
         UserEntity userEntity = userService.getUserFromUserId(userId);
+        if(userEntity.getContestWidgets().size() >= TabbyConstants.CONTEST_WIDGET_SIZE_LIMIT)
+            throw new Exception("Contest widget size limit is reached");
         ContestWidgetEntity contestWidgetEntity = new ContestWidgetEntity()
                 .toBuilder()
                 .websiteId(contestWidgetRequest.getWebsiteId())

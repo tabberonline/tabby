@@ -1,5 +1,6 @@
 package com.tabber.tabby.service.impl;
 
+import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.PersonalProjectRequest;
 import com.tabber.tabby.entity.PersonalProjectEntity;
 import com.tabber.tabby.entity.UserEntity;
@@ -19,8 +20,11 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
     PersonalProjectRepository personalProjectRepository;
 
     @Override
-    public PersonalProjectEntity createPersonalProject(PersonalProjectRequest personalProjectRequest , Long userId) {
+    public PersonalProjectEntity createPersonalProject(PersonalProjectRequest personalProjectRequest , Long userId)
+    throws Exception{
         UserEntity userEntity = userService.getUserFromUserId(userId);
+        if(userEntity.getPersonalProjects().size() >= TabbyConstants.PERSONAL_PROJECT_SIZE_LIMIT)
+            throw new Exception("Personal project size limit is reached");
         PersonalProjectEntity personalProjectEntity = new PersonalProjectEntity()
                 .toBuilder()
                 .title(personalProjectRequest.getTitle())
