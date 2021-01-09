@@ -3,6 +3,7 @@ package com.tabber.tabby.service.impl;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.ContestWidgetRequest;
 import com.tabber.tabby.entity.ContestWidgetEntity;
+import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.exceptions.ContestWidgetNotExistsException;
 import com.tabber.tabby.respository.ContestWidgetRepository;
@@ -10,6 +11,8 @@ import com.tabber.tabby.service.ContestWidgetService;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ContestWidgetServiceImpl implements ContestWidgetService {
@@ -46,7 +49,7 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
             throw new ContestWidgetNotExistsException("Widget Id not specified");
         }
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestId);
+        ContestWidgetEntity contestWidget = getContestById(contestId,userEntity);
         if(contestWidget==null){
             throw new ContestWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestWidgetRequest.getWebsiteId());
         }
@@ -70,7 +73,7 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
         if(contestId == null){
             throw new ContestWidgetNotExistsException("Widget Id not specified");
         }
-        ContestWidgetEntity contestWidget = contestWidgetRepository.getTopByWidgetId(contestId);
+        ContestWidgetEntity contestWidget = getContestById(contestId,userEntity);
         if(contestWidget==null){
             throw new ContestWidgetNotExistsException("Doesn't exist for user "+userId+" for website id "+contestId);
         }
@@ -81,5 +84,13 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
         return contestWidget;
     }
 
-
+    private ContestWidgetEntity getContestById(Long contestId,UserEntity userEntity){
+        List<ContestWidgetEntity> contestWidgetEntities = userEntity.getContestWidgets();
+        for(ContestWidgetEntity contestWidget:contestWidgetEntities){
+            if(contestWidget.getContestWidgetId().equals(contestId)){
+                return contestWidget;
+            }
+        }
+        return null;
+    }
 }
