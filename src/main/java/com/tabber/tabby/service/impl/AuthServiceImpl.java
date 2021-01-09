@@ -12,6 +12,7 @@ import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.Collections;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -49,6 +50,7 @@ public class AuthServiceImpl implements AuthService {
         logger.log(Level.INFO,"User Info :{}",payload);
         UserEntity userEntity = userService.getUserFromSub(payload.getSubject());
         Long userId ;
+        Date presentDate = new Date();
         if(userEntity == null) {
             userEntity = new UserEntity()
                     .toBuilder()
@@ -58,12 +60,13 @@ public class AuthServiceImpl implements AuthService {
                     .locale((String) payload.get("locale"))
                     .name((String) payload.get("name"))
                     .resumePresent(false)
+                    .lastLoggedIn(presentDate)
                     .build();
-            userId = userService.save(userEntity);
         }
         else {
-            userId = userEntity.getUserId();
+            userEntity.setLastLoggedIn(presentDate);
         }
+        userId = userService.save(userEntity);
         String token = jwtService.getJWTToken(userEntity.getSub(),userId,payload.getEmail());
         return token;
     }

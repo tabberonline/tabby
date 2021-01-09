@@ -66,6 +66,11 @@ public class UserEntity {
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
     private PortfolioEntity portfolio;
 
+    @JsonProperty("last_logged_in")
+    @Column(name="last_logged_in")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastLoggedIn;
+
     @JsonProperty("created_at")
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
