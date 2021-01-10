@@ -1,5 +1,6 @@
 package com.tabber.tabby.service.impl;
 
+import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.PersonalProjectRequest;
 import com.tabber.tabby.entity.PersonalProjectEntity;
 import com.tabber.tabby.entity.UserEntity;
@@ -19,8 +20,11 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
     PersonalProjectRepository personalProjectRepository;
 
     @Override
-    public PersonalProjectEntity createPersonalProject(PersonalProjectRequest personalProjectRequest , Long userId) {
+    public PersonalProjectEntity createPersonalProject(PersonalProjectRequest personalProjectRequest , Long userId)
+    throws Exception{
         UserEntity userEntity = userService.getUserFromUserId(userId);
+        if(userEntity.getPersonalProjects().size() >= TabbyConstants.PERSONAL_PROJECT_SIZE_LIMIT)
+            throw new Exception("Personal project size limit is reached");
         PersonalProjectEntity personalProjectEntity = new PersonalProjectEntity()
                 .toBuilder()
                 .title(personalProjectRequest.getTitle())
@@ -40,7 +44,7 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
             throw new PersonalProjectNotExistsException("Project id not specified");
         }
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        PersonalProjectEntity personalProject = personalProjectRepository.getTopByProjectId(projectId);
+        PersonalProjectEntity personalProject = getPersonalProjectFromProjectId(userEntity,projectId);
         if(personalProject == null)
             throw new PersonalProjectNotExistsException("Project doesn't exist exception");
         userEntity.getPersonalProjects().remove(personalProject);
@@ -61,7 +65,7 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         if(projectId == null){
             throw new PersonalProjectNotExistsException("Project id not specified");
         }
-        PersonalProjectEntity personalProjectEntity = personalProjectRepository.getTopByProjectId(projectId);
+        PersonalProjectEntity personalProjectEntity = getPersonalProjectFromProjectId(userEntity,projectId);
         if(personalProjectEntity==null){
             throw new PersonalProjectNotExistsException("Doesn't exist for user ");
         }
@@ -70,6 +74,14 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         userEntity = userService.setResumePresent(userEntity);
         userService.updateCache(userEntity);
         return personalProjectEntity;
+    }
+
+    private PersonalProjectEntity getPersonalProjectFromProjectId(UserEntity userEntity,Long projectId){
+        for(PersonalProjectEntity personalProject:userEntity.getPersonalProjects()){
+            if(personalProject.getPersonalProjectId().equals(projectId))
+                return personalProject;
+        }
+        return null;
     }
 
 }

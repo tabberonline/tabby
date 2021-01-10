@@ -1,5 +1,6 @@
 package com.tabber.tabby.service.impl;
 
+import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.RankWidgetRequest;
 import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
@@ -22,11 +23,13 @@ public class RankWidgetServiceImpl implements RankWidgetService {
     UserService userService;
 
     @Override
-    public RankWidgetEntity createRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetExistsException {
+    public RankWidgetEntity createRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws Exception {
         UserEntity userEntity = userService.getUserFromUserId(userId);
         if(rankWidgetExistsForWebsite(userEntity,rankWidgetRequest.getWebsiteId())!=null){
             throw new RankWidgetExistsException("Exists for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
+        if(userEntity.getRankWidgets().size() >= TabbyConstants.RANK_WIDGET_SIZE_LIMIT)
+            throw new Exception("Rank widget size limit is reached");
         RankWidgetEntity rankWidgetEntity = new RankWidgetEntity()
                 .toBuilder()
                 .websiteId(rankWidgetRequest.getWebsiteId())

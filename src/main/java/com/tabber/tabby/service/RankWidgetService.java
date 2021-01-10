@@ -6,7 +6,7 @@ import com.tabber.tabby.exceptions.RankWidgetExistsException;
 import com.tabber.tabby.exceptions.RankWidgetNotExistsException;
 
 public interface RankWidgetService {
-    RankWidgetEntity createRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetExistsException;
+    RankWidgetEntity createRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws Exception;
     RankWidgetEntity updateRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws RankWidgetNotExistsException;
     RankWidgetEntity deleteRankWidget(Integer websiteId, Long userId) throws RankWidgetNotExistsException;
 

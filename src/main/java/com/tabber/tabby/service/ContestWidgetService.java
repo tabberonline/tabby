@@ -6,7 +6,7 @@ import com.tabber.tabby.exceptions.ContestWidgetExistsException;
 import com.tabber.tabby.exceptions.ContestWidgetNotExistsException;
 
 public interface ContestWidgetService {
-    ContestWidgetEntity createContestWidget(ContestWidgetRequest rankWidgetRequest, Long userId) throws ContestWidgetExistsException;
+    ContestWidgetEntity createContestWidget(ContestWidgetRequest rankWidgetRequest, Long userId) throws Exception;
 
     ContestWidgetEntity updateContestWidget(ContestWidgetRequest rankWidgetRequest, Long contestId,Long userId) throws ContestWidgetNotExistsException;
 
