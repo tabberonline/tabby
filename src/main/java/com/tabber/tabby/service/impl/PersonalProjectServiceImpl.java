@@ -44,7 +44,7 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
             throw new PersonalProjectNotExistsException("Project id not specified");
         }
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        PersonalProjectEntity personalProject = personalProjectRepository.getTopByProjectId(projectId);
+        PersonalProjectEntity personalProject = getPersonalProjectFromProjectId(userEntity,projectId);
         if(personalProject == null)
             throw new PersonalProjectNotExistsException("Project doesn't exist exception");
         userEntity.getPersonalProjects().remove(personalProject);
@@ -65,7 +65,7 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         if(projectId == null){
             throw new PersonalProjectNotExistsException("Project id not specified");
         }
-        PersonalProjectEntity personalProjectEntity = personalProjectRepository.getTopByProjectId(projectId);
+        PersonalProjectEntity personalProjectEntity = getPersonalProjectFromProjectId(userEntity,projectId);
         if(personalProjectEntity==null){
             throw new PersonalProjectNotExistsException("Doesn't exist for user ");
         }
@@ -74,6 +74,14 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         userEntity = userService.setResumePresent(userEntity);
         userService.updateCache(userEntity);
         return personalProjectEntity;
+    }
+
+    private PersonalProjectEntity getPersonalProjectFromProjectId(UserEntity userEntity,Long projectId){
+        for(PersonalProjectEntity personalProject:userEntity.getPersonalProjects()){
+            if(personalProject.getPersonalProjectId().equals(projectId))
+                return personalProject;
+        }
+        return null;
     }
 
 }
