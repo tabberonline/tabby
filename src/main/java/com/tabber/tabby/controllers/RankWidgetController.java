@@ -26,7 +26,7 @@ public class RankWidgetController {
 
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<RankWidgetEntity> createRankWidget(
-            @RequestBody @Validated RankWidgetRequest rankWidgetRequest) throws RankWidgetExistsException {
+            @RequestBody @Validated RankWidgetRequest rankWidgetRequest) throws Exception {
         logger.log(Level.INFO,"Create widget request for rank widget",rankWidgetRequest);
         RankWidgetEntity rankWidgetEntity = null;
         try {
