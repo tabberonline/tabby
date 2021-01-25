@@ -8,6 +8,7 @@ public interface TabbyConstants {
     String WEBSITE = "WEBSITE";
     String RESUME = "RESUME";
     String FRONTEND_CONFIG = "FRONTEND_CONFIG";
+    String EMAIL_BY= "EMAIL_BY";
     Integer RANK_WIDGET_SIZE_LIMIT = 3;
     Integer CONTEST_WIDGET_SIZE_LIMIT = 3;
     Integer PERSONAL_PROJECT_SIZE_LIMIT = 3;

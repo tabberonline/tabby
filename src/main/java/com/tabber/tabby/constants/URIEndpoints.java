@@ -13,6 +13,7 @@ public interface URIEndpoints {
     String UPDATE = "/update";
     String DELETE = "/delete";
     String EMAIL_TABBER = "/email";
+    String EMAIL_TO = "/share/email";
     String WEBSITE = "/website";
     String ALL_WEBSITE = "/website/all";
 
