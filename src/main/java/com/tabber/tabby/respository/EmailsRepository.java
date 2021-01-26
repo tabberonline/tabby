@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface EmailsRepository extends JpaRepository<EmailEntity,Long> {
-    @Query(value = "select * from contest_widgets where profile_id=?1 limit 1",nativeQuery = true)
+    @Query(value = "select * from emails where profile_id=?1 limit 1",nativeQuery = true)
     EmailEntity getEmailDataByProfileId(Long id);
 }

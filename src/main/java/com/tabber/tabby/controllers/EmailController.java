@@ -3,6 +3,7 @@ package com.tabber.tabby.controllers;
 import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.EmailRequest;
 import com.tabber.tabby.email.EmailService;
+import com.tabber.tabby.service.EmailTabberProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,9 @@ public class EmailController {
 
     @Autowired
     EmailService emailService;
+
+    @Autowired
+    EmailTabberProfileService emailTabberProfileService;
 
     @PostMapping(value = URIEndpoints.EMAIL_TABBER,produces = "application/json")
     public ResponseEntity<String> sendEmail(
@@ -35,7 +39,7 @@ public class EmailController {
 
         try{
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            emailService.sendTabbyProfileInEmail(userId, emailTo);
+            emailTabberProfileService.sendTabbyProfileInEmail(userId, emailTo);
         }
         catch (Exception e){
             throw new Exception("Unable to send email to user "+emailTo+" due to exception "+e.toString());
