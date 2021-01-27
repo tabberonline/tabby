@@ -98,8 +98,7 @@ public class RedisServiceManager {
     }
     public Long rPush(String key, String  value){
         try (Jedis redis = jedisConnection().getJedis()) {
-             redis.rpush(key,value);
-             return redis.llen(key);
+            return redis.rpush(key,value);
         }catch (Exception e) {
             logger.log(java.util.logging.Level.WARNING,
                     "An error occured while getting value for the key {}. Please check if redis is up", key);
