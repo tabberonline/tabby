@@ -11,6 +11,7 @@ import com.tabber.tabby.manager.EmailsManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.EmailsRepository;
 import com.tabber.tabby.service.EmailTabberProfileService;
+import com.tabber.tabby.service.ReceiverEmailListRedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -46,6 +47,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    ReceiverEmailListRedisService receiverEmailListRedisService;
+
     private void sendMailWithTemplate(UserEntity userEntity, String toEmail) {
 
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
@@ -64,6 +68,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.name());
             helper.setTo(toEmail);
             helper.setText(html, true);
+            receiverEmailListRedisService.addEmailToRedisCachedList(toEmail);
             javaMailSender.send(mailMessage);
         }
         catch (Exception ex){

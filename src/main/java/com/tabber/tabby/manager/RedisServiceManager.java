@@ -96,15 +96,17 @@ public class RedisServiceManager {
             return null;
         }
     }
-    public Long lPush(byte[] key, byte[]... values){
+    public Long rPush(String key, String  value){
         try (Jedis redis = jedisConnection().getJedis()) {
-            return redis.lpush(key,values);
+             redis.rpush(key,value);
+             return redis.llen(key);
         }catch (Exception e) {
             logger.log(java.util.logging.Level.WARNING,
                     "An error occured while getting value for the key {}. Please check if redis is up", key);
             return null;
         }
     }
+
     public Integer delKeys(String... keys) {
         try (Jedis redis = jedisConnection().getJedis()) {
             redis.del(keys);
