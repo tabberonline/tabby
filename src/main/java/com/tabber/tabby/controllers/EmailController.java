@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 public class EmailController {
@@ -33,13 +34,13 @@ public class EmailController {
         return new ResponseEntity<>("Email Sent Successfully", HttpStatus.OK);
     }
 
-    @GetMapping(value = URIEndpoints.EMAIL_TO,produces = "application/json")
+    @PostMapping(value = URIEndpoints.EMAIL_TO,produces = "application/json")
     public ResponseEntity<String> sendEmailToUser(
-            @RequestParam("email_to") String emailTo) throws Exception {
+            @RequestParam("email_to") String emailTo,@RequestParam("file") MultipartFile file) throws Exception {
 
         try{
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            emailTabberProfileService.sendTabbyProfileInEmail(userId, emailTo);
+            emailTabberProfileService.sendTabbyProfileInEmail(userId, emailTo, file);
         }
         catch (Exception e){
             throw new Exception("Unable to send email to user "+emailTo+" due to exception "+e.toString());

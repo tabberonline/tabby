@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 
@@ -50,7 +51,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     @Autowired
     ReceiverEmailListRedisService receiverEmailListRedisService;
 
-    private void sendMailWithTemplate(UserEntity userEntity, String toEmail) {
+    private void sendMailWithTemplate(UserEntity userEntity, String toEmail, MultipartFile multipartFile) {
 
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
         try {
@@ -68,6 +69,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.name());
             helper.setTo(toEmail);
             helper.setText(html, true);
+            helper.addAttachment("userResume.pdf",multipartFile);
             receiverEmailListRedisService.addEmailToRedisCachedList(toEmail);
             javaMailSender.send(mailMessage);
         }
@@ -77,7 +79,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     }
 
     @Override
-    public void sendTabbyProfileInEmail(Long userProfileId,String receiverEmail){
+    public void sendTabbyProfileInEmail(Long userProfileId,String receiverEmail, MultipartFile multipartFile){
         UserEntity userEntity = userManager.findUserById(userProfileId);
         EmailEntity emailEntity = emailsManager.getEmailByProfileId(userProfileId);
         if(emailEntity == null) {
@@ -95,7 +97,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         }
         emailsManager.evictEmailCacheValue(userProfileId);
         emailsRepository.saveAndFlush(emailEntity);
-        sendMailWithTemplate(userEntity,receiverEmail);
+        sendMailWithTemplate(userEntity,receiverEmail,multipartFile);
     }
 
     private JsonNode createEmailObject(String emailTo){
