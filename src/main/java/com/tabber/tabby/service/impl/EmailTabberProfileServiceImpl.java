@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tabber.tabby.dto.EmailHistoryResponse;
 import com.tabber.tabby.email.EmailService;
 import com.tabber.tabby.entity.EmailEntity;
 import com.tabber.tabby.entity.UserEntity;
@@ -12,6 +13,7 @@ import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.EmailsRepository;
 import com.tabber.tabby.service.EmailTabberProfileService;
 import com.tabber.tabby.service.ReceiverEmailListRedisService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -99,6 +101,27 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         emailsRepository.saveAndFlush(emailEntity);
         sendMailWithTemplate(userEntity,receiverEmail,multipartFile);
     }
+
+    @Override
+    public EmailHistoryResponse getPaginatedEmailHistory(Integer pageNo, Integer itemsPerPage, Long userProfileId){
+        EmailEntity emailEntity = emailsManager.getEmailByProfileId(userProfileId);
+        JsonNode jsonNodeArray = emailEntity.getEmailData().get("data");
+        ArrayList<JSONObject> emailHistory = objectMapper.convertValue(jsonNodeArray,ArrayList.class);
+        List<JSONObject> emailSlicedHistory = new ArrayList<>();
+        if((pageNo-1)*itemsPerPage <= emailHistory.size()) {
+            Integer toItemNumber = Math.min((pageNo - 1) * itemsPerPage + itemsPerPage, emailHistory.size());
+            emailSlicedHistory = emailHistory.subList((pageNo - 1) * itemsPerPage, toItemNumber);
+        }
+        EmailHistoryResponse emailHistoryResponse = new EmailHistoryResponse().toBuilder()
+                .totalItems(emailHistory.size())
+                .pageNo(pageNo)
+                .itemsPerPage(itemsPerPage)
+                .mailHistory(emailSlicedHistory)
+                .build();
+        return emailHistoryResponse;
+
+    }
+
 
     private JsonNode createEmailObject(String emailTo){
         JsonNode emailObject = objectMapper.createObjectNode();

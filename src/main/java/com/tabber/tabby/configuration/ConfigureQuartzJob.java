@@ -20,7 +20,7 @@ public class ConfigureQuartzJob {
 
         return TriggerBuilder.newTrigger().forJob(emailingProfileReceiverJob)
                 .withIdentity("emailJobTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("* * * * * ? *")) // everyday
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 12 1/1 * ? *")) // everyday
                 .build();
     }
 }

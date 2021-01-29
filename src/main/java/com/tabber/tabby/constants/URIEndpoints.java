@@ -14,6 +14,7 @@ public interface URIEndpoints {
     String DELETE = "/delete";
     String EMAIL_TABBER = "/email";
     String EMAIL_TO = "/share/email";
+    String EMAIL_HISTORY = "/email/history";
     String WEBSITE = "/website";
     String ALL_WEBSITE = "/website/all";
 

@@ -1,9 +1,11 @@
 package com.tabber.tabby.controllers;
 
 import com.tabber.tabby.constants.URIEndpoints;
+import com.tabber.tabby.dto.EmailHistoryResponse;
 import com.tabber.tabby.dto.EmailRequest;
 import com.tabber.tabby.email.EmailService;
 import com.tabber.tabby.service.EmailTabberProfileService;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,4 +49,19 @@ public class EmailController {
         }
         return new ResponseEntity<>("Email Sent Successfully to user"+emailTo, HttpStatus.OK);
     }
+
+    @GetMapping(value = URIEndpoints.EMAIL_HISTORY,produces = "application/json")
+    public ResponseEntity<EmailHistoryResponse> emailHistory(
+            @RequestParam("page_no") Integer pageNo,@RequestParam( "items_per_page") Integer itemsPerPage) throws Exception {
+
+        try{
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            EmailHistoryResponse emailHistoryResponse = emailTabberProfileService.getPaginatedEmailHistory(pageNo,itemsPerPage,userId);
+            return new ResponseEntity<>(emailHistoryResponse, HttpStatus.OK);
+        }
+        catch (Exception e){
+            throw new Exception("Unable to provide email history due to exception "+e.toString());
+        } }
+
+
 }
