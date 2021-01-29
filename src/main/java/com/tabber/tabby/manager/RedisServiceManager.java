@@ -106,6 +106,15 @@ public class RedisServiceManager {
         }
     }
 
+    public List<String> lrange(String key, Integer  start, Integer stop){
+        try (Jedis redis = jedisConnection().getJedis()) {
+            return redis.lrange(key,start,stop);
+        }catch (Exception e) {
+            logger.log(java.util.logging.Level.WARNING,
+                    "An error occured while getting value for the key {}. Please check if redis is up", key);
+            return null;
+        }
+    }
     public Integer delKeys(String... keys) {
         try (Jedis redis = jedisConnection().getJedis()) {
             redis.del(keys);

@@ -72,7 +72,6 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             helper.setTo(toEmail);
             helper.setText(html, true);
             helper.addAttachment("userResume.pdf",multipartFile);
-            receiverEmailListRedisService.addEmailToRedisCachedList(toEmail);
             javaMailSender.send(mailMessage);
         }
         catch (Exception ex){
@@ -99,6 +98,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         }
         emailsManager.evictEmailCacheValue(userProfileId);
         emailsRepository.saveAndFlush(emailEntity);
+        receiverEmailListRedisService.addEmailToRedisCachedList(receiverEmail);
         sendMailWithTemplate(userEntity,receiverEmail,multipartFile);
     }
 
