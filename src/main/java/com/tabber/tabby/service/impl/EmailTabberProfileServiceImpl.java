@@ -4,10 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.EmailHistoryResponse;
 import com.tabber.tabby.email.EmailService;
 import com.tabber.tabby.entity.EmailEntity;
 import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.manager.EmailsManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.EmailsRepository;
@@ -18,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
@@ -46,9 +49,6 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
 
     @Autowired
     private JavaMailSender javaMailSender;
-
-    @Autowired
-    EmailService emailService;
 
     @Autowired
     ReceiverEmailListRedisService receiverEmailListRedisService;
@@ -80,7 +80,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     }
 
     @Override
-    public void sendTabbyProfileInEmail(Long userProfileId,String receiverEmail, MultipartFile multipartFile){
+    public void sendTabbyProfileInEmail(Long userProfileId,String receiverEmail, MultipartFile multipartFile) throws Exception{
         UserEntity userEntity = userManager.findUserById(userProfileId);
         EmailEntity emailEntity = emailsManager.getEmailByProfileId(userProfileId);
         if(emailEntity == null) {
@@ -93,6 +93,8 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         }
         else {
             JsonNode jsonNode = emailEntity.getEmailData();
+            if(checkIfEmailSendingLimitReached(jsonNode))
+                throw new BadRequestException("Email sending limit of "+ TabbyConstants.EMAIL_SENDING_LIMIT+" emails reached");
             ((ArrayNode)jsonNode.get("data")).add(createEmailObject(receiverEmail));
             emailEntity.setEmailData(jsonNode);
         }
@@ -100,6 +102,24 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         emailsRepository.saveAndFlush(emailEntity);
         receiverEmailListRedisService.addEmailToRedisCachedList(receiverEmail);
         sendMailWithTemplate(userEntity,receiverEmail,multipartFile);
+    }
+
+    private Boolean checkIfEmailSendingLimitReached(JsonNode jsonNodeArray){
+        ArrayList<JSONObject> emailHistory = objectMapper.convertValue(jsonNodeArray.get("data"),ArrayList.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        if(emailHistory.size() - 1 - TabbyConstants.EMAIL_SENDING_LIMIT < 0)
+            return false;
+        try {
+            Date lastEmailDate = sdf.parse(objectMapper.convertValue(emailHistory.get(emailHistory.size() - 1),
+                    LinkedHashMap.class).get("date").toString());
+            Date dateToCompare = sdf.parse(objectMapper.convertValue(emailHistory.get(emailHistory.size() - 1 - TabbyConstants.EMAIL_SENDING_LIMIT),
+                    LinkedHashMap.class).get("date").toString());
+            if(lastEmailDate.equals(dateToCompare))
+                return true;
+        }
+        catch (Exception ex){}
+
+        return false;
     }
 
     @Override

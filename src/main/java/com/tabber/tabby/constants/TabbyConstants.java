@@ -10,11 +10,12 @@ public interface TabbyConstants {
     String FRONTEND_CONFIG = "FRONTEND_CONFIG";
     String EMAIL_BY= "EMAIL_BY";
     String EMAIL_KEY= "EMAIL_KEY";
-    Integer MAX_EMAILS_PER_KEY= 3;
     String COUNT_EMAIL_KEY= "COUNT_EMAIL_KEY";
+    Integer MAX_EMAILS_PER_KEY= 3;
     Integer RANK_WIDGET_SIZE_LIMIT = 3;
     Integer CONTEST_WIDGET_SIZE_LIMIT = 3;
     Integer PERSONAL_PROJECT_SIZE_LIMIT = 3;
+    Integer EMAIL_SENDING_LIMIT = 3;
     List<String> admins = Arrays.asList("mandeep.sidhu2@gmail.com","vikrant.negi74@gmail.com");
 
 }
