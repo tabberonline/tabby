@@ -13,6 +13,9 @@ ENV REDIS_HOST_URL=ec2-54-224-171-77.compute-1.amazonaws.com
 ENV REDIS_PASSWORD=pd0e3dcc09d6b839610992efb1693e3ba18ab86d2fbe380f8faecbb5bea55a084
 ENV REDIS_PORT=10489
 ENV SERVER_PORT=8082
+ENV SCHEDULER_DB_URL=postgres://nggnfmgccrtxit:20deb40cec77d6124adcc2ddbff1439239602e6af0aef24a6d6a82fa4a91eee0@ec2-54-159-107-189.compute-1.amazonaws.com:5432/daqi6dvv7o2lu5
+ENV SCHEDULER_DB_USERNAME=nggnfmgccrtxit
+ENV SCHEDULER_DB_PASSWORD=20deb40cec77d6124adcc2ddbff1439239602e6af0aef24a6d6a82fa4a91eee0
 
 ENTRYPOINT ["java","-Dserver.port=8082","-Dspring.profiles.active=prod","-jar","/tabby.jar"]
 
