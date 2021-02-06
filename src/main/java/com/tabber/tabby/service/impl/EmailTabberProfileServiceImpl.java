@@ -12,6 +12,7 @@ import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.manager.EmailsManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.EmailsRepository;
+import com.tabber.tabby.service.AWSService;
 import com.tabber.tabby.service.EmailTabberProfileService;
 import com.tabber.tabby.service.ReceiverEmailListRedisService;
 import org.json.JSONObject;
@@ -51,10 +52,13 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     @Autowired
     ReceiverEmailListRedisService receiverEmailListRedisService;
 
-    private void sendMailWithTemplate(UserEntity userEntity, String toEmail, MultipartFile multipartFile) {
+    @Autowired
+    AWSService awsService;
 
-        MimeMessage mailMessage = javaMailSender.createMimeMessage();
-        try {
+    private String getHTMLwithTemplate(UserEntity userEntity, String toEmail, MultipartFile multipartFile) {
+
+//        MimeMessage mailMessage = javaMailSender.createMimeMessage();
+//        try {
             Map<String,Object> model =new HashMap<String,Object>();
             model.put("name",userEntity.getName());
             model.put("email",userEntity.getEmail());
@@ -64,17 +68,19 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             Context context = new Context();
             context.setVariables(model);
 
-            mailMessage.setSubject("Visit "+ userEntity.getName() +"'s Tabber Profile", "UTF-8");
+            String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
+            //mailMessage.setSubject(subject, "UTF-8");
             String html = templateEngine.process("tabberProfile",context);
-            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.name());
-            helper.setTo(toEmail);
-            helper.setText(html, true);
-            helper.addAttachment("userResume.pdf",multipartFile);
-            javaMailSender.send(mailMessage);
-        }
-        catch (Exception ex){
-
-        }
+            return html;
+//            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.name());
+//            helper.setTo(toEmail);
+//            helper.setText(html, true);
+//            helper.addAttachment("userResume.pdf",multipartFile);
+            //javaMailSender.send(mailMessage);
+//        }
+//        catch (Exception ex){
+//
+//        }
     }
 
     @Override
@@ -93,18 +99,24 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             JsonNode jsonNode = emailEntity.getEmailData();
             if(checkIfEmailSendingLimitReached(jsonNode))
                 throw new BadRequestException("Email sending limit of "+ TabbyConstants.EMAIL_SENDING_LIMIT+" emails reached");
+            if((jsonNode.get("data")).size()>=TabbyConstants.EMAIL_HISTORY_STORING_LIMIT){
+                ((ArrayNode)jsonNode.get("data")).remove(0);
+            }
             ((ArrayNode)jsonNode.get("data")).add(createEmailObject(receiverEmail));
             emailEntity.setEmailData(jsonNode);
         }
         emailsManager.evictEmailCacheValue(userProfileId);
         emailsRepository.saveAndFlush(emailEntity);
         receiverEmailListRedisService.addEmailToRedisCachedList(receiverEmail);
-        sendMailWithTemplate(userEntity,receiverEmail,multipartFile);
+        String html = getHTMLwithTemplate(userEntity,receiverEmail,multipartFile);
+        String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
+        awsService.sendSESEmail(receiverEmail,html,subject,multipartFile);
     }
 
     private Boolean checkIfEmailSendingLimitReached(JsonNode jsonNodeArray){
         ArrayList<JSONObject> emailHistory = objectMapper.convertValue(jsonNodeArray.get("data"),ArrayList.class);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        // EMAIL_HISTORY_STORING_LIMIT should always be greater than EMAIL_SENDING_LIMIT, otherwise this check never works
         if(emailHistory.size() - 1 - TabbyConstants.EMAIL_SENDING_LIMIT < 0)
             return false;
         try {

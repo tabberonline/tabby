@@ -1,0 +1,102 @@
+package com.tabber.tabby.service;
+
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.ByteBuffer;
+import java.util.Properties;
+
+// JavaMail libraries. Download the JavaMail API
+// from https://javaee.github.io/javamail/
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.FileDataSource;
+import javax.activation.FileTypeMap;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeBodyPart;
+import javax.mail.internet.MimeMessage;
+import javax.mail.internet.MimeMultipart;
+
+// AWS SDK libraries. Download the AWS SDK for Java
+// from https://aws.amazon.com/sdk-for-java
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
+import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
+import com.amazonaws.services.simpleemail.model.RawMessage;
+import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
+import com.sun.istack.ByteArrayDataSource;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+@Service
+public class AWSService {
+
+    @Async
+    public void sendSESEmail(String toEmail, String HTML, String subject, MultipartFile multipartFile){
+        try {
+        String fromEmail = "communications@tabber.online";
+        Session session = Session.getDefaultInstance(new Properties());
+        // Create a new MimeMessage object.
+        MimeMessage message = new MimeMessage(session);
+        // Add subject, from and to lines.
+        message.setSubject(subject, "UTF-8");
+        message.setFrom(new InternetAddress(fromEmail));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+
+        // Create a wrapper for the HTML and text parts.
+        MimeBodyPart wrap = new MimeBodyPart();
+        // Create a multipart/alternative child container.
+        MimeMultipart msg_body = new MimeMultipart("alternative");
+        // Define the text part.
+        MimeBodyPart textPart = new MimeBodyPart();
+        textPart.setContent("THIS IS TEXT TEST", "text/plain; charset=UTF-8");
+        // Define the HTML part.
+        MimeBodyPart htmlPart = new MimeBodyPart();
+        htmlPart.setContent(HTML,"text/html; charset=UTF-8");
+        // Add the text and HTML parts to the child container.
+        msg_body.addBodyPart(textPart);
+        msg_body.addBodyPart(htmlPart);
+        // Add the child container to the wrapper object.
+        wrap.setContent(msg_body);
+
+        // Create a multipart/mixed parent container.
+        MimeMultipart msg = new MimeMultipart("mixed");
+        // Add the parent container to the message.
+        message.setContent(msg);
+        // Add the multipart/alternative part to the message.
+        msg.addBodyPart(wrap);
+
+        // Define the attachment
+        MimeBodyPart att = new MimeBodyPart();
+
+        String mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(multipartFile.getOriginalFilename());
+        DataSource dataSource = new ByteArrayDataSource(multipartFile.getBytes(), mimeType);
+        att.setDataHandler(new DataHandler(dataSource));
+        att.setFileName(multipartFile.getName());
+
+        // Add the attachment to the message.
+        msg.addBodyPart(att);
+        AmazonSimpleEmailService client =
+                    AmazonSimpleEmailServiceClientBuilder.standard()
+                    .withRegion(Regions.US_EAST_2)
+                    .build();
+            // Send the email.
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        message.writeTo(outputStream);
+        RawMessage rawMessage =new RawMessage(ByteBuffer.wrap(outputStream.toByteArray()));
+
+        SendRawEmailRequest rawEmailRequest =new SendRawEmailRequest(rawMessage);
+        client.sendRawEmail(rawEmailRequest);
+        System.out.println("Email sent!");
+        } catch (Exception ex) {
+            System.out.println("The email was not sent. Error message: "
+                    + ex.getMessage());
+        }
+    }
+}

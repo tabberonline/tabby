@@ -16,6 +16,7 @@ public interface TabbyConstants {
     Integer CONTEST_WIDGET_SIZE_LIMIT = 3;
     Integer PERSONAL_PROJECT_SIZE_LIMIT = 3;
     Integer EMAIL_SENDING_LIMIT = 3;
+    Integer EMAIL_HISTORY_STORING_LIMIT = 4;
     List<String> admins = Arrays.asList("mandeep.sidhu2@gmail.com","vikrant.negi74@gmail.com");
 
 }
