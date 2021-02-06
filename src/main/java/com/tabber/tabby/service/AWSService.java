@@ -30,6 +30,7 @@ import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.simpleemail.model.RawMessage;
 import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
 import com.sun.istack.ByteArrayDataSource;
+import com.tabber.tabby.entity.UserEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -38,7 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AWSService {
 
     @Async
-    public void sendSESEmail(String toEmail, String HTML, String subject, MultipartFile multipartFile){
+    public void sendSESEmail(String toEmail, String HTML, String subject, MultipartFile multipartFile, UserEntity userEntity){
         try {
         String fromEmail = "communications@tabber.online";
         Session session = Session.getDefaultInstance(new Properties());
@@ -78,7 +79,7 @@ public class AWSService {
         String mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(multipartFile.getOriginalFilename());
         DataSource dataSource = new ByteArrayDataSource(multipartFile.getBytes(), mimeType);
         att.setDataHandler(new DataHandler(dataSource));
-        att.setFileName(multipartFile.getName());
+        att.setFileName(userEntity.getName().trim()+".pdf");
 
         // Add the attachment to the message.
         msg.addBodyPart(att);

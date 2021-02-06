@@ -110,7 +110,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         receiverEmailListRedisService.addEmailToRedisCachedList(receiverEmail);
         String html = getHTMLwithTemplate(userEntity,receiverEmail,multipartFile);
         String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
-        awsService.sendSESEmail(receiverEmail,html,subject,multipartFile);
+        awsService.sendSESEmail(receiverEmail,html,subject,multipartFile,userEntity);
     }
 
     private Boolean checkIfEmailSendingLimitReached(JsonNode jsonNodeArray){
