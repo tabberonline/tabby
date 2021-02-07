@@ -124,7 +124,8 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
                     LinkedHashMap.class).get("date").toString());
             Date dateToCompare = sdf.parse(objectMapper.convertValue(emailHistory.get(emailHistory.size() - 1 - TabbyConstants.EMAIL_SENDING_LIMIT),
                     LinkedHashMap.class).get("date").toString());
-            if(lastEmailDate.equals(dateToCompare))
+            Date dateToday= sdf.parse(getCurrentDateInUTC());
+            if(lastEmailDate.equals(dateToCompare) && dateToday.equals(lastEmailDate))
                 return true;
         }
         catch (Exception ex){}
