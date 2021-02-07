@@ -56,4 +56,19 @@ public class PortfolioServiceImpl implements PortfolioService {
         return portfolioEntity;
     }
 
+    @Override
+    public void updateResumeLink(String cloudLink,Long userId){
+        UserEntity user = userService.getUserFromUserId(userId);
+        if(user.getPortfolio()==null) {
+            throw new PortfolioNotExistsException("Portfolio does not exist for user with id: " + userId);
+        }
+        PortfolioEntity portfolioEntity = user.getPortfolio();
+        portfolioEntity = portfolioEntity.toBuilder()
+                .cloudResumeLink(cloudLink)
+                .build();
+        portfolioRepository.saveAndFlush(portfolioEntity);
+        user.setPortfolio(portfolioEntity);
+        userService.updateCache(user);
+    }
+
 }

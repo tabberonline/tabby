@@ -6,4 +6,5 @@ import com.tabber.tabby.entity.PortfolioEntity;
 public interface PortfolioService {
     PortfolioEntity createPortfolio(PortfolioRequest portfolioRequest,Long userId);
     PortfolioEntity updatePortfolio(PortfolioRequest portfolioRequest,Long userId);
+    void updateResumeLink(String cloudLink,Long userId);
 }
