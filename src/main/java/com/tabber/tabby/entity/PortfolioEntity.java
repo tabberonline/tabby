@@ -38,6 +38,10 @@ public class PortfolioEntity {
     @JsonProperty("description")
     private String description;
 
+    @Column(name = "cloud_resume_link")
+    @JsonProperty("cloud_resume_link")
+    private String cloudResumeLink;
+
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp

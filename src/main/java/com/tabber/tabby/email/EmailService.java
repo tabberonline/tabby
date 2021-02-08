@@ -1,12 +1,22 @@
 package com.tabber.tabby.email;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.tabber.tabby.entity.EmailEntity;
 import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.manager.EmailsManager;
+import com.tabber.tabby.manager.UserResumeManager;
+import com.tabber.tabby.respository.EmailsRepository;
 import com.tabber.tabby.respository.UserRepository;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.HtmlUtils;
 import org.thymeleaf.context.Context;
@@ -17,6 +27,8 @@ import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import javax.mail.internet.MimeMessage;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,16 +39,9 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
-    @Autowired
-    private SpringTemplateEngine templateEngine;
-
-    @Autowired
-    UserRepository userRepository;
-
     public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
-
 
     public void sendMail(String toEmail, String subject, String message) {
         MimeMessage mailMessage = javaMailSender.createMimeMessage();
@@ -52,28 +57,5 @@ public class EmailService {
         }
     }
 
-    public void sendMailWithTemplate(UserEntity userEntity) {
 
-        MimeMessage mailMessage = javaMailSender.createMimeMessage();
-        try {
-            Map<String,Object> model =new HashMap<String,Object>();
-            model.put("name",userEntity.getName());
-            model.put("email",userEntity.getEmail());
-            model.put("title",userEntity.getPortfolio().getTitle());
-            model.put("description",userEntity.getPortfolio().getDescription());
-
-            Context context = new Context();
-            context.setVariables(model);
-
-            mailMessage.setSubject("Visit "+ userEntity.getName() +"'s Tabber Profile", "UTF-8");
-            String html = templateEngine.process("sample",context);
-            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true,StandardCharsets.UTF_8.name());
-            helper.setTo("tabberonline@gmail.com");
-            helper.setText(html, true);
-            javaMailSender.send(mailMessage);
-        }
-        catch (Exception ex){
-
-        }
-    }
 }

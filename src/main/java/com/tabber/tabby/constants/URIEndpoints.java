@@ -10,9 +10,12 @@ public interface URIEndpoints {
     String GUEST_RESUME = "/guest/resume";
     String PORTFOLIO = "/portfolio";
     String CREATE = "/create";
+    String UPLOAD_CLOUD_RESUME_LINK = "/upload/crlink";
     String UPDATE = "/update";
     String DELETE = "/delete";
     String EMAIL_TABBER = "/email";
+    String EMAIL_TO = "/share/email";
+    String EMAIL_HISTORY = "/email/history";
     String WEBSITE = "/website";
     String ALL_WEBSITE = "/website/all";
 

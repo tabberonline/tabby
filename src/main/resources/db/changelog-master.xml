@@ -15,4 +15,6 @@
     <include file="db/migrations/006_create_frontend_configurations_table.xml"/>
     <include file="db/migrations/007_create_personal_projects_table.xml"/>
     <include file="db/migrations/008_add_last_logged_in_column_to_users.xml"/>
+    <include file="db/migrations/009_create_emails_table.xml"/>
+    <include file="db/migrations/010_add_cloud_resume_link_to_portfolios.xml"/>
 </databaseChangeLog>

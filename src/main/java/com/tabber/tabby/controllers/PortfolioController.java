@@ -25,6 +25,22 @@ public class PortfolioController {
     @Autowired
     PortfolioService portfolioService;
 
+    @PostMapping(value = URIEndpoints.UPLOAD_CLOUD_RESUME_LINK,produces = "application/json")
+    public ResponseEntity<Boolean> uploadCloudResumeLink(
+            @RequestParam("cloud_link")  String cloudLink) throws Exception {
+        logger.log(Level.INFO,"Uploading cloud link",cloudLink);
+        Boolean linkUpdated = null;
+        try {
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            portfolioService.updateResumeLink(cloudLink,userId);
+        }
+        catch (Exception ex){
+            logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
+            return new ResponseEntity<>(false, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(true, HttpStatus.OK);
+    }
+
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<PortfolioEntity> createPortfolio(
             @RequestBody @Validated PortfolioRequest portfolioRequest) throws PortfolioExistsException {
