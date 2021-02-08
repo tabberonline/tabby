@@ -1,16 +1,12 @@
 package com.tabber.tabby.schedulers;
 
-import com.amazonaws.auth.AWSCredentials;
-import com.amazonaws.auth.AWSStaticCredentialsProvider;
-import com.amazonaws.auth.BasicAWSCredentials;
-import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.csvreader.CsvWriter;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.manager.RedisServiceManager;
+import com.tabber.tabby.service.AWSService;
+import com.tabber.tabby.utils.DateUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +18,7 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 
+@Service
 public class EmailTabberProfileReceiverScheduler implements Job {
 
     @Override
@@ -29,13 +26,13 @@ public class EmailTabberProfileReceiverScheduler implements Job {
         aws();
     }
 
-    private final String accessKey="AKIA5Y57L2I37TQ2AKEA";
-    private final String secretKey ="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";
-    private AmazonS3 s3client;
+    @Autowired
+    AWSService awsService;
 
     @Autowired
     RedisServiceManager redisServiceManager;
 
+    private AmazonS3 s3client;
     public void aws(){
         try {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -48,25 +45,21 @@ public class EmailTabberProfileReceiverScheduler implements Job {
                 List<String> emailChainList = redisServiceManager.lrange(emailChainKey,0,TabbyConstants.MAX_EMAILS_PER_KEY-1);
                 for (String email:emailChainList)
                     writer.write(email);
-
             }
-
-            AWSCredentials credentials = new BasicAWSCredentials(this.accessKey, this.secretKey);
-            this.s3client = AmazonS3ClientBuilder.standard()
-                    .withCredentials(new AWSStaticCredentialsProvider(credentials))
-                    .withRegion(Regions.US_EAST_2)
-                    .build();
+            writer.endRecord();
+            writer.close();
 
             ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType("plain/text");
-            metadata.addUserMetadata("title", "Receiver Emails");
+            metadata.setContentType("csv");
+            metadata.addUserMetadata("yyyyMMddHHmm emails key", "date coded key");
 
             InputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
-            PutObjectRequest request = new PutObjectRequest("elasticbeanstalk-us-east-2-946904748599", "test", inputStream,metadata);
             stream.close();
 
-            request.setMetadata(metadata);
-            this.s3client.putObject(request);
+            String dateKey = DateUtil.getDateKey()+"emails.csv";
+
+            awsService.uploadOnS3("tabbybucket1",dateKey,inputStream,metadata);
+
         }
         catch (Exception e){}
     }

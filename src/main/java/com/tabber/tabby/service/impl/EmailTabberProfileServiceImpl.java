@@ -15,6 +15,7 @@ import com.tabber.tabby.respository.EmailsRepository;
 import com.tabber.tabby.service.AWSService;
 import com.tabber.tabby.service.EmailTabberProfileService;
 import com.tabber.tabby.service.ReceiverEmailListRedisService;
+import com.tabber.tabby.utils.DateUtil;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -124,7 +125,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
                     LinkedHashMap.class).get("date").toString());
             Date dateToCompare = sdf.parse(objectMapper.convertValue(emailHistory.get(emailHistory.size() - 1 - TabbyConstants.EMAIL_SENDING_LIMIT),
                     LinkedHashMap.class).get("date").toString());
-            Date dateToday= sdf.parse(getCurrentDateInUTC());
+            Date dateToday= sdf.parse(DateUtil.getCurrentDateInUTC());
             if(lastEmailDate.equals(dateToCompare) && dateToday.equals(lastEmailDate))
                 return true;
         }
@@ -157,14 +158,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     private JsonNode createEmailObject(String emailTo){
         JsonNode emailObject = objectMapper.createObjectNode();
         ((ObjectNode)emailObject).put("email", emailTo);
-        ((ObjectNode)emailObject).put("date", getCurrentDateInUTC());
+        ((ObjectNode)emailObject).put("date", DateUtil.getCurrentDateInUTC());
         return emailObject;
     }
 
-    private String getCurrentDateInUTC(){
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        return sdf.format(new Date());
-    }
 
 }

@@ -2,29 +2,24 @@ package com.tabber.tabby.service;
 
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Properties;
-
-// JavaMail libraries. Download the JavaMail API
-// from https://javaee.github.io/javamail/
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
-import javax.activation.FileDataSource;
 import javax.activation.FileTypeMap;
 import javax.mail.Message;
-import javax.mail.MessagingException;
 import javax.mail.Session;
-import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
-
-// AWS SDK libraries. Download the AWS SDK for Java
-// from https://aws.amazon.com/sdk-for-java
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailService;
 import com.amazonaws.services.simpleemail.AmazonSimpleEmailServiceClientBuilder;
 import com.amazonaws.services.simpleemail.model.RawMessage;
@@ -37,6 +32,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class AWSService {
+
+    private AmazonS3 s3client;
 
     @Async
     public void sendSESEmail(String toEmail, String HTML, String subject, MultipartFile multipartFile, UserEntity userEntity){
@@ -99,5 +96,14 @@ public class AWSService {
             System.out.println("The email was not sent. Error message: "
                     + ex.getMessage());
         }
+    }
+
+    public void uploadOnS3(String bucketName, String bucketKey, InputStream inputStream, ObjectMetadata metaData){
+        this.s3client = AmazonS3ClientBuilder.standard()
+                .withCredentials(DefaultAWSCredentialsProviderChain.getInstance())
+                .withRegion(Regions.US_EAST_2)
+                .build();
+        PutObjectRequest request = new PutObjectRequest("tabbybucket1", bucketKey, inputStream,metaData);
+        this.s3client.putObject(request);
     }
 }
