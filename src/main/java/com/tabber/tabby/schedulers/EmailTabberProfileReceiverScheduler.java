@@ -56,8 +56,9 @@ public class EmailTabberProfileReceiverScheduler implements Job {
             InputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
             stream.close();
 
-            String dateKey = DateUtil.getDateKey()+"emails.csv";
-
+            //String dateKey = DateUtil.getDateKey()+"emails.csv";
+            // replacing same name to keep min storage, replace later with above
+            String dateKey = "emails.csv";
             awsService.uploadOnS3("tabbybucket1",dateKey,inputStream,metadata);
 
         }
