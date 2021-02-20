@@ -137,6 +137,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     @Override
     public EmailHistoryResponse getPaginatedEmailHistory(Integer pageNo, Integer itemsPerPage, Long userProfileId){
         EmailEntity emailEntity = emailsManager.getEmailByProfileId(userProfileId);
+        if(emailEntity == null){
+          throw new BadRequestException("No email history for this user");
+        }
         JsonNode jsonNodeArray = emailEntity.getEmailData().get("data");
         ArrayList<JSONObject> emailHistory = objectMapper.convertValue(jsonNodeArray,ArrayList.class);
         List<JSONObject> emailSlicedHistory = new ArrayList<>();

@@ -51,7 +51,7 @@ public class EmailController {
     }
 
     @GetMapping(value = URIEndpoints.EMAIL_HISTORY,produces = "application/json")
-    public ResponseEntity<EmailHistoryResponse> emailHistory(
+    public ResponseEntity<EmailHistoryResponse> emailHistory (
             @RequestParam("page_no") Integer pageNo,@RequestParam( "items_per_page") Integer itemsPerPage) throws Exception {
 
         try{
