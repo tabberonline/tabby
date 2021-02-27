@@ -3,7 +3,9 @@ package com.tabber.tabby.controllers;
 import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.EmailHistoryResponse;
 import com.tabber.tabby.dto.EmailRequest;
+import com.tabber.tabby.dto.StatusWiseResponse;
 import com.tabber.tabby.email.EmailService;
+import com.tabber.tabby.enums.ResponseStatus;
 import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.service.EmailTabberProfileService;
 import org.json.JSONObject;
@@ -38,17 +40,21 @@ public class EmailController {
     }
 
     @PostMapping(value = URIEndpoints.EMAIL_TO,produces = "application/json")
-    public ResponseEntity<String> sendEmailToUser(
+    public ResponseEntity<StatusWiseResponse> sendEmailToUser(
             @RequestParam("email_to") String emailTo,@RequestParam("file") MultipartFile file) throws Exception {
-
+        StatusWiseResponse statusWiseResponse;
         try{
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            emailTabberProfileService.sendTabbyProfileInEmail(userId, emailTo, file);
+            statusWiseResponse=emailTabberProfileService.sendTabbyProfileInEmail(userId, emailTo, file);
         }
         catch (Exception e){
-            throw new Exception("Unable to send email to user "+emailTo+" due to exception "+e.toString());
+            statusWiseResponse= new StatusWiseResponse().toBuilder()
+                    .status(ResponseStatus.failure.name())
+                    .message("Error in sending email")
+                    .detailed_message(e.toString())
+                    .build();
         }
-        return new ResponseEntity<>("Email Sent Successfully to user"+emailTo, HttpStatus.OK);
+        return new ResponseEntity<>(statusWiseResponse, HttpStatus.OK);
     }
 
     @GetMapping(value = URIEndpoints.EMAIL_HISTORY,produces = "application/json")

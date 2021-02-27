@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.EmailHistoryResponse;
+import com.tabber.tabby.dto.StatusWiseResponse;
 import com.tabber.tabby.entity.EmailEntity;
 import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.enums.ResponseStatus;
 import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.manager.EmailsManager;
 import com.tabber.tabby.manager.UserResumeManager;
@@ -85,9 +87,13 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     }
 
     @Override
-    public void sendTabbyProfileInEmail(Long userProfileId,String receiverEmail, MultipartFile multipartFile) throws Exception{
+    public StatusWiseResponse sendTabbyProfileInEmail(Long userProfileId, String receiverEmail, MultipartFile multipartFile) throws Exception{
         UserEntity userEntity = userManager.findUserById(userProfileId);
         EmailEntity emailEntity = emailsManager.getEmailByProfileId(userProfileId);
+        StatusWiseResponse statusWiseResponse= new StatusWiseResponse().toBuilder()
+                .status(ResponseStatus.success.name())
+                .message("Email Successfully sent")
+                .build();
         if(emailEntity == null) {
             emailEntity = new EmailEntity();
             emailEntity.setId(userProfileId);
@@ -98,8 +104,12 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         }
         else {
             JsonNode jsonNode = emailEntity.getEmailData();
-            if(checkIfEmailSendingLimitReached(jsonNode))
-                throw new BadRequestException("Email sending limit of "+ TabbyConstants.EMAIL_SENDING_LIMIT+" emails reached");
+            if(checkIfEmailSendingLimitReached(jsonNode)) {
+                statusWiseResponse= new StatusWiseResponse().toBuilder()
+                        .status(ResponseStatus.failure.name())
+                        .message("Email sending limit of " + TabbyConstants.EMAIL_SENDING_LIMIT + " emails reached")
+                        .build();
+            }
             if((jsonNode.get("data")).size()>=TabbyConstants.EMAIL_HISTORY_STORING_LIMIT){
                 ((ArrayNode)jsonNode.get("data")).remove(0);
             }
@@ -112,6 +122,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         String html = getHTMLwithTemplate(userEntity,receiverEmail,multipartFile);
         String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
         awsService.sendSESEmail(receiverEmail,html,subject,multipartFile,userEntity);
+        return statusWiseResponse;
     }
 
     private Boolean checkIfEmailSendingLimitReached(JsonNode jsonNodeArray){
