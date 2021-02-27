@@ -109,6 +109,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
                         .status(ResponseStatus.failure.name())
                         .message("Email sending limit of " + TabbyConstants.EMAIL_SENDING_LIMIT + " emails reached")
                         .build();
+                return statusWiseResponse;
             }
             if((jsonNode.get("data")).size()>=TabbyConstants.EMAIL_HISTORY_STORING_LIMIT){
                 ((ArrayNode)jsonNode.get("data")).remove(0);
