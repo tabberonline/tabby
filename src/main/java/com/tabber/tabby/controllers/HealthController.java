@@ -20,7 +20,7 @@ public class HealthController {
     @GetMapping(value = "ping")
     public ResponseEntity<String> ping(){
         emailTabberProfileReceiverScheduler.aws();
-        return new ResponseEntity<>("Pong"+username, HttpStatus.OK);
+        return new ResponseEntity<>("Pong1"+username, HttpStatus.OK);
     }
 
 }

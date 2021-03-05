@@ -55,7 +55,7 @@ public class EmailTabberProfileReceiverScheduler implements Job {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType("csv");
             metadata.addUserMetadata("yyyyMMddHHmm emails key", "date coded key");
-
+            metadata.setContentLength(stream.toByteArray().length);
             InputStream inputStream = new ByteArrayInputStream(stream.toByteArray());
             stream.close();
 
