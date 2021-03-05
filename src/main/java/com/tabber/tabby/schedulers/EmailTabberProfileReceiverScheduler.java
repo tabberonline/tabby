@@ -6,7 +6,6 @@ import com.csvreader.CsvWriter;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.manager.RedisServiceManager;
 import com.tabber.tabby.service.AWSService;
-import com.tabber.tabby.utils.DateUtil;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +16,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class EmailTabberProfileReceiverScheduler implements Job {
+
+    private static final Logger logger = Logger.getLogger(EmailTabberProfileReceiverScheduler.class.getName());
 
     @Override
     public void execute(JobExecutionContext context) {
@@ -62,6 +65,8 @@ public class EmailTabberProfileReceiverScheduler implements Job {
             awsService.uploadOnS3("tabbybucket1",dateKey,inputStream,metadata);
 
         }
-        catch (Exception e){}
+        catch (Exception e){
+            logger.log(Level.WARNING,"Failed uploading on S3 due to exception:"+e.toString());
+        }
     }
 }
