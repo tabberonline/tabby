@@ -13,6 +13,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        /* -> All the endpoints mentioned here are whitelisted to allow usage without access token('Authorisation').
+           -> This filter is set only once when app is started, this filter comes before UsernamePasswordAuthenticationFilter
+           and after SecurityContextPersistenceFilter(which is set in JWTAuthorisationFilter file)
+           -> For reference https://stackoverflow.com/questions/41480102/how-spring-security-filter-chain-works
+           -> If no security context is present(SecurityContextHolder.clearContext() is executed), then that API must be
+           whitelisted below, otherwise it won't reach the controller.
+           -> For the APIs not listed here security context is present and will be passed to the controller
+           -> This use case arises when you need to reach an API controller without authentication(like actuator, ping)
+           -> Another use case is to allow only admin users to access admin APIs
+         */
         http.csrf().disable()
                 .addFilterBefore(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
