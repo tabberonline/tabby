@@ -10,7 +10,6 @@ import com.tabber.tabby.dto.StatusWiseResponse;
 import com.tabber.tabby.entity.EmailEntity;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.enums.ResponseStatus;
-import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.manager.EmailsManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.EmailsRepository;
@@ -20,15 +19,10 @@ import com.tabber.tabby.service.ReceiverEmailListRedisService;
 import com.tabber.tabby.utils.DateUtil;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import javax.mail.internet.MimeMessage;
-import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -50,40 +44,21 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     ObjectMapper objectMapper;
 
     @Autowired
-    private JavaMailSender javaMailSender;
-
-    @Autowired
     ReceiverEmailListRedisService receiverEmailListRedisService;
 
     @Autowired
     AWSService awsService;
 
-    private String getHTMLwithTemplate(UserEntity userEntity, String toEmail, MultipartFile multipartFile) {
-
-//        MimeMessage mailMessage = javaMailSender.createMimeMessage();
-//        try {
-            Map<String,Object> model =new HashMap<String,Object>();
-            model.put("name",userEntity.getName());
-            model.put("email",userEntity.getEmail());
-            model.put("title",userEntity.getPortfolio().getTitle());
-            model.put("description",userEntity.getPortfolio().getDescription());
-
-            Context context = new Context();
-            context.setVariables(model);
-
-            String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
-            //mailMessage.setSubject(subject, "UTF-8");
-            String html = templateEngine.process("tabberProfile",context);
-            return html;
-//            MimeMessageHelper helper = new MimeMessageHelper(mailMessage, true, StandardCharsets.UTF_8.name());
-//            helper.setTo(toEmail);
-//            helper.setText(html, true);
-//            helper.addAttachment("userResume.pdf",multipartFile);
-            //javaMailSender.send(mailMessage);
-//        }
-//        catch (Exception ex){
-//
-//        }
+    private String getHTMLwithTemplate(UserEntity userEntity) {
+        Map<String,Object> model =new HashMap<String,Object>();
+        model.put("name",userEntity.getName());
+        model.put("email",userEntity.getEmail());
+        model.put("title",userEntity.getPortfolio().getTitle());
+        model.put("description",userEntity.getPortfolio().getDescription());
+        Context context = new Context();
+        context.setVariables(model);
+        String html = templateEngine.process("tabberProfile",context);
+        return html;
     }
 
     @Override
@@ -120,9 +95,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         emailsManager.evictEmailCacheValue(userProfileId);
         emailsRepository.saveAndFlush(emailEntity);
         receiverEmailListRedisService.addEmailToRedisCachedList(receiverEmail);
-        String html = getHTMLwithTemplate(userEntity,receiverEmail,multipartFile);
+        String html = getHTMLwithTemplate(userEntity);
         String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
-        awsService.sendSESEmail(receiverEmail,html,subject,multipartFile,userEntity);
+        awsService.sendSESEmail(receiverEmail,null,html,subject,multipartFile,userEntity);
         return statusWiseResponse;
     }
 

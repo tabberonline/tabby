@@ -36,7 +36,7 @@ public class AWSService {
     private AmazonS3 s3client;
 
     @Async
-    public void sendSESEmail(String toEmail, String HTML, String subject, MultipartFile multipartFile, UserEntity userEntity){
+    public void sendSESEmail(String toEmail,String text, String HTML, String subject, MultipartFile multipartFile, UserEntity userEntity){
         try {
         String fromEmail = "communications@tabber.online";
         Session session = Session.getDefaultInstance(new Properties());
@@ -51,15 +51,20 @@ public class AWSService {
         MimeBodyPart wrap = new MimeBodyPart();
         // Create a multipart/alternative child container.
         MimeMultipart msg_body = new MimeMultipart("alternative");
-        // Define the text part.
-        MimeBodyPart textPart = new MimeBodyPart();
-        textPart.setContent("THIS IS TEXT TEST", "text/plain; charset=UTF-8");
-        // Define the HTML part.
-        MimeBodyPart htmlPart = new MimeBodyPart();
-        htmlPart.setContent(HTML,"text/html; charset=UTF-8");
-        // Add the text and HTML parts to the child container.
-        msg_body.addBodyPart(textPart);
-        msg_body.addBodyPart(htmlPart);
+
+       if(text != null) {
+           // Define the text part.
+           MimeBodyPart textPart = new MimeBodyPart();
+           textPart.setContent(text, "text/plain; charset=UTF-8");
+           msg_body.addBodyPart(textPart);
+       }
+       else {
+           // Define the HTML part.
+           MimeBodyPart htmlPart = new MimeBodyPart();
+           htmlPart.setContent(HTML, "text/html; charset=UTF-8");
+           msg_body.addBodyPart(htmlPart);
+       }
+
         // Add the child container to the wrapper object.
         wrap.setContent(msg_body);
 
@@ -71,15 +76,16 @@ public class AWSService {
         msg.addBodyPart(wrap);
 
         // Define the attachment
-        MimeBodyPart att = new MimeBodyPart();
+        if(userEntity !=null && multipartFile != null && !multipartFile.getOriginalFilename().equals("")) {
+            MimeBodyPart att = new MimeBodyPart();
+            String mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(multipartFile.getOriginalFilename());
+            DataSource dataSource = new ByteArrayDataSource(multipartFile.getBytes(), mimeType);
+            att.setDataHandler(new DataHandler(dataSource));
+            att.setFileName(userEntity.getName().trim() + ".pdf");
+            // Add the attachment to the message.
+            msg.addBodyPart(att);
+        }
 
-        String mimeType = FileTypeMap.getDefaultFileTypeMap().getContentType(multipartFile.getOriginalFilename());
-        DataSource dataSource = new ByteArrayDataSource(multipartFile.getBytes(), mimeType);
-        att.setDataHandler(new DataHandler(dataSource));
-        att.setFileName(userEntity.getName().trim()+".pdf");
-
-        // Add the attachment to the message.
-        msg.addBodyPart(att);
         AmazonSimpleEmailService client =
                     AmazonSimpleEmailServiceClientBuilder.standard()
                     .withRegion(Regions.US_EAST_2)

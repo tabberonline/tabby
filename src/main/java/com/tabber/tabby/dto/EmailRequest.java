@@ -16,6 +16,9 @@ public class EmailRequest {
     @JsonProperty("text")
     String text;
 
+    @JsonProperty("email")
+    String email;
+
     @JsonProperty("email_to")
     String emailTo ="tabberonline@gmail.com";
 }
