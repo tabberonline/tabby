@@ -39,7 +39,7 @@ public class EmailController {
 
     @PostMapping(value = URIEndpoints.EMAIL_TO,produces = "application/json")
     public ResponseEntity<StatusWiseResponse> sendEmailToUser(
-            @RequestParam("email_to") String emailTo,@RequestParam("file") MultipartFile file) throws Exception {
+            @RequestParam("email_to") String emailTo,@RequestParam(value = "file",required = false) MultipartFile file) throws Exception {
         StatusWiseResponse statusWiseResponse;
         try{
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
