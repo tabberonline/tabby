@@ -92,12 +92,17 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             ((ArrayNode)jsonNode.get("data")).add(createEmailObject(receiverEmail));
             emailEntity.setEmailData(jsonNode);
         }
+        String html = getHTMLwithTemplate(userEntity);
+        String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
+        try {
+            awsService.sendSESEmail(receiverEmail, null, html, subject, multipartFile, userEntity);
+        }
+        catch (Exception ex){
+           throw ex;
+        }
         emailsManager.evictEmailCacheValue(userProfileId);
         emailsRepository.saveAndFlush(emailEntity);
         receiverEmailListRedisService.addEmailToRedisCachedList(receiverEmail);
-        String html = getHTMLwithTemplate(userEntity);
-        String subject ="Visit "+ userEntity.getName() +"'s Tabber Profile";
-        awsService.sendSESEmail(receiverEmail,null,html,subject,multipartFile,userEntity);
         return statusWiseResponse;
     }
 
