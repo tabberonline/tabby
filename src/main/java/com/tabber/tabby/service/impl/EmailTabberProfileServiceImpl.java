@@ -17,6 +17,7 @@ import com.tabber.tabby.service.AWSService;
 import com.tabber.tabby.service.EmailTabberProfileService;
 import com.tabber.tabby.service.ReceiverEmailListRedisService;
 import com.tabber.tabby.utils.DateUtil;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     @Autowired
     AWSService awsService;
 
+    @Autowired
+    private MeterRegistry meterRegistry;
+
     private String getHTMLwithTemplate(UserEntity userEntity) {
         Map<String,Object> model =new HashMap<String,Object>();
         model.put("name",userEntity.getName());
@@ -80,6 +84,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         else {
             JsonNode jsonNode = emailEntity.getEmailData();
             if(checkIfEmailSendingLimitReached(jsonNode)) {
+                meterRegistry.counter("failed_share_profile_email_count").increment();
                 statusWiseResponse= new StatusWiseResponse().toBuilder()
                         .status(ResponseStatus.failure.name())
                         .message("Email sending limit of " + TabbyConstants.EMAIL_SENDING_LIMIT + " emails reached")
@@ -98,11 +103,13 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             awsService.sendSESEmail(receiverEmail, null, html, subject, multipartFile, userEntity);
         }
         catch (Exception ex){
-           throw ex;
+            meterRegistry.counter("failed_share_profile_email_count").increment();
+            throw ex;
         }
         emailsManager.evictEmailCacheValue(userProfileId);
         emailsRepository.saveAndFlush(emailEntity);
         receiverEmailListRedisService.addEmailToRedisCachedList(receiverEmail);
+        meterRegistry.counter("success_share_profile_email_count").increment();
         return statusWiseResponse;
     }
 
