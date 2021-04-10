@@ -29,6 +29,8 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
                 .toBuilder()
                 .title(personalProjectRequest.getTitle())
                 .link(personalProjectRequest.getLink())
+                .description(personalProjectRequest.getDescription())
+                .techStack(personalProjectRequest.getTechStack())
                 .userId(userId)
                 .build();
         personalProjectRepository.saveAndFlush(personalProjectEntity);
@@ -48,10 +50,13 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         if(personalProject == null)
             throw new PersonalProjectNotExistsException("Project doesn't exist exception");
         userEntity.getPersonalProjects().remove(personalProject);
+
         personalProject = personalProject.toBuilder()
                 .title(personalProjectRequest.getTitle())
                 .link(personalProjectRequest.getLink())
                 .invisible(personalProjectRequest.getInvisible())
+                .techStack(personalProjectRequest.getTechStack())
+                .description(personalProject.getDescription())
                 .build();
         personalProjectRepository.saveAndFlush(personalProject);
         userEntity.getPersonalProjects().add(personalProject);

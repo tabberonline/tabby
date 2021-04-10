@@ -1,11 +1,11 @@
 package com.tabber.tabby.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.JsonNode;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -35,6 +35,16 @@ public class PersonalProjectEntity {
     @JsonProperty("link")
     private String link;
 
+
+    @Column(name = "tech_stack",columnDefinition = "jsonb")
+    @Type(type = "jsonb-node")
+    @JsonProperty("tech_stack")
+    private JsonNode techStack;
+
+    @Column(name = "description")
+    @JsonProperty("description")
+    private String description;
+
     @Column(name = "invisible")
     @JsonProperty("invisible")
     private Boolean invisible = false;
@@ -50,4 +60,6 @@ public class PersonalProjectEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonProperty("updated_at")
     private Date updatedAt;
+
+
 }
