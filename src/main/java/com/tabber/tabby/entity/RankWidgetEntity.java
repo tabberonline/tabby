@@ -34,6 +34,10 @@ public class RankWidgetEntity {
     @JsonProperty("website_username")
     private String websiteUsername;
 
+    @Column(name = "link")
+    @JsonProperty("link")
+    private String link;
+
     @Column(name ="rank_widget_user_id")
     @JsonProperty("rank_widget_user_id")
     private Long userId;

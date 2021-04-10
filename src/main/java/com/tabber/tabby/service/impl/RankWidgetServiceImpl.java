@@ -36,6 +36,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .websiteUsername(rankWidgetRequest.getUsername())
                 .rank(rankWidgetRequest.getRank())
                 .userId(userId)
+                .link(rankWidgetRequest.getLink())
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidgetEntity);
         userEntity.getRankWidgets().add(rankWidgetEntity);
@@ -57,6 +58,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .websiteId(rankWidgetRequest.getWebsiteId())
                 .websiteUsername(rankWidgetRequest.getUsername())
                 .invisible(rankWidgetRequest.getInvisible())
+                .link(rankWidgetRequest.getLink())
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidget);
         userEntity.getRankWidgets().add(rankWidget);

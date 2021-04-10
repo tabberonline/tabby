@@ -15,6 +15,9 @@ public class RankWidgetRequest {
     @JsonProperty("rank")
     Integer rank;
 
+    @JsonProperty("link")
+    String link;
+
     // only used while updating, not creating
     @JsonProperty("invisible")
     Boolean invisible = false;

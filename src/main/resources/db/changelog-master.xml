@@ -17,4 +17,6 @@
     <include file="db/migrations/008_add_last_logged_in_column_to_users.xml"/>
     <include file="db/migrations/009_create_emails_table.xml"/>
     <include file="db/migrations/010_add_cloud_resume_link_to_portfolios.xml"/>
+    <include file="db/migrations/011_add_tech_stack_and_description_to_personal_projects.xml"/>
+    <include file="db/migrations/012_add_link_to_rank_widget.xml"/>
 </databaseChangeLog>

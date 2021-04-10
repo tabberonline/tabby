@@ -1,5 +1,8 @@
 package com.tabber.tabby.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.PersonalProjectRequest;
 import com.tabber.tabby.entity.PersonalProjectEntity;
@@ -19,6 +22,9 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
     @Autowired
     PersonalProjectRepository personalProjectRepository;
 
+    @Autowired
+    ObjectMapper objectMapper;
+
     @Override
     public PersonalProjectEntity createPersonalProject(PersonalProjectRequest personalProjectRequest , Long userId)
     throws Exception{
@@ -29,6 +35,8 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
                 .toBuilder()
                 .title(personalProjectRequest.getTitle())
                 .link(personalProjectRequest.getLink())
+                .description(personalProjectRequest.getDescription())
+                .techStack(personalProjectRequest.getTechStack())
                 .userId(userId)
                 .build();
         personalProjectRepository.saveAndFlush(personalProjectEntity);
@@ -48,10 +56,13 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         if(personalProject == null)
             throw new PersonalProjectNotExistsException("Project doesn't exist exception");
         userEntity.getPersonalProjects().remove(personalProject);
+
         personalProject = personalProject.toBuilder()
                 .title(personalProjectRequest.getTitle())
                 .link(personalProjectRequest.getLink())
                 .invisible(personalProjectRequest.getInvisible())
+                .techStack(personalProjectRequest.getTechStack())
+                .description(personalProject.getDescription())
                 .build();
         personalProjectRepository.saveAndFlush(personalProject);
         userEntity.getPersonalProjects().add(personalProject);
