@@ -1,8 +1,5 @@
 package com.tabber.tabby.service.impl;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.PersonalProjectRequest;
 import com.tabber.tabby.entity.PersonalProjectEntity;
@@ -21,9 +18,6 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
 
     @Autowired
     PersonalProjectRepository personalProjectRepository;
-
-    @Autowired
-    ObjectMapper objectMapper;
 
     @Override
     public PersonalProjectEntity createPersonalProject(PersonalProjectRequest personalProjectRequest , Long userId)
