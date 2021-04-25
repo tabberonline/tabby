@@ -32,7 +32,7 @@ public class JWTService {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 86400000))
+                .setExpiration(new Date(System.currentTimeMillis() + 604800000))
                 .signWith(SignatureAlgorithm.HS512,
                         AuthConstants.SECRET_KEY.getBytes()).compact();
 
