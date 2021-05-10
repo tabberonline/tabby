@@ -19,4 +19,6 @@
     <include file="db/migrations/010_add_cloud_resume_link_to_portfolios.xml"/>
     <include file="db/migrations/011_add_tech_stack_and_description_to_personal_projects.xml"/>
     <include file="db/migrations/012_add_link_to_rank_widget.xml"/>
+    <include file="db/migrations/013_add_website_type_to_websites.xml"/>
+    <include file="db/migrations/014_add_social_link_to_portfolios_table.xml"/>
 </databaseChangeLog>

@@ -1,16 +1,22 @@
 package com.tabber.tabby.service.impl;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.tabber.tabby.dto.PortfolioRequest;
+import com.tabber.tabby.dto.SocialWebsiteDto;
 import com.tabber.tabby.entity.PortfolioEntity;
 import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.enums.WebsiteType;
 import com.tabber.tabby.exceptions.PortfolioExistsException;
 import com.tabber.tabby.exceptions.PortfolioNotExistsException;
 import com.tabber.tabby.respository.PortfolioRepository;
 import com.tabber.tabby.service.PortfolioService;
 import com.tabber.tabby.service.UserService;
+import com.tabber.tabby.service.WebsiteService;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -20,6 +26,9 @@ public class PortfolioServiceImpl implements PortfolioService {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    WebsiteService websiteService;
 
     @Override
     public PortfolioEntity createPortfolio(PortfolioRequest portfolioRequest,Long userId){
@@ -56,6 +65,72 @@ public class PortfolioServiceImpl implements PortfolioService {
         return portfolioEntity;
     }
 
+    public ArrayList<SocialWebsiteDto> addSocialWeblink(String websiteName, String link, Long userId) throws Exception {
+        UserEntity user = userService.getUserFromUserId(userId);
+        if(user.getPortfolio()==null) {
+            throw new PortfolioNotExistsException("Portfolio does not exist for user with id: " + userId);
+        }
+        if(websiteService.getWebsiteByNameAndType(websiteName, WebsiteType.SOCIAL.name()) == null){
+            throw new Exception("Requested website doesn't exist");
+        }
+        PortfolioEntity portfolioEntity = user.getPortfolio();
+        SocialWebsiteDto socialWebsiteDto = new SocialWebsiteDto().toBuilder()
+                .website_name(websiteName)
+                .link(link)
+                .build();
+        ArrayList<SocialWebsiteDto> socialWebsiteDtoArrayList = portfolioEntity.getSocialProfiles();
+        if(socialWebsiteDtoArrayList == null || socialWebsiteDtoArrayList.size()==0){
+            socialWebsiteDtoArrayList = new ArrayList<>();
+        }
+        else if(socialWebsiteDtoArrayList.contains(socialWebsiteDto)){
+            throw new Exception("this profile already exists");
+        }
+        socialWebsiteDtoArrayList.add(socialWebsiteDto);
+        portfolioEntity.setSocialProfiles(socialWebsiteDtoArrayList);
+        portfolioRepository.saveAndFlush(portfolioEntity);
+        user.setPortfolio(portfolioEntity);
+        userService.updateCache(user);
+        return socialWebsiteDtoArrayList;
+    }
+
+    public ArrayList<SocialWebsiteDto> updateSocialWeblink(String websiteName, String link, Long userId) throws Exception {
+        UserEntity user = userService.getUserFromUserId(userId);
+        if(user.getPortfolio()==null) {
+            throw new PortfolioNotExistsException("Portfolio does not exist for user with id: " + userId);
+        }
+        if(websiteService.getWebsiteByNameAndType(websiteName, WebsiteType.SOCIAL.name()) == null){
+            throw new Exception("Requested website doesn't exist");
+        }
+        PortfolioEntity portfolioEntity = user.getPortfolio();
+        SocialWebsiteDto socialWebsiteDto = new SocialWebsiteDto().toBuilder()
+                .website_name(websiteName)
+                .link(link)
+                .build();
+        ArrayList<SocialWebsiteDto> socialWebsiteDtoArrayList = portfolioEntity.getSocialProfiles();
+        if(socialWebsiteDtoArrayList == null || socialWebsiteDtoArrayList.size()==0){
+            throw new Exception("No profile present for this id");
+        }
+
+        boolean updated = false;
+        for(SocialWebsiteDto socialWebsite:socialWebsiteDtoArrayList){
+            if(socialWebsite.getWebsite_name().equals(websiteName)){
+                socialWebsiteDtoArrayList.remove(socialWebsite);
+                updated = true;
+                break;
+            }
+        }
+        if(!updated){
+            throw new Exception("No profile present for this website");
+        }
+
+        socialWebsiteDtoArrayList.add(socialWebsiteDto);
+        portfolioEntity.setSocialProfiles(socialWebsiteDtoArrayList);
+        portfolioRepository.saveAndFlush(portfolioEntity);
+        user.setPortfolio(portfolioEntity);
+        userService.updateCache(user);
+        return socialWebsiteDtoArrayList;
+    }
+
     @Override
     public void updateResumeLink(String cloudLink,Long userId){
         UserEntity user = userService.getUserFromUserId(userId);
@@ -70,5 +145,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         user.setPortfolio(portfolioEntity);
         userService.updateCache(user);
     }
+
+
 
 }

@@ -27,4 +27,17 @@ public class WebsiteServiceImpl implements WebsiteService {
         }
         return websiteEntity;
     }
+
+    @Override
+    public WebsiteEntity getWebsiteByNameAndType(String name, String type){
+        WebsiteEntity websiteEntity = null;
+        try{
+            websiteEntity = websiteManager.findWebsiteByNameAndType(name,type);
+        }
+        catch (Exception ex){
+            logger.log(Level.INFO,"Cannot get website due to error: {}",ex.toString());
+        }
+        return websiteEntity;
+    }
+
 }

@@ -1,13 +1,19 @@
 package com.tabber.tabby.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tabber.tabby.dto.SocialWebsiteDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.json.JSONArray;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 
 @Getter
@@ -42,6 +48,11 @@ public class PortfolioEntity {
     @JsonProperty("cloud_resume_link")
     private String cloudResumeLink;
 
+    @Column(name = "social_profiles",columnDefinition = "jsonb")
+    @Type(type = "jsonb-node")
+    @JsonProperty("social_profiles")
+    private JsonNode socialProfiles;
+
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -53,4 +64,21 @@ public class PortfolioEntity {
     @Temporal(TemporalType.TIMESTAMP)
     @JsonProperty("updated_at")
     private Date updatedAt;
+
+    public ArrayList<SocialWebsiteDto> getSocialProfiles(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArrayList<SocialWebsiteDto> socialWebsiteDtoList = objectMapper.convertValue(this.socialProfiles, new TypeReference<>(){});
+        return socialWebsiteDtoList;
+    }
+
+    public void setSocialProfiles(ArrayList<SocialWebsiteDto> socialWebsiteDtoList) {
+        JSONArray socialWebsiteArray = new JSONArray(socialWebsiteDtoList);
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            JsonNode jsonNode = objectMapper.readTree(socialWebsiteArray.toString());
+            this.socialProfiles = jsonNode;
+        } catch (Exception ex) {
+            return;
+        }
+    }
 }

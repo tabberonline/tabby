@@ -26,4 +26,11 @@ public class WebsiteManager {
     public List<WebsiteEntity> findAllWebsites(){
         return websiteRepository.getAllWebsites();
     }
+
+    @Cacheable(value = TabbyConstants.WEBSITE,key="#websiteName.concat('_').concat(#websiteType)")
+    public WebsiteEntity findWebsiteByNameAndType(String websiteName, String websiteType){
+        if(websiteType==null)
+            return null;
+        return websiteRepository.getTopByNameAndType(websiteName,websiteType);
+    }
 }

@@ -1,6 +1,7 @@
 package com.tabber.tabby.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.tabber.tabby.enums.WebsiteType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,6 +36,11 @@ public class WebsiteEntity {
     @Column(name = "name")
     @JsonProperty("name")
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    @JsonProperty("type")
+    private WebsiteType type;
 
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)
