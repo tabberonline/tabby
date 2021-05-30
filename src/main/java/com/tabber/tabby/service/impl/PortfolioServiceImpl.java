@@ -82,7 +82,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         if(socialWebsiteDtoArrayList == null || socialWebsiteDtoArrayList.size()==0){
             socialWebsiteDtoArrayList = new ArrayList<>();
         }
-        else if(socialWebsiteDtoArrayList.contains(socialWebsiteDto)){
+        if(checkIfWebsiteAlreadyPresent(socialWebsiteDtoArrayList,websiteName)){
             throw new Exception("this profile already exists");
         }
         socialWebsiteDtoArrayList.add(socialWebsiteDto);
@@ -111,14 +111,7 @@ public class PortfolioServiceImpl implements PortfolioService {
             throw new Exception("No profile present for this id");
         }
 
-        boolean updated = false;
-        for(SocialWebsiteDto socialWebsite:socialWebsiteDtoArrayList){
-            if(socialWebsite.getWebsite_name().equals(websiteName)){
-                socialWebsiteDtoArrayList.remove(socialWebsite);
-                updated = true;
-                break;
-            }
-        }
+        boolean updated = checkIfWebsiteAlreadyPresent(socialWebsiteDtoArrayList,websiteName);
         if(!updated){
             throw new Exception("No profile present for this website");
         }
@@ -129,6 +122,16 @@ public class PortfolioServiceImpl implements PortfolioService {
         user.setPortfolio(portfolioEntity);
         userService.updateCache(user);
         return socialWebsiteDtoArrayList;
+    }
+
+    private Boolean checkIfWebsiteAlreadyPresent(List<SocialWebsiteDto> socialWebsiteDtoArrayList,String  websiteName){
+        for(SocialWebsiteDto socialWebsite:socialWebsiteDtoArrayList){
+            if(socialWebsite.getWebsite_name().equals(websiteName)){
+                socialWebsiteDtoArrayList.remove(socialWebsite);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
