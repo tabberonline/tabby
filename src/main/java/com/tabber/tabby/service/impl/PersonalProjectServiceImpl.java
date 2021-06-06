@@ -8,6 +8,7 @@ import com.tabber.tabby.exceptions.PersonalProjectNotExistsException;
 import com.tabber.tabby.respository.PersonalProjectRepository;
 import com.tabber.tabby.service.PersonalProjectService;
 import com.tabber.tabby.service.UserService;
+import com.tabber.tabby.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +29,7 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
         PersonalProjectEntity personalProjectEntity = new PersonalProjectEntity()
                 .toBuilder()
                 .title(personalProjectRequest.getTitle())
-                .link(personalProjectRequest.getLink())
+                .link(StringUtil.addHttpsToURI(personalProjectRequest.getLink()))
                 .description(personalProjectRequest.getDescription())
                 .techStack(personalProjectRequest.getTechStack())
                 .userId(userId)
