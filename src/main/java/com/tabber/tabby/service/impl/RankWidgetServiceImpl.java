@@ -9,6 +9,7 @@ import com.tabber.tabby.exceptions.RankWidgetNotExistsException;
 import com.tabber.tabby.respository.RankWidgetRepository;
 import com.tabber.tabby.service.RankWidgetService;
 import com.tabber.tabby.service.UserService;
+import com.tabber.tabby.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -36,7 +37,7 @@ public class RankWidgetServiceImpl implements RankWidgetService {
                 .websiteUsername(rankWidgetRequest.getUsername())
                 .rank(rankWidgetRequest.getRank())
                 .userId(userId)
-                .link(rankWidgetRequest.getLink())
+                .link(StringUtil.addHttpsToURI(rankWidgetRequest.getLink()))
                 .build();
         rankWidgetRepository.saveAndFlush(rankWidgetEntity);
         userEntity.getRankWidgets().add(rankWidgetEntity);

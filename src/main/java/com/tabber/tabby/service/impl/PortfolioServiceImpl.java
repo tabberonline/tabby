@@ -12,6 +12,7 @@ import com.tabber.tabby.respository.PortfolioRepository;
 import com.tabber.tabby.service.PortfolioService;
 import com.tabber.tabby.service.UserService;
 import com.tabber.tabby.service.WebsiteService;
+import com.tabber.tabby.utils.StringUtil;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -76,7 +77,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         PortfolioEntity portfolioEntity = user.getPortfolio();
         SocialWebsiteDto socialWebsiteDto = new SocialWebsiteDto().toBuilder()
                 .website_name(websiteName)
-                .link(link)
+                .link(StringUtil.addHttpsToURI(link))
                 .build();
         ArrayList<SocialWebsiteDto> socialWebsiteDtoArrayList = portfolioEntity.getSocialProfiles();
         if(socialWebsiteDtoArrayList == null || socialWebsiteDtoArrayList.size()==0){
@@ -142,7 +143,7 @@ public class PortfolioServiceImpl implements PortfolioService {
         }
         PortfolioEntity portfolioEntity = user.getPortfolio();
         portfolioEntity = portfolioEntity.toBuilder()
-                .cloudResumeLink(cloudLink)
+                .cloudResumeLink(StringUtil.addHttpsToURI(cloudLink))
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
         user.setPortfolio(portfolioEntity);
