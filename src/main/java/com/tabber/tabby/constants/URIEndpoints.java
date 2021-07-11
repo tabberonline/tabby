@@ -19,6 +19,7 @@ public interface URIEndpoints {
     String EMAIL_HISTORY = "/email/history";
     String WEBSITE = "/website";
     String ALL_WEBSITE = "/website/all";
+    String UPDATE_USER_NAME = "/update/user_name";
 
     // admin
     String ADMIN = "/admin";

@@ -9,4 +9,5 @@ public interface UserService {
     UserEntity getUserFromUserId(Long userId);
     UserEntity getUserFromSub(String sub);
     UserEntity setResumePresent(UserEntity userEntity);
+    void updateUserName(UserEntity userEntity);
 }

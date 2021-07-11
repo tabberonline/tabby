@@ -56,4 +56,10 @@ public class UserServiceImpl implements UserService {
         }
         return userEntity;
     }
+
+    @Override
+    public void updateUserName(UserEntity userEntity){
+        userRepository.saveAndFlush(userEntity);
+        updateCache(userEntity);
+    }
 }

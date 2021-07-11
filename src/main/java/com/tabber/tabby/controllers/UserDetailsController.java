@@ -72,5 +72,21 @@ public class UserDetailsController {
         }
         return new ResponseEntity<>(userBasicRespone, HttpStatus.OK);
     }
+
+    @GetMapping(value = URIEndpoints.UPDATE_USER_NAME,produces = "application/json")
+    public ResponseEntity<String> getUserInfo(@RequestParam String userName) throws Exception {
+        UserEntity userEntity;
+        try {
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            userEntity = userService.getUserFromUserId(userId);
+            userEntity.setName(userName);
+            userService.updateUserName(userEntity);
+        }
+        catch (Exception ex){
+            logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
+            throw ex;
+        }
+        return new ResponseEntity<>("User name updated Successfully", HttpStatus.OK);
+    }
 }
 
