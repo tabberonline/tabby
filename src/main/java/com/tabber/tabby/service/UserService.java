@@ -10,4 +10,5 @@ public interface UserService {
     UserEntity getUserFromSub(String sub);
     UserEntity setResumePresent(UserEntity userEntity);
     void updateUserName(UserEntity userEntity);
+     Object getEnrichedUserData(Long userId);
 }

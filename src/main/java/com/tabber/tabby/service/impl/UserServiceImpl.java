@@ -1,11 +1,18 @@
 package com.tabber.tabby.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.tabber.tabby.constants.UniversityListConstants;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.UserRepository;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedHashMap;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -61,5 +68,29 @@ public class UserServiceImpl implements UserService {
     public void updateUserName(UserEntity userEntity){
         userRepository.saveAndFlush(userEntity);
         updateCache(userEntity);
+    }
+
+    public Object getEnrichedUserData(Long userId){
+        UserEntity userEntity= userResumeManager.findUserById(userId);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        Object userEnrichedData;
+        try {
+            userEnrichedData = objectMapper.readValue(objectMapper.writeValueAsString(userEntity), Object.class);
+            LinkedHashMap<String , String> portfolioObject= (LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio");
+            Object collegeIndex = ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).get("college");
+            String collegeName;
+            if((Integer) collegeIndex == -1){
+                collegeName = portfolioObject.get("college_others");
+            }
+            else {
+                collegeName = UniversityListConstants.universityList.get(collegeIndex);
+            }
+            ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
+            ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).remove("college_others");
+            return userEnrichedData;
+        }catch(Exception e){}
+        return null;
     }
 }

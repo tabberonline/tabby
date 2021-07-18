@@ -22,10 +22,10 @@ public class UserDetailsController {
     UserService userService;
 
     @GetMapping(value = URIEndpoints.GUEST_RESUME,produces = "application/json")
-    public ResponseEntity<UserEntity> getGuestUserResume(@RequestParam("id") Long userId) throws Exception {
-        UserEntity userEntity = null;
+    public ResponseEntity<Object> getGuestUserResume(@RequestParam("id") Long userId) throws Exception {
+        Object userEntity = null;
         try {
-            userEntity = userService.getUserFromUserId(userId);
+            userEntity = userService.getEnrichedUserData(userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
@@ -35,11 +35,11 @@ public class UserDetailsController {
     }
 
     @GetMapping(value = URIEndpoints.RESUME,produces = "application/json")
-    public ResponseEntity<UserEntity> getUserResume() throws Exception {
-        UserEntity userEntity = null;
+    public ResponseEntity<Object> getUserResume() throws Exception {
+        Object userEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            userEntity = userService.getUserFromUserId(userId);
+            userEntity = userService.getEnrichedUserData(userId);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
