@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserResumeManager userResumeManager;
+
+    private static final Logger logger = Logger.getLogger(AuthServiceImpl.class.getName());
+
 
     @Override
     public Long save(UserEntity userEntity){
@@ -90,7 +95,9 @@ public class UserServiceImpl implements UserService {
             ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
             ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).remove("college_others");
             return userEnrichedData;
-        }catch(Exception e){}
+        }catch(Exception e){
+            logger.log(Level.INFO,"Error in college enriching  "+e);
+        }
         return null;
     }
 }
