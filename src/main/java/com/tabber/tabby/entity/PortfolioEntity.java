@@ -48,6 +48,14 @@ public class PortfolioEntity {
     @JsonProperty("cloud_resume_link")
     private String cloudResumeLink;
 
+    @Column(name = "college")
+    @JsonProperty("college")
+    private Integer college;
+
+    @Column(name = "college_others")
+    @JsonProperty("college_others")
+    private String collegeOthers;
+
     @Column(name = "social_profiles",columnDefinition = "jsonb")
     @Type(type = "jsonb-node")
     @JsonProperty("social_profiles")

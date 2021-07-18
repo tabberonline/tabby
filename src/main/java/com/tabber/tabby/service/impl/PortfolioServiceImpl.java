@@ -40,6 +40,8 @@ public class PortfolioServiceImpl implements PortfolioService {
         PortfolioEntity portfolioEntity = new PortfolioEntity().toBuilder()
                 .title(portfolioRequest.getTitle())
                 .description(portfolioRequest.getDescription())
+                .college(portfolioRequest.getCollege())
+                .collegeOthers(portfolioRequest.getCollegeOthers())
                 .user(user)
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
@@ -59,6 +61,8 @@ public class PortfolioServiceImpl implements PortfolioService {
         portfolioEntity = portfolioEntity.toBuilder()
                 .title(portfolioRequest.getTitle())
                 .description(portfolioRequest.getDescription())
+                .college(portfolioRequest.getCollege())
+                .collegeOthers(portfolioRequest.getCollegeOthers())
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
         user.setPortfolio(portfolioEntity);

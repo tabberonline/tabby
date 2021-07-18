@@ -21,4 +21,5 @@
     <include file="db/migrations/012_add_link_to_rank_widget.xml"/>
     <include file="db/migrations/013_add_website_type_to_websites.xml"/>
     <include file="db/migrations/014_add_social_link_to_portfolios_table.xml"/>
+    <include file="db/migrations/015_add_college_name_to_portfolios_table.xml"/>
 </databaseChangeLog>

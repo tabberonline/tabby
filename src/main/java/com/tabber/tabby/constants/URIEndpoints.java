@@ -20,6 +20,8 @@ public interface URIEndpoints {
     String WEBSITE = "/website";
     String ALL_WEBSITE = "/website/all";
     String UPDATE_USER_NAME = "/update/user_name";
+    String UNIVERSITY = "/university";
+    String UNIVERSITY_LIST = "/university_list";
 
     // admin
     String ADMIN = "/admin";
