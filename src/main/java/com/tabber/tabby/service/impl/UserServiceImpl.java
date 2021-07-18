@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserResumeManager userResumeManager;
 
-    private static final Logger logger = Logger.getLogger(AuthServiceImpl.class.getName());
+    private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
 
     @Override
