@@ -84,16 +84,17 @@ public class UserServiceImpl implements UserService {
         try {
             userEnrichedData = objectMapper.readValue(objectMapper.writeValueAsString(userEntity), Object.class);
             LinkedHashMap<String , String> portfolioObject= (LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio");
-            Object collegeIndex = ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).get("college");
-            String collegeName;
-            if((Integer) collegeIndex == -1){
-                collegeName = portfolioObject.get("college_others");
+            if(((LinkedHashMap) userEnrichedData).get("portfolio")!=null) {
+                Object collegeIndex = ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).get("college");
+                String collegeName;
+                if ((Integer) collegeIndex == -1) {
+                    collegeName = portfolioObject.get("college_others");
+                } else {
+                    collegeName = UniversityListConstants.universityList.get(collegeIndex);
+                }
+                ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
+                ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).remove("college_others");
             }
-            else {
-                collegeName = UniversityListConstants.universityList.get(collegeIndex);
-            }
-            ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
-            ((LinkedHashMap)((LinkedHashMap) userEnrichedData).get("portfolio")).remove("college_others");
             return userEnrichedData;
         }catch(Exception e){
             logger.log(Level.INFO,"Error in college enriching  "+e);
