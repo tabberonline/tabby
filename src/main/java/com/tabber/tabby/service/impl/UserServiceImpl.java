@@ -4,10 +4,10 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
-import com.tabber.tabby.constants.UniversityListConstants;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.UserRepository;
+import com.tabber.tabby.service.UniversityService;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +23,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserResumeManager userResumeManager;
+
+    @Autowired
+    UniversityService universityService;
 
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
@@ -90,7 +93,7 @@ public class UserServiceImpl implements UserService {
                 if ((Integer) collegeIndex == -1) {
                     collegeName = portfolioObject.get("college_others");
                 } else {
-                    collegeName = UniversityListConstants.universityList.get(collegeIndex);
+                    collegeName = universityService.getAllUniversityMap().get(collegeIndex);
                 }
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).remove("college_others");
