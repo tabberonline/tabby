@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HealthController {
 
     @GetMapping(value = "ping")
-    public ResponseEntity<String> ping(@RequestParam String var){
+    public ResponseEntity<String> ping(){
         return new ResponseEntity<>("pong", HttpStatus.OK);
     }
 

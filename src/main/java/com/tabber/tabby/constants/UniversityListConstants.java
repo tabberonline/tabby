@@ -425,7 +425,6 @@ public interface UniversityListConstants {
             entry(417,"Devi Ahilya Vishwavidyalaya, “Nalanda Parisar”, 165, R.N. Tagore Marg,  Indore.-452 001, Madhya Pradesh. (State University)."),
             entry(418,"Dharmashastra National Law University, Bharat Ratna Bhim Rao Ambedkar Institute of Telecom Training, Ridge Road, Civil Lines, Jabalpur, Madhya Pradesh. (State University)"),
             entry(419,"Dr. A.P.J. Abdul Kalam University, Indore-Devas Bypass Road, Village –"),
-            entry(Ara,"ia, Post – Jhalaria, Madhya Pradesh – 452016. (Private University)"),
             entry(420,"Dr. B.R. Ambedkar University of Social Sciences, Dr. Ambedkar Nagar, Mhow– 453 441, Dist. – Indore, Madhya Pradesh. (State University)"),
             entry(421,"Dr. C.V. Raman University, Khandwa –Indore Road, Post – Chhaigaon Makhan, Khandwa - 450771, Madhya Pradesh. (Private University)"),
             entry(423,"Eklavya University, Ojaswini Nagar, Sagar Road, Damoh, Madhya Pradesh. (Private University)"),
@@ -993,6 +992,7 @@ public interface UniversityListConstants {
             entry(985,"Central Institute of Buddhist Studies, Choglamsar, Leh (Ladakh), Jammu & Kashmir. (Deemed University)"),
             entry(986,"University of Ladakh, Silk Route Rest House, TC, Leh, Union Territory of Ladakh. (State University)"),
             entry(987,"Pondicherry University, R. Venkataraman Nagar, Kalapet, Puducherry - 605 014. (Central University)"),
-            entry(988,"Sri Balaji Vidyapeeth, Mahatma Gandhi Medical College Campus, Pondy- Cuddalore Main Road, Pillaiyarkuppam, Puducherry – 607 402(Deemed University)")
+            entry(988,"Sri Balaji Vidyapeeth, Mahatma Gandhi Medical College Campus, Pondy- Cuddalore Main Road, Pillaiyarkuppam, Puducherry – 607 402(Deemed University)"),
+            entry(989,"Dr. A.P.J. Abdul Kalam University, Indore-Devas Bypass Road, Village – Arandia, Post – Jhalaria, Madhya Pradesh – 452016. (Private University)")
             );
 }
