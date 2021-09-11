@@ -24,7 +24,12 @@ public class UniversityManager {
     private static final Logger logger = Logger.getLogger(UniversityManager.class.getName());
 
 
-    public void setUniversityList(){
+    public void setUniversityList() throws Exception{
+        String lock = redisServiceManager.getValueForKey("GET_UNI_LOCK");
+        if(lock != null){
+            throw new Exception("Redis locked for university list update");
+        }
+        redisServiceManager.setWithExpiry("GET_UNI_LOCK","locked",60*5);
         Integer universityCount = universityRepository.getUniversityCount();
         Integer offset = 0, limit = 50;
         Integer keysCount = Integer.valueOf((int) Math.ceil(Double.valueOf(universityCount)/limit));
@@ -37,7 +42,8 @@ public class UniversityManager {
             }
             offset+=limit;
         }
-        redisServiceManager.setWithExpiry("UNIVERSITY_LIST_COUNT",String.valueOf(universityCount),24*60*60);
+        redisServiceManager.setWithExpiry("UNIVERSITY_LIST_COUNT",String.valueOf(universityCount),24*60*60*7);
+        redisServiceManager.delKey("GET_UNI_LOCK");
     }
     public void clearUniversityListCache(){
         String uniCount = redisServiceManager.getValueForKey("UNIVERSITY_LIST_COUNT");
@@ -55,12 +61,17 @@ public class UniversityManager {
         redisServiceManager.delKey("UNIVERSITY_LIST_COUNT");
     }
 
-    public Map<Integer,String> getUniversityList(){
+    public Map<Integer,String> getUniversityList() throws Exception{
         String uniCount = redisServiceManager.getValueForKey("UNIVERSITY_LIST_COUNT");
         Integer universityCount;
         Map<Integer,String> map = new HashMap<>();
         if(uniCount == null)  {
-            setUniversityList();
+            try {
+                setUniversityList();
+            }catch (Exception ex){
+                logger.log(Level.INFO,"Multiple requests while updating in redis");
+                throw new Exception("Multiple requests while updating in redis");
+            }
             uniCount = redisServiceManager.getValueForKey("UNIVERSITY_LIST_COUNT");
         }
         universityCount = Integer.parseInt(uniCount);
