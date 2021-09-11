@@ -2,12 +2,15 @@ package com.tabber.tabby.manager;
 
 import com.tabber.tabby.entity.UniversityEntity;
 import com.tabber.tabby.respository.UniversityRepository;
+import com.tabber.tabby.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class UniversityManager {
@@ -18,12 +21,16 @@ public class UniversityManager {
     @Autowired
     RedisServiceManager redisServiceManager;
 
+    private static final Logger logger = Logger.getLogger(UniversityManager.class.getName());
+
+
     public void setUniversityList(){
         Integer universityCount = universityRepository.getUniversityCount();
         Integer offset = 0, limit = 50;
         Integer keysCount = Integer.valueOf((int) Math.ceil(Double.valueOf(universityCount)/limit));
         for(int i=0;i<keysCount;i++){
             List<UniversityEntity> universityEntities = universityRepository.getUniversities(offset,limit);
+            logger.log(Level.INFO,"Getting list with offset:"+ offset +" limit:"+limit+" university list size:"+universityEntities.size());
             String redisKey = "UNIVERSITY_LIST_" + i;
             for(UniversityEntity universityEntity:universityEntities){
                 redisServiceManager.rPush(redisKey,universityEntity.getName());
