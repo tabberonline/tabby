@@ -57,7 +57,7 @@ public class PersonalProjectServiceImpl implements PersonalProjectService {
                 .link(personalProjectRequest.getLink())
                 .invisible(personalProjectRequest.getInvisible())
                 .techStack(personalProjectRequest.getTechStack())
-                .description(personalProject.getDescription())
+                .description(personalProjectRequest.getDescription())
                 .build();
         personalProjectRepository.saveAndFlush(personalProject);
         userEntity.getPersonalProjects().add(personalProject);
