@@ -95,6 +95,7 @@ public class UserServiceImpl implements UserService {
                 } else {
                     collegeName = universityService.getAllUniversityMap().get(collegeIndex);
                 }
+                ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("college_num", collegeIndex);
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).remove("college_others");
             }
