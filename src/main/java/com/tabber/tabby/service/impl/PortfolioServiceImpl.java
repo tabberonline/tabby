@@ -57,11 +57,13 @@ public class PortfolioServiceImpl implements PortfolioService {
         if(user.getPortfolio()==null) {
             throw new PortfolioNotExistsException("Portfolio does not exist for user with id: " + userId);
         }
+        Integer collegeNum = (portfolioRequest.getCollege() == null || portfolioRequest.getCollege() == -1)
+                ? -1:portfolioRequest.getCollege()+1;
         PortfolioEntity portfolioEntity = user.getPortfolio();
         portfolioEntity = portfolioEntity.toBuilder()
                 .title(portfolioRequest.getTitle())
                 .description(portfolioRequest.getDescription())
-                .college(portfolioRequest.getCollege()+1)
+                .college(collegeNum)
                 .collegeOthers(portfolioRequest.getCollegeOthers())
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
