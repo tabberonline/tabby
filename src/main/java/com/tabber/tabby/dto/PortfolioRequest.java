@@ -19,8 +19,14 @@ public class PortfolioRequest {
     @JsonProperty("description")
     String description;
 
+    @JsonProperty("graduation_year")
+    Integer graduationYear;
+
     @JsonProperty("college")
     Integer college;
+
+    @JsonProperty("education_level")
+    String educationLevel;
 
     @JsonProperty("college_others")
     String collegeOthers;

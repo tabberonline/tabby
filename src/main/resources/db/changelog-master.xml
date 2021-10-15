@@ -23,4 +23,5 @@
     <include file="db/migrations/014_add_social_link_to_portfolios_table.xml"/>
     <include file="db/migrations/015_add_college_name_to_portfolios_table.xml"/>
     <include file="db/migrations/016_create_universities_table.xml"/>
+    <include file="db/migrations/017_add_graduation_level_to_portfolio.xml"/>
 </databaseChangeLog>

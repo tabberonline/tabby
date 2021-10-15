@@ -56,6 +56,14 @@ public class PortfolioEntity {
     @JsonProperty("college_others")
     private String collegeOthers;
 
+    @Column(name = "graduation_year")
+    @JsonProperty("graduation_year")
+    private Integer graduationYear;
+
+    @Column(name = "education_level")
+    @JsonProperty("education_level")
+    private String educationLevel;
+
     @Column(name = "social_profiles",columnDefinition = "jsonb")
     @Type(type = "jsonb-node")
     @JsonProperty("social_profiles")
