@@ -37,10 +37,14 @@ public class PortfolioServiceImpl implements PortfolioService {
         if( user.getPortfolio()!=null){
             throw new PortfolioExistsException("Portfolio exists for user with id: "+userId);
         }
+        Integer collegeNum = (portfolioRequest.getCollege() == null || portfolioRequest.getCollege() == -1)
+                ? -1:portfolioRequest.getCollege()+1;
         PortfolioEntity portfolioEntity = new PortfolioEntity().toBuilder()
                 .title(portfolioRequest.getTitle())
                 .description(portfolioRequest.getDescription())
-                .college(portfolioRequest.getCollege()+1)
+                .educationLevel(portfolioRequest.getEducationLevel())
+                .graduationYear(portfolioRequest.getGraduationYear())
+                .college(collegeNum)
                 .collegeOthers(portfolioRequest.getCollegeOthers())
                 .user(user)
                 .build();
@@ -63,6 +67,8 @@ public class PortfolioServiceImpl implements PortfolioService {
         portfolioEntity = portfolioEntity.toBuilder()
                 .title(portfolioRequest.getTitle())
                 .description(portfolioRequest.getDescription())
+                .educationLevel(portfolioRequest.getEducationLevel())
+                .graduationYear(portfolioRequest.getGraduationYear())
                 .college(collegeNum)
                 .collegeOthers(portfolioRequest.getCollegeOthers())
                 .build();
