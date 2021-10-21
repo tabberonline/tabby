@@ -24,4 +24,6 @@
     <include file="db/migrations/015_add_college_name_to_portfolios_table.xml"/>
     <include file="db/migrations/016_create_universities_table.xml"/>
     <include file="db/migrations/017_add_graduation_level_to_portfolio.xml"/>
+    <include file="db/migrations/018_add_plan_id_to_users.xml"/>
+    <include file="db/migrations/019_create_plans_table.xml"/>
 </databaseChangeLog>
