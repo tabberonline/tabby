@@ -17,6 +17,8 @@ public interface PortfolioService {
 
     ArrayList<SocialWebsiteDto> updateSocialWeblink(String websiteName, String link, Long userId) throws Exception;
 
+    void deletePortfolio(PortfolioEntity portfolioEntity);
+
 }
 
 
