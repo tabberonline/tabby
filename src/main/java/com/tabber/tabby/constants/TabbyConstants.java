@@ -18,6 +18,7 @@ public interface TabbyConstants {
     Integer EMAIL_SENDING_LIMIT = 3;
     Integer EMAIL_HISTORY_STORING_LIMIT = 4;
     String PLAN = "PLAN";
-    List<String> admins = Arrays.asList("mandeep.sidhu2@gmail.com","vikrant.negi74@gmail.com");
+    Integer LITE_PLAN_ID = 0;
+    List<String> admins = Arrays.asList("mandeep.sidhu2@gmail.com","vikrant.negi74@gmail.com","malisujit12@gmail.com");
 
 }

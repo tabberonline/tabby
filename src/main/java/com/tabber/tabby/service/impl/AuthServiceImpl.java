@@ -4,6 +4,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.exceptions.UnauthorisedException;
 import com.tabber.tabby.security.JWTService;
@@ -61,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
                     .name((String) payload.get("name"))
                     .resumePresent(false)
                     .lastLoggedIn(presentDate)
+                    .planId(TabbyConstants.LITE_PLAN_ID)
                     .build();
         }
         else {

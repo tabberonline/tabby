@@ -48,6 +48,14 @@ public class UserResumeManager {
         }catch (Exception ex){}
     }
 
+    public void deleteUserCache(Long userId){
+        String resumeCacheKey = getResumeCacheKey(userId);
+
+        try{
+            redisServiceManager.delKey(resumeCacheKey);
+        }catch (Exception ex){}
+    }
+
     private String getResumeCacheKey(Long userId){
         return TabbyConstants.RESUME+"::"+userId.toString();
     }

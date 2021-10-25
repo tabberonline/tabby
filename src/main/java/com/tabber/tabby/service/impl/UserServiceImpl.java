@@ -4,11 +4,15 @@ import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
+import com.tabber.tabby.constants.TabbyConstants;
+import com.tabber.tabby.entity.ContestWidgetEntity;
+import com.tabber.tabby.entity.PersonalProjectEntity;
+import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.exceptions.UnauthorisedException;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.UserRepository;
-import com.tabber.tabby.service.UniversityService;
-import com.tabber.tabby.service.UserService;
+import com.tabber.tabby.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,18 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UniversityService universityService;
+
+    @Autowired
+    PortfolioService portfolioService;
+
+    @Autowired
+    RankWidgetService rankWidgetService;
+
+    @Autowired
+    ContestWidgetService contestWidgetService;
+
+    @Autowired
+    PersonalProjectService personalProjectService;
 
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
@@ -104,5 +120,28 @@ public class UserServiceImpl implements UserService {
             logger.log(Level.INFO,"Error in college enriching  "+e);
         }
         return null;
+    }
+
+    @Override
+    public void deleteUser(Long userId,Long deleteUserId){
+        UserEntity user= userResumeManager.findUserById(userId);
+        if(!TabbyConstants.admins.contains(user.getEmail())){
+            throw new UnauthorisedException("Email id is not of admin");
+        }
+        UserEntity userEntity= userResumeManager.findUserById(deleteUserId);
+        if(userEntity.getPortfolio() != null) {
+            portfolioService.deletePortfolio(userEntity.getPortfolio());
+        }
+        for(RankWidgetEntity rankWidgetEntity :userEntity.getRankWidgets()){
+            rankWidgetService.deleteRankWidget(rankWidgetEntity.getWebsiteId(),deleteUserId);
+        }
+        for(ContestWidgetEntity contestWidgetEntity :userEntity.getContestWidgets()){
+            contestWidgetService.deleteContestWidget(contestWidgetEntity.getContestWidgetId(),deleteUserId);
+        }
+        for(PersonalProjectEntity personalProjectEntity :userEntity.getPersonalProjects()){
+            personalProjectService.deletePersonalProject(personalProjectEntity.getPersonalProjectId(),deleteUserId);
+        }
+        userRepository.delete(userEntity);
+        userResumeManager.deleteUserCache(deleteUserId);
     }
 }
