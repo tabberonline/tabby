@@ -82,4 +82,8 @@ public class UserEntity {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
+
+    @JsonProperty("plan_id")
+    @Column(name = "plan_id")
+    private Integer planId;
 }

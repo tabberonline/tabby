@@ -2,10 +2,12 @@ package com.tabber.tabby.service.impl;
 
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.RankWidgetRequest;
+import com.tabber.tabby.entity.PlanEntity;
 import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.exceptions.RankWidgetExistsException;
 import com.tabber.tabby.exceptions.RankWidgetNotExistsException;
+import com.tabber.tabby.manager.PlansManager;
 import com.tabber.tabby.respository.RankWidgetRepository;
 import com.tabber.tabby.service.RankWidgetService;
 import com.tabber.tabby.service.UserService;
@@ -23,13 +25,18 @@ public class RankWidgetServiceImpl implements RankWidgetService {
     @Autowired
     UserService userService;
 
+    @Autowired
+    PlansManager plansManager;
+
     @Override
     public RankWidgetEntity createRankWidget(RankWidgetRequest rankWidgetRequest, Long userId) throws Exception {
         UserEntity userEntity = userService.getUserFromUserId(userId);
+        PlanEntity planEntity = plansManager.findPlanById(userEntity.getPlanId());
         if(rankWidgetExistsForWebsite(userEntity,rankWidgetRequest.getWebsiteId())!=null){
             throw new RankWidgetExistsException("Exists for user "+userId+" for website id "+rankWidgetRequest.getWebsiteId());
         }
-        if(userEntity.getRankWidgets().size() >= TabbyConstants.RANK_WIDGET_SIZE_LIMIT)
+
+        if(userEntity.getRankWidgets().size() >= planEntity.getRankWidgetMax())
             throw new Exception("Rank widget size limit is reached");
         RankWidgetEntity rankWidgetEntity = new RankWidgetEntity()
                 .toBuilder()

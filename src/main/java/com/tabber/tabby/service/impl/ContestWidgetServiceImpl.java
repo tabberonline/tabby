@@ -3,9 +3,11 @@ package com.tabber.tabby.service.impl;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.ContestWidgetRequest;
 import com.tabber.tabby.entity.ContestWidgetEntity;
+import com.tabber.tabby.entity.PlanEntity;
 import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.exceptions.ContestWidgetNotExistsException;
+import com.tabber.tabby.manager.PlansManager;
 import com.tabber.tabby.respository.ContestWidgetRepository;
 import com.tabber.tabby.service.ContestWidgetService;
 import com.tabber.tabby.service.UserService;
@@ -23,11 +25,15 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
     @Autowired
     ContestWidgetRepository contestWidgetRepository;
 
+    @Autowired
+    PlansManager plansManager;
+
     @Override
     public ContestWidgetEntity createContestWidget(ContestWidgetRequest contestWidgetRequest, Long userId)
             throws Exception {
         UserEntity userEntity = userService.getUserFromUserId(userId);
-        if(userEntity.getContestWidgets().size() >= TabbyConstants.CONTEST_WIDGET_SIZE_LIMIT)
+        PlanEntity planEntity = plansManager.findPlanById(userEntity.getPlanId());
+        if(userEntity.getContestWidgets().size() >= planEntity.getContestWidgetMax())
             throw new Exception("Contest widget size limit is reached");
         ContestWidgetEntity contestWidgetEntity = new ContestWidgetEntity()
                 .toBuilder()

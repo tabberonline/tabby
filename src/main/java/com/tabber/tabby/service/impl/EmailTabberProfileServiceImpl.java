@@ -8,9 +8,11 @@ import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.dto.EmailHistoryResponse;
 import com.tabber.tabby.dto.StatusWiseResponse;
 import com.tabber.tabby.entity.EmailEntity;
+import com.tabber.tabby.entity.PlanEntity;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.enums.ResponseStatus;
 import com.tabber.tabby.manager.EmailsManager;
+import com.tabber.tabby.manager.PlansManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.EmailsRepository;
 import com.tabber.tabby.service.AWSService;
@@ -51,6 +53,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     AWSService awsService;
 
     @Autowired
+    PlansManager plansManager;
+
+    @Autowired
     private MeterRegistry meterRegistry;
 
     private String getHTMLwithTemplate(UserEntity userEntity) {
@@ -70,6 +75,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
     public StatusWiseResponse sendTabbyProfileInEmail(Long userProfileId, String receiverEmail, MultipartFile multipartFile) throws Exception{
         UserEntity userEntity = userManager.findUserById(userProfileId);
         EmailEntity emailEntity = emailsManager.getEmailByProfileId(userProfileId);
+        PlanEntity planEntity = plansManager.findPlanById(userEntity.getPlanId());
         StatusWiseResponse statusWiseResponse= new StatusWiseResponse().toBuilder()
                 .status(ResponseStatus.success.name())
                 .message("Email Successfully sent")
@@ -84,15 +90,15 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         }
         else {
             JsonNode jsonNode = emailEntity.getEmailData();
-            if(checkIfEmailSendingLimitReached(jsonNode)) {
+            if(checkIfEmailSendingLimitReached(jsonNode, planEntity)) {
                 meterRegistry.counter("failed_share_profile_email_count").increment();
                 statusWiseResponse= new StatusWiseResponse().toBuilder()
                         .status(ResponseStatus.failure.name())
-                        .message("Email sending limit of " + TabbyConstants.EMAIL_SENDING_LIMIT + " emails reached")
+                        .message("Email sending limit of " + planEntity.getEmailPerDayLimit() + " emails reached")
                         .build();
                 return statusWiseResponse;
             }
-            if((jsonNode.get("data")).size()>=TabbyConstants.EMAIL_HISTORY_STORING_LIMIT){
+            if((jsonNode.get("data")).size()>=20){
                 ((ArrayNode)jsonNode.get("data")).remove(0);
             }
             ((ArrayNode)jsonNode.get("data")).add(createEmailObject(receiverEmail));
@@ -114,16 +120,16 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         return statusWiseResponse;
     }
 
-    private Boolean checkIfEmailSendingLimitReached(JsonNode jsonNodeArray){
+    private Boolean checkIfEmailSendingLimitReached(JsonNode jsonNodeArray, PlanEntity planEntity){
         ArrayList<JSONObject> emailHistory = objectMapper.convertValue(jsonNodeArray.get("data"),ArrayList.class);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         // EMAIL_HISTORY_STORING_LIMIT should always be greater than EMAIL_SENDING_LIMIT, otherwise this check never works
-        if(emailHistory.size() - 1 - TabbyConstants.EMAIL_SENDING_LIMIT < 0)
+        if(emailHistory.size() < planEntity.getEmailPerDayLimit())
             return false;
         try {
             Date lastEmailDate = sdf.parse(objectMapper.convertValue(emailHistory.get(emailHistory.size() - 1),
                     LinkedHashMap.class).get("date").toString());
-            Date dateToCompare = sdf.parse(objectMapper.convertValue(emailHistory.get(emailHistory.size() - 1 - TabbyConstants.EMAIL_SENDING_LIMIT),
+            Date dateToCompare = sdf.parse(objectMapper.convertValue(emailHistory.get(emailHistory.size() - planEntity.getEmailPerDayLimit()),
                     LinkedHashMap.class).get("date").toString());
             Date dateToday= sdf.parse(DateUtil.getCurrentDateInUTC());
             if(lastEmailDate.equals(dateToCompare) && dateToday.equals(lastEmailDate))
