@@ -34,6 +34,14 @@ public class PlanEntity {
     @Column(name = "email_per_day_limit")
     private Integer emailPerDayLimit;
 
+    @JsonProperty("courses_limit")
+    @Column(name = "courses_limit")
+    private Integer coursesLimit;
+
+    @JsonProperty("experience_limit")
+    @Column(name = "experience_limit")
+    private Integer experienceLimit;
+
     @JsonProperty("plan_name")
     @Column(name = "plan_name")
     private String planName;
