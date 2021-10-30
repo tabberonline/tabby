@@ -36,4 +36,8 @@ public class CourseWidgetEntity {
     @JsonProperty("course_user_id")
     @Column(name = "course_user_id")
     private Long courseUserId;
+
+    @Column(name = "invisible")
+    @JsonProperty("invisible")
+    private Boolean invisible = false;
 }

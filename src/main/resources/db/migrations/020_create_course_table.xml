@@ -10,6 +10,7 @@
             <column name="certificate_link" type="VARCHAR" />
             <column name="course_name" type="VARCHAR" />
             <column name="issuer" type="VARCHAR" />
+            <column name="invisible" type="BOOLEAN" />
         </createTable>
     </changeSet>
 
@@ -20,20 +21,10 @@
     <changeSet author="mandeep.sidhu2@gmail.com" id="020_003_primaryConstraint_course_widget">
         <addPrimaryKey columnNames="course_id" constraintName="pkey_course" tableName="course_widgets" />
     </changeSet>
-    <changeSet author="mandeep.sidhu2@gmail.com" id="020_004_uniqueConstraint_course_widget">
-        <addUniqueConstraint columnNames="course_id" constraintName="unqKeys_course" tableName="course_widgets" />
-    </changeSet>
-    <changeSet author="mandeep.sidhu2@gmail.com" id="020_005_notNullConstraint_course_widget">
+    <changeSet author="mandeep.sidhu2@gmail.com" id="020_004_notNullConstraint_course_widget">
         <addNotNullConstraint schemaName="public" tableName="course_widgets" columnName="course_id" columnDataType="INT" />
         <addNotNullConstraint schemaName="public" tableName="course_widgets" columnName="course_user_id" columnDataType="BIGINT" />
         <addNotNullConstraint schemaName="public" tableName="course_widgets" columnName="course_name" columnDataType="VARCHAR" />
-        <addNotNullConstraint schemaName="public" tableName="course_widgets" columnName="certificate_link" columnDataType="VARCHAR" />
         <addNotNullConstraint schemaName="public" tableName="course_widgets" columnName="issuer" columnDataType="VARCHAR" />
-
-    </changeSet>
-    <changeSet author="mandeep.sidhu2@gmail.com" id="020_006_index_course_widget">
-        <createIndex indexName="index_course_on_id" schemaName="public" tableName="course_widgets" unique="true">
-            <column name="course_id" type="INT" />
-        </createIndex>
     </changeSet>
 </databaseChangeLog>

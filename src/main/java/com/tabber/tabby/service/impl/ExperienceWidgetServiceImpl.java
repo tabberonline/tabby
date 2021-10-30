@@ -44,7 +44,6 @@ public class ExperienceWidgetServiceImpl implements ExperienceWidgetService {
                 .type(experienceWidgetRequest.getType())
                 .startDate(experienceWidgetRequest.getStartDate())
                 .endDate(experienceWidgetRequest.getEndDate())
-                .cloudCertificationLink(experienceWidgetRequest.getCloudCertificationLink())
                 .experienceUserId(userId)
                 .build();
         experienceWidgetRepository.saveAndFlush(experienceWidgetEntity);
@@ -65,20 +64,20 @@ public class ExperienceWidgetServiceImpl implements ExperienceWidgetService {
             throw new ExperienceWidgetNotExistsException("Doesn't exist for user "+userId+" for experience id "+experienceId);
         }
         userEntity.getExperienceWidgets().remove(experienceWidget);
-        ExperienceWidgetEntity experienceWidgetEntity = new ExperienceWidgetEntity()
+        experienceWidget = experienceWidget
                 .toBuilder()
                 .companyName(experienceWidgetRequest.getCompanyName())
                 .description(experienceWidgetRequest.getDescription())
                 .type(experienceWidgetRequest.getType())
                 .startDate(experienceWidgetRequest.getStartDate())
                 .endDate(experienceWidgetRequest.getEndDate())
-                .cloudCertificationLink(experienceWidgetRequest.getCloudCertificationLink())
-                .experienceUserId(userId)
+                .invisible(experienceWidgetRequest.getInvisible())
                 .build();
-        experienceWidgetRepository.saveAndFlush(experienceWidgetEntity);
-        userEntity.getExperienceWidgets().add(experienceWidgetEntity);
+        experienceWidgetRepository.saveAndFlush(experienceWidget);
+        userEntity.getExperienceWidgets().add(experienceWidget);
         userEntity = userService.setResumePresent(userEntity);
-        return experienceWidgetEntity;
+        userService.updateCache(userEntity);
+        return experienceWidget;
     }
 
     @Override

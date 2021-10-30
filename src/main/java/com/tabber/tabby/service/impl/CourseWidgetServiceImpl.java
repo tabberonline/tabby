@@ -60,7 +60,7 @@ public class CourseWidgetServiceImpl implements CourseWidgetService {
                 .courseName(courseWidgetRequest.getCourseName())
                 .certificateLink(courseWidgetRequest.getCertificateLink())
                 .issuer(courseWidgetRequest.getIssuer())
-                .courseUserId(userId)
+                .invisible(courseWidgetRequest.getInvisible())
                 .build();
         courseWidgetRepository.saveAndFlush(courseWidgetEntity);
         userEntity.getCourses().add(courseWidgetEntity);

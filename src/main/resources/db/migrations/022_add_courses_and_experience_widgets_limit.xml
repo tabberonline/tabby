@@ -9,9 +9,4 @@
             <column name="experience_limit" type="INT" />
         </addColumn>
     </changeSet>
-<!--    <changeSet author="mandeep.sidhu2@gmail.com" id="022_002_add_courses_and_experience_widgets_limit">-->
-<!--        <dropColumn tableName="plans">-->
-<!--            <column name="experience_limit" type="INT" />-->
-<!--        </dropColumn>-->
-<!--    </changeSet>-->
 </databaseChangeLog>

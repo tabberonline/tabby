@@ -42,12 +42,12 @@ public class ExperienceWidgetEntity {
     @Column(name = "end_date")
     private String endDate;
 
-    @JsonProperty("cloud_certification_link")
-    @Column(name = "cloud_certification_link")
-    private String cloudCertificationLink;
-
     @JsonProperty("experience_user_id")
     @Column(name = "experience_user_id")
     private Long experienceUserId;
+
+    @Column(name = "invisible")
+    @JsonProperty("invisible")
+    private Boolean invisible = false;
 
 }

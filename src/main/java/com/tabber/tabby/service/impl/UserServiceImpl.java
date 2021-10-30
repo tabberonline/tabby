@@ -72,14 +72,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserEntity setResumePresent(UserEntity userEntity){
         if(userEntity.getPortfolio() == null && userEntity.getContestWidgets().size() == 0
-        && userEntity.getRankWidgets().size()==0 && userEntity.getPersonalProjects().size()==0
-        && userEntity.getResumePresent()){
+        && userEntity.getRankWidgets().size()==0 && userEntity.getPersonalProjects().size()==0 && userEntity.getExperienceWidgets().size()==0
+                && userEntity.getCourses().size()==0 && userEntity.getResumePresent()){
             userEntity.setResumePresent(false);
             userRepository.saveAndFlush(userEntity);
             return userEntity;
         }
         else if(!(userEntity.getPortfolio() == null && userEntity.getContestWidgets().size() == 0
-                && userEntity.getRankWidgets().size()==0 && userEntity.getPersonalProjects().size()==0)
+                && userEntity.getRankWidgets().size()==0 && userEntity.getPersonalProjects().size()==0 && userEntity.getExperienceWidgets().size()==0
+                && userEntity.getCourses().size()==0)
                 && !userEntity.getResumePresent()){
             userEntity.setResumePresent(true);
             userRepository.saveAndFlush(userEntity);
