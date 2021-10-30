@@ -11,4 +11,5 @@ public interface UserService {
     UserEntity setResumePresent(UserEntity userEntity);
     void updateUserName(UserEntity userEntity);
      Object getEnrichedUserData(Long userId);
+     void deleteUser(Long userId, Long deleteUserId);
 }

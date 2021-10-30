@@ -7,11 +7,14 @@ import com.tabber.tabby.exceptions.FrontendConfigurationExistsException;
 import com.tabber.tabby.exceptions.FrontendConfigurationNotExistsException;
 import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
+import com.tabber.tabby.service.UserService;
+import com.tabber.tabby.service.impl.UserServiceImpl;
 import com.tabber.tabby.utils.CacheClearUtil;
 import liquibase.pro.packaged.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -28,6 +31,9 @@ public class AdminController {
 
     @Autowired
     CacheClearUtil cacheClearUtil;
+
+    @Autowired
+    UserService userService;
 
 
     @PostMapping(value = URIEndpoints.FRONTEND_CONFIG_CREATE,produces = "application/json")
@@ -90,5 +96,18 @@ public class AdminController {
         List<FrontendConfigurationEntity> frontendConfigurationEntities=
                 frontendConfigManager.findAllFEConfiguration();
         return new ResponseEntity<>(frontendConfigurationEntities,HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "delete_user",produces = "application/json")
+    public ResponseEntity deleteUser(@RequestParam Long deleteUserId) {
+        try {
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            userService.deleteUser(userId,deleteUserId);
+        }
+        catch (Exception e){
+            throw e;
+        }
+        return new ResponseEntity<>(true,HttpStatus.OK);
+
     }
 }

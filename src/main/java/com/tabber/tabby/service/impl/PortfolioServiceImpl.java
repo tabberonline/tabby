@@ -13,7 +13,6 @@ import com.tabber.tabby.service.PortfolioService;
 import com.tabber.tabby.service.UserService;
 import com.tabber.tabby.service.WebsiteService;
 import com.tabber.tabby.utils.StringUtil;
-import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -161,7 +160,9 @@ public class PortfolioServiceImpl implements PortfolioService {
         user.setPortfolio(portfolioEntity);
         userService.updateCache(user);
     }
-
-
+    @Override
+    public void deletePortfolio(PortfolioEntity portfolioEntity){
+        portfolioRepository.delete(portfolioEntity);
+    }
 
 }
