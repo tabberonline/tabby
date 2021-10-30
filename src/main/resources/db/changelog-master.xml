@@ -26,4 +26,8 @@
     <include file="db/migrations/017_add_graduation_level_to_portfolio.xml"/>
     <include file="db/migrations/018_add_plan_id_to_users.xml"/>
     <include file="db/migrations/019_create_plans_table.xml"/>
+    <include file="db/migrations/020_create_course_table.xml"/>
+    <include file="db/migrations/021_create_experience_widget_table.xml"/>
+    <include file="db/migrations/022_add_courses_and_experience_widgets_limit.xml"/>
+
 </databaseChangeLog>

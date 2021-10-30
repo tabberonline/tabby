@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 @RequestMapping(value = URIEndpoints.CONTEST_WIDGET)
 public class ContestWidgetController {
 
-    private static final Logger logger = Logger.getLogger(RankWidgetController.class.getName());
+    private static final Logger logger = Logger.getLogger(ContestWidgetController.class.getName());
 
     @Autowired
     ContestWidgetService contestWidgetService;

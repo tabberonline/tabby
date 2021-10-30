@@ -22,6 +22,8 @@ public interface URIEndpoints {
     String UPDATE_USER_NAME = "/update/user_name";
     String UNIVERSITY = "/university";
     String UNIVERSITY_LIST = "/university_list";
+    String COURSE_WIDGET = "/coursewidget";
+    String EXPERIENCE_WIDGET = "/experiencewidget";
 
     // admin
     String ADMIN = "/admin";

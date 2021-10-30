@@ -61,6 +61,16 @@ public class UserEntity {
     @JoinColumn(name = "personal_project_user_id")
     private List<PersonalProjectEntity> personalProjects;
 
+    @JsonProperty("course_widgets")
+    @OneToMany
+    @JoinColumn(name = "course_user_id")
+    private List<CourseWidgetEntity> courses;
+
+    @JsonProperty("experience_widgets")
+    @OneToMany
+    @JoinColumn(name = "experience_user_id")
+    private List<ExperienceWidgetEntity> experienceWidgets;
+
     @JsonProperty("portfolio")
     @JsonManagedReference
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
