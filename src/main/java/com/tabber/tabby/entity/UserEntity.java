@@ -81,6 +81,11 @@ public class UserEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date lastLoggedIn;
 
+
+    @Column(name = "cookie_accepted")
+    @JsonProperty("cookie_accepted")
+    private Boolean cookieAccepted = false;
+
     @JsonProperty("created_at")
     @Column(name="created_at")
     @Temporal(TemporalType.TIMESTAMP)

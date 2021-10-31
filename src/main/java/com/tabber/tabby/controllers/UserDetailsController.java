@@ -73,14 +73,40 @@ public class UserDetailsController {
         return new ResponseEntity<>(userBasicRespone, HttpStatus.OK);
     }
 
-    @GetMapping(value = URIEndpoints.UPDATE_USER_NAME,produces = "application/json")
-    public ResponseEntity<String> getUserInfo(@RequestParam String userName) throws Exception {
+    @GetMapping(value = URIEndpoints.GET_USER_COOKIE,produces = "application/json")
+    public ResponseEntity<Boolean> getUserCookie() throws Exception {
         UserEntity userEntity;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             userEntity = userService.getUserFromUserId(userId);
-            userEntity.setName(userName);
-            userService.updateUserName(userEntity);
+        }
+        catch (Exception ex){
+            logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
+            throw ex;
+        }
+        return new ResponseEntity<>(userEntity.getCookieAccepted(), HttpStatus.OK);
+    }
+
+    @GetMapping(value = URIEndpoints.UPDATE_USER_COOKIE,produces = "application/json")
+    public ResponseEntity<String> updateUserCookie() throws Exception {
+        UserEntity userEntity;
+        try {
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            userService.updateUserCookiePermission(userId);
+        }
+        catch (Exception ex){
+            logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
+            throw ex;
+        }
+        return new ResponseEntity<>("User cookie permission updated Successfully", HttpStatus.OK);
+    }
+
+    @GetMapping(value = URIEndpoints.UPDATE_USER_NAME,produces = "application/json")
+    public ResponseEntity<String> updateUserName(@RequestParam String userName) throws Exception {
+        UserEntity userEntity;
+        try {
+            Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+            userService.updateUserName(userId,userName);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());

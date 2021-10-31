@@ -61,6 +61,7 @@ public class AuthServiceImpl implements AuthService {
                     .locale((String) payload.get("locale"))
                     .name((String) payload.get("name"))
                     .resumePresent(false)
+                    .cookieAccepted(false)
                     .lastLoggedIn(presentDate)
                     .planId(TabbyConstants.LITE_PLAN_ID)
                     .build();

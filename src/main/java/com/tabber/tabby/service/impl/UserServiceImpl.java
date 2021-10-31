@@ -90,7 +90,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUserName(UserEntity userEntity){
+    public void updateUserName(Long userId, String userName){
+        UserEntity userEntity= userResumeManager.findUserById(userId);
+        userEntity.setName(userName);
+        userRepository.saveAndFlush(userEntity);
+        updateCache(userEntity);
+    }
+
+    @Override
+    public void updateUserCookiePermission(Long userId){
+        UserEntity userEntity= userResumeManager.findUserById(userId);
+        userEntity.setCookieAccepted(true);
         userRepository.saveAndFlush(userEntity);
         updateCache(userEntity);
     }
