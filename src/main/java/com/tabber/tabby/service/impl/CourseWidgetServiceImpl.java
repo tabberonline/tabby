@@ -36,7 +36,7 @@ public class CourseWidgetServiceImpl implements CourseWidgetService {
                 .courseName(courseWidgetRequest.getCourseName())
                 .certificateLink(courseWidgetRequest.getCertificateLink())
                 .issuer(courseWidgetRequest.getIssuer())
-                .courseUserId(userId)
+                .userId(userId)
                 .build();
         courseWidgetRepository.saveAndFlush(courseWidgetEntity);
         userEntity.getCourses().add(courseWidgetEntity);
@@ -46,7 +46,7 @@ public class CourseWidgetServiceImpl implements CourseWidgetService {
     }
 
     @Override
-    public CourseWidgetEntity updateCourseWidget(CourseWidgetRequest courseWidgetRequest, Integer courseId, Long userId) throws CourseWidgetNotExistsException {
+    public CourseWidgetEntity updateCourseWidget(CourseWidgetRequest courseWidgetRequest, Long courseId, Long userId) throws CourseWidgetNotExistsException {
         if(courseId == null){
             throw new CourseWidgetNotExistsException("Widget Id not specified");
         }
@@ -69,7 +69,7 @@ public class CourseWidgetServiceImpl implements CourseWidgetService {
     }
 
     @Override
-    public CourseWidgetEntity deleteCourseWidget(Integer courseId, Long userId) throws CourseWidgetNotExistsException {
+    public CourseWidgetEntity deleteCourseWidget(Long courseId, Long userId) throws CourseWidgetNotExistsException {
         UserEntity userEntity = userService.getUserFromUserId(userId);
         if(courseId == null){
             throw new CourseWidgetNotExistsException("Widget Id not specified");
@@ -85,7 +85,7 @@ public class CourseWidgetServiceImpl implements CourseWidgetService {
         return courseWidget;
     }
 
-    private CourseWidgetEntity getCourseById(Integer courseId,UserEntity userEntity){
+    private CourseWidgetEntity getCourseById(Long courseId,UserEntity userEntity){
         List<CourseWidgetEntity> courseWidgetEntities = userEntity.getCourses();
         for(CourseWidgetEntity courseWidget:courseWidgetEntities){
             if(courseWidget.getCourseId().equals(courseId)){

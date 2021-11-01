@@ -8,7 +8,7 @@ public interface CourseWidgetService {
 
     CourseWidgetEntity createCourseWidget(CourseWidgetRequest courseWidgetRequest, Long userId) throws Exception;
 
-    CourseWidgetEntity updateCourseWidget(CourseWidgetRequest courseWidgetRequest, Integer courseId, Long userId) throws CourseWidgetNotExistsException;
+    CourseWidgetEntity updateCourseWidget(CourseWidgetRequest courseWidgetRequest, Long courseId, Long userId) throws CourseWidgetNotExistsException;
 
-    CourseWidgetEntity deleteCourseWidget(Integer courseId, Long userId) throws CourseWidgetNotExistsException;
+    CourseWidgetEntity deleteCourseWidget(Long courseId, Long userId) throws CourseWidgetNotExistsException;
 }

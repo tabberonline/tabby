@@ -44,7 +44,7 @@ public class ExperienceWidgetServiceImpl implements ExperienceWidgetService {
                 .type(experienceWidgetRequest.getType())
                 .startDate(experienceWidgetRequest.getStartDate())
                 .endDate(experienceWidgetRequest.getEndDate())
-                .experienceUserId(userId)
+                .userId(userId)
                 .build();
         experienceWidgetRepository.saveAndFlush(experienceWidgetEntity);
         userEntity.getExperienceWidgets().add(experienceWidgetEntity);
@@ -54,7 +54,7 @@ public class ExperienceWidgetServiceImpl implements ExperienceWidgetService {
     }
 
     @Override
-    public ExperienceWidgetEntity updateExperienceWidget(ExperienceWidgetRequest experienceWidgetRequest, Integer experienceId, Long userId) throws ExperienceWidgetNotExistsException {
+    public ExperienceWidgetEntity updateExperienceWidget(ExperienceWidgetRequest experienceWidgetRequest, Long experienceId, Long userId) throws ExperienceWidgetNotExistsException {
         if(experienceId == null){
             throw new ExperienceWidgetNotExistsException("Experience Id not specified");
         }
@@ -75,13 +75,12 @@ public class ExperienceWidgetServiceImpl implements ExperienceWidgetService {
                 .build();
         experienceWidgetRepository.saveAndFlush(experienceWidget);
         userEntity.getExperienceWidgets().add(experienceWidget);
-        userEntity = userService.setResumePresent(userEntity);
         userService.updateCache(userEntity);
         return experienceWidget;
     }
 
     @Override
-    public ExperienceWidgetEntity deleteExperienceWidget(Integer experienceId, Long userId) throws ExperienceWidgetNotExistsException {
+    public ExperienceWidgetEntity deleteExperienceWidget(Long experienceId, Long userId) throws ExperienceWidgetNotExistsException {
         UserEntity userEntity = userService.getUserFromUserId(userId);
         if(experienceId == null){
             throw new ExperienceWidgetNotExistsException("Widget Id not specified");
@@ -97,7 +96,7 @@ public class ExperienceWidgetServiceImpl implements ExperienceWidgetService {
         return experienceWidgetEntity;
     }
 
-    private ExperienceWidgetEntity getExperienceById(Integer experienceId,UserEntity userEntity){
+    private ExperienceWidgetEntity getExperienceById(Long experienceId,UserEntity userEntity){
         List<ExperienceWidgetEntity> experienceWidgetEntities = userEntity.getExperienceWidgets();
         for(ExperienceWidgetEntity experienceWidget:experienceWidgetEntities){
             if(experienceWidget.getExperienceId().equals(experienceId)){

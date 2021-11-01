@@ -76,6 +76,11 @@ public class UserEntity {
     @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
     private PortfolioEntity portfolio;
 
+    @JsonProperty("custom_link_entity")
+    @JsonManagedReference
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY,orphanRemoval = true)
+    private CustomLinkEntity customLinkEntity;
+
     @JsonProperty("last_logged_in")
     @Column(name="last_logged_in")
     @Temporal(TemporalType.TIMESTAMP)

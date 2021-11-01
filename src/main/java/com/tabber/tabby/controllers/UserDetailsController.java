@@ -22,10 +22,10 @@ public class UserDetailsController {
     UserService userService;
 
     @GetMapping(value = URIEndpoints.GUEST_RESUME,produces = "application/json")
-    public ResponseEntity<Object> getGuestUserResume(@RequestParam("id") Long userId) throws Exception {
+    public ResponseEntity<Object> getGuestUserResume(@RequestParam("id") Long userId, @RequestParam(value = "group", required = false) String group) throws Exception {
         Object userEntity = null;
         try {
-            userEntity = userService.getEnrichedUserData(userId);
+            userEntity = userService.getUserFromCustomLink(userId,group);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());

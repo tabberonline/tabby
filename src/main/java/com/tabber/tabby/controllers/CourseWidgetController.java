@@ -42,7 +42,7 @@ public class CourseWidgetController {
     @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
     public ResponseEntity<CourseWidgetEntity>  updateCourseWidget(
             @RequestBody CourseWidgetRequest courseWidgetRequest,
-            @RequestParam("id") Integer id) throws CourseWidgetNotExistsException {
+            @RequestParam("id") Long id) throws CourseWidgetNotExistsException {
         logger.log(Level.INFO,"Update widget request for course widget",courseWidgetRequest);
         CourseWidgetEntity courseWidgetEntity = null;
         try {
@@ -58,7 +58,7 @@ public class CourseWidgetController {
 
     @DeleteMapping(value = URIEndpoints.DELETE,produces = "application/json")
     public ResponseEntity<CourseWidgetEntity>  deleteCourseWidget(
-            @RequestParam("id") Integer id) throws CourseWidgetNotExistsException {
+            @RequestParam("id") Long id) throws CourseWidgetNotExistsException {
         logger.log(Level.INFO,"Delete widget request for course widget:{}",id);
         CourseWidgetEntity courseWidgetEntity = null;
         try {

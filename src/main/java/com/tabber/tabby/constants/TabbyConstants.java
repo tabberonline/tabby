@@ -7,6 +7,7 @@ import java.util.List;
 public interface TabbyConstants {
     String WEBSITE = "WEBSITE";
     String RESUME = "RESUME";
+    String CUSTOM_LINK = "CUSTOM_LINK";
     String FRONTEND_CONFIG = "FRONTEND_CONFIG";
     String EMAIL_BY= "EMAIL_BY";
     String EMAIL_KEY= "EMAIL_KEY";

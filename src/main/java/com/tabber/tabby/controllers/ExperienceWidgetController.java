@@ -46,7 +46,7 @@ public class ExperienceWidgetController {
     @PutMapping(value = URIEndpoints.UPDATE,produces = "application/json")
     public ResponseEntity<ExperienceWidgetEntity>  updateExperienceWidget(
             @RequestBody ExperienceWidgetRequest experienceWidgetRequest,
-            @RequestParam("id") Integer id) throws ExperienceWidgetNotExistsException {
+            @RequestParam("id") Long id) throws ExperienceWidgetNotExistsException {
         logger.log(Level.INFO,"Update widget request for experience widget",experienceWidgetRequest);
         ExperienceWidgetEntity experienceWidgetEntity = null;
         try {
@@ -62,7 +62,7 @@ public class ExperienceWidgetController {
 
     @DeleteMapping(value = URIEndpoints.DELETE,produces = "application/json")
     public ResponseEntity<ExperienceWidgetEntity>  deleteExperienceWidget(
-            @RequestParam("id") Integer id) throws ExperienceWidgetNotExistsException {
+            @RequestParam("id") Long id) throws ExperienceWidgetNotExistsException {
         logger.log(Level.INFO,"Delete widget request for course widget:{}",id);
         ExperienceWidgetEntity experienceWidgetEntity = null;
         try {

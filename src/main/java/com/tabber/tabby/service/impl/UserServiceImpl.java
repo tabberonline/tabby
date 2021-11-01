@@ -5,10 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.tabber.tabby.constants.TabbyConstants;
-import com.tabber.tabby.entity.ContestWidgetEntity;
-import com.tabber.tabby.entity.PersonalProjectEntity;
-import com.tabber.tabby.entity.RankWidgetEntity;
-import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.entity.*;
 import com.tabber.tabby.exceptions.UnauthorisedException;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.UserRepository;
@@ -42,6 +39,15 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     PersonalProjectService personalProjectService;
+
+    @Autowired
+    ExperienceWidgetService experienceWidgetService;
+
+    @Autowired
+    CourseWidgetService courseWidgetService;
+
+    @Autowired
+    CustomLinkService customLinkService;
 
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
@@ -105,11 +111,27 @@ public class UserServiceImpl implements UserService {
         updateCache(userEntity);
     }
 
+    @Override
+    public Object getUserFromCustomLink(Long id, String groupId){
+        Long userId = userResumeManager.getCustomLinkUserId(groupId,id);
+        if(userId == null)
+            return null;
+        return getEnrichedUserData(userId);
+    }
+
+    @Override
     public Object getEnrichedUserData(Long userId){
         UserEntity userEntity= userResumeManager.findUserById(userId);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
+        String portfolioLink = "tabber.online/d/";
+        if(userEntity.getCustomLinkEntity()!=null){
+            portfolioLink += userEntity.getCustomLinkEntity().getLinkGroup() + '/' + userEntity.getCustomLinkEntity().getGroupId();
+        }
+        else{
+            portfolioLink += userEntity.getUserId();
+        }
         Object userEnrichedData;
         try {
             userEnrichedData = objectMapper.readValue(objectMapper.writeValueAsString(userEntity), Object.class);
@@ -126,6 +148,8 @@ public class UserServiceImpl implements UserService {
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).remove("college_others");
             }
+            ((LinkedHashMap) userEnrichedData).remove("custom_link_entity",portfolioLink);
+            ((LinkedHashMap) userEnrichedData).put("portfolio_link",portfolioLink);
             return userEnrichedData;
         }catch(Exception e){
             logger.log(Level.INFO,"Error in college enriching  "+e);
@@ -143,6 +167,9 @@ public class UserServiceImpl implements UserService {
         if(userEntity.getPortfolio() != null) {
             portfolioService.deletePortfolio(userEntity.getPortfolio());
         }
+        if(userEntity.getCustomLinkEntity() != null) {
+            customLinkService.deleteCustomLink(userEntity.getCustomLinkEntity());
+        }
         for(RankWidgetEntity rankWidgetEntity :userEntity.getRankWidgets()){
             rankWidgetService.deleteRankWidget(rankWidgetEntity.getWebsiteId(),deleteUserId);
         }
@@ -152,7 +179,13 @@ public class UserServiceImpl implements UserService {
         for(PersonalProjectEntity personalProjectEntity :userEntity.getPersonalProjects()){
             personalProjectService.deletePersonalProject(personalProjectEntity.getPersonalProjectId(),deleteUserId);
         }
-        userRepository.delete(userEntity);
+        for(ExperienceWidgetEntity experienceWidgetEntity :userEntity.getExperienceWidgets()){
+            experienceWidgetService.deleteExperienceWidget(experienceWidgetEntity.getExperienceId(),deleteUserId);
+        }
+        for(CourseWidgetEntity courseWidgetEntity :userEntity.getCourses()){
+            courseWidgetService.deleteCourseWidget(courseWidgetEntity.getCourseId(),deleteUserId);
+        }
+        userRepository.deleteById(userEntity.getUserId());
         userResumeManager.deleteUserCache(deleteUserId);
     }
 }

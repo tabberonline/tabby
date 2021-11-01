@@ -16,10 +16,10 @@ import javax.persistence.*;
 public class CourseWidgetEntity {
 
     @Id
-    @Column(name = "course_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("course_id")
-    private Integer courseId;
+    @JsonProperty("id")
+    private Long courseId;
 
     @JsonProperty("issuer")
     @Column(name = "issuer")
@@ -35,7 +35,7 @@ public class CourseWidgetEntity {
 
     @JsonProperty("course_user_id")
     @Column(name = "course_user_id")
-    private Long courseUserId;
+    private Long userId;
 
     @Column(name = "invisible")
     @JsonProperty("invisible")

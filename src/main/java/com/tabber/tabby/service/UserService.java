@@ -10,7 +10,8 @@ public interface UserService {
     UserEntity getUserFromSub(String sub);
     UserEntity setResumePresent(UserEntity userEntity);
     void updateUserName(Long userId, String userName);
-     Object getEnrichedUserData(Long userId);
-     void deleteUser(Long userId, Long deleteUserId);
+    Object getEnrichedUserData(Long userId);
+    Object getUserFromCustomLink(Long id, String groupId);
+    void deleteUser(Long userId, Long deleteUserId);
     void updateUserCookiePermission(Long userId);
 }

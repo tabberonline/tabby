@@ -17,10 +17,10 @@ public class ExperienceWidgetEntity {
 
 
     @Id
-    @Column(name = "experience_id")
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("experience_id")
-    private Integer experienceId;
+    @JsonProperty("id")
+    private Long experienceId;
 
     @JsonProperty("type")
     @Column(name = "type")
@@ -44,7 +44,7 @@ public class ExperienceWidgetEntity {
 
     @JsonProperty("experience_user_id")
     @Column(name = "experience_user_id")
-    private Long experienceUserId;
+    private Long userId;
 
     @Column(name = "invisible")
     @JsonProperty("invisible")

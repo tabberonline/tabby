@@ -10,7 +10,7 @@ public interface ExperienceWidgetService {
 
     ExperienceWidgetEntity createExperienceWidget(ExperienceWidgetRequest experienceWidgetRequest, Long userId) throws Exception;
 
-    ExperienceWidgetEntity updateExperienceWidget(ExperienceWidgetRequest experienceWidgetRequest, Integer courseId, Long userId) throws ExperienceWidgetNotExistsException;
+    ExperienceWidgetEntity updateExperienceWidget(ExperienceWidgetRequest experienceWidgetRequest, Long experienceId, Long userId) throws ExperienceWidgetNotExistsException;
 
-    ExperienceWidgetEntity deleteExperienceWidget(Integer experienceId, Long userId) throws ExperienceWidgetNotExistsException;
+    ExperienceWidgetEntity deleteExperienceWidget(Long experienceId, Long userId) throws ExperienceWidgetNotExistsException;
 }
