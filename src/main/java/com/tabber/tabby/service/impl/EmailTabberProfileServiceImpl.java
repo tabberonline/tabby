@@ -64,7 +64,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
         model.put("email",userEntity.getEmail());
         model.put("title",userEntity.getPortfolio().getTitle());
         model.put("description",userEntity.getPortfolio().getDescription());
-        model.put("profile_link","https://tabber.online/d?="+userEntity.getUserId());
+        model.put("profile_link","https://tabber.online/d/"+userEntity.getUserId());
         Context context = new Context();
         context.setVariables(model);
         String html = templateEngine.process("tabberProfile",context);
