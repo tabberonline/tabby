@@ -25,7 +25,7 @@ public class UserDetailsController {
     public ResponseEntity<Object> getGuestUserResume(@RequestParam("id") Long userId, @RequestParam(value = "group", required = false) String group) throws Exception {
         Object userEntity = null;
         try {
-            userEntity = userService.getUserFromCustomLink(userId,group);
+            userEntity = userService.getUserFromCustomLink(userId,group,null);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
@@ -39,7 +39,7 @@ public class UserDetailsController {
         Object userEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-            userEntity = userService.getEnrichedUserData(userId);
+            userEntity = userService.getEnrichedUserData(userId, null);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
