@@ -35,7 +35,6 @@ public class PersonalProjectEntity {
     @JsonProperty("link")
     private String link;
 
-
     @Column(name = "tech_stack",columnDefinition = "jsonb")
     @Type(type = "jsonb-node")
     @JsonProperty("tech_stack")

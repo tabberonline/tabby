@@ -1,0 +1,43 @@
+package com.tabber.tabby.service;
+
+import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.manager.RedisServiceManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+@Service
+public class UserViewService {
+
+    @Autowired
+    RedisServiceManager redisServiceManager;
+
+    private static final Logger logger = Logger.getLogger(UserViewService.class.getName());
+
+    public void incrementViewsRedis(UserEntity userEntity) {
+        try {
+            Long userId = userEntity.getUserId();
+            Double currentViews = redisServiceManager.zscore("viewsSet", String.valueOf(userId));
+            Integer converter = currentViews==null ? 0 : currentViews.intValue();
+            Long views = Long.valueOf(converter);
+            redisServiceManager.zadd("viewsSet", String.valueOf(userId), views+1);
+        } catch(Exception ex) {
+            logger.log(Level.INFO,"Error in incrementing views in redis : "+ex);
+        }
+    }
+
+    public void setTrackingId(UserEntity userEntity, Long trackingId) {
+        try {
+            Double prevTrackingId = redisServiceManager.zscore("trackingIdSet", String.valueOf(trackingId));
+            if(prevTrackingId==null) {
+                Long currentTimestamp = (System.currentTimeMillis()/1000) + 3600;
+                redisServiceManager.zadd("trackingIdSet", String.valueOf(trackingId), currentTimestamp);
+                incrementViewsRedis(userEntity);
+            }
+        } catch (Exception ex) {
+            logger.log(Level.INFO,"Error in setting tracking id in redis : "+ex);
+        }
+    }
+
+}

@@ -19,6 +19,10 @@ import java.util.logging.Logger;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    UserViewService userViewService;
+
     @Autowired
     UserRepository userRepository;
 
@@ -112,15 +116,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object getUserFromCustomLink(Long id, String groupId){
+    public Object getUserFromCustomLink(Long id, String groupId, Long trackingId){
         Long userId = userResumeManager.getCustomLinkUserId(groupId,id);
         if(userId == null)
             return null;
-        return getEnrichedUserData(userId);
+        return getEnrichedUserData(userId, trackingId);
     }
 
     @Override
-    public Object getEnrichedUserData(Long userId){
+    public Object getEnrichedUserData(Long userId, Long trackingId){
         UserEntity userEntity= userResumeManager.findUserById(userId);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -150,6 +154,9 @@ public class UserServiceImpl implements UserService {
             }
             ((LinkedHashMap) userEnrichedData).remove("custom_link_entity",portfolioLink);
             ((LinkedHashMap) userEnrichedData).put("portfolio_link",portfolioLink);
+            if(trackingId!=null) {
+                userViewService.setTrackingId(userEntity, trackingId);
+            }
             return userEnrichedData;
         }catch(Exception e){
             logger.log(Level.INFO,"Error in college enriching  "+e);

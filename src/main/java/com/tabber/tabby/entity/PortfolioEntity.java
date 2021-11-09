@@ -81,6 +81,10 @@ public class PortfolioEntity {
     @JsonProperty("updated_at")
     private Date updatedAt;
 
+    @JsonProperty("views")
+    @Column(name = "views")
+    private Integer views;
+
     public ArrayList<SocialWebsiteDto> getSocialProfiles(){
         ObjectMapper objectMapper = new ObjectMapper();
         ArrayList<SocialWebsiteDto> socialWebsiteDtoList = objectMapper.convertValue(this.socialProfiles, new TypeReference<>(){});
