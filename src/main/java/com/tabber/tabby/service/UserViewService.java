@@ -40,4 +40,18 @@ public class UserViewService {
         }
     }
 
+    public void setUntrackedViews(UserEntity userEntity) {
+        try {
+            Long userId = userEntity.getUserId();
+            Double userIdViewsPresent = redisServiceManager.zscore("untrackedViewsSet", String.valueOf(userId));
+            if(userIdViewsPresent!=null) {
+                redisServiceManager.zadd("untrackedViewsSet", String.valueOf(userId), (long)userIdViewsPresent.doubleValue() + 1);
+            }
+            else {
+                redisServiceManager.zadd("untrackedViewsSet", String.valueOf(userId), (long)1);
+            }
+        } catch(Exception ex) {
+            logger.log(Level.INFO,"Error in setting untracked views in redis : "+ex);
+        }
+    }
 }

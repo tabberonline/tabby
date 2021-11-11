@@ -157,6 +157,9 @@ public class UserServiceImpl implements UserService {
             if(trackingId!=null) {
                 userViewService.setTrackingId(userEntity, trackingId);
             }
+            else {
+                userViewService.setUntrackedViews(userEntity);
+            }
             return userEnrichedData;
         }catch(Exception e){
             logger.log(Level.INFO,"Error in college enriching  "+e);

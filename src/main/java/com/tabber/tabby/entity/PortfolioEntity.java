@@ -83,7 +83,11 @@ public class PortfolioEntity {
 
     @JsonProperty("views")
     @Column(name = "views")
-    private Integer views;
+    private Long views;
+
+    @JsonProperty("untracked_views")
+    @Column(name = "untracked_views")
+    private Long untrackedViews;
 
     public ArrayList<SocialWebsiteDto> getSocialProfiles(){
         ObjectMapper objectMapper = new ObjectMapper();

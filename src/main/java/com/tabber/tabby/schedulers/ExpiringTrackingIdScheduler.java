@@ -26,7 +26,7 @@ public class ExpiringTrackingIdScheduler implements Job {
     public void expiringTrackingIdScheduler() {
         try {
             Set<String> setOfKeysToRemove = redisServiceManager
-                    .zrangebyscore("trackingIdSet", "0", String.valueOf(System.currentTimeMillis()/1000));
+                    .zrangeByScore("trackingIdSet", "0", String.valueOf(System.currentTimeMillis()/1000));
             String[] keysToRemove = setOfKeysToRemove.toArray(new String[0]);
             redisServiceManager.zrem("trackingIdSet", keysToRemove);
         } catch(Exception ex) {

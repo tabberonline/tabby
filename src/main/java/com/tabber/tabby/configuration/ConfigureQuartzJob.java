@@ -3,6 +3,7 @@ package com.tabber.tabby.configuration;
 import com.tabber.tabby.schedulers.EmailTabberProfileReceiverScheduler;
 import com.tabber.tabby.schedulers.ExpiringTrackingIdScheduler;
 import com.tabber.tabby.schedulers.IncrementViewsScheduler;
+import com.tabber.tabby.schedulers.UntrackedViewsScheduler;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,6 +21,9 @@ public class ConfigureQuartzJob {
 
     @Autowired @Qualifier("deleteTrackingIds")
     JobDetail jobDetail3;
+
+    @Autowired @Qualifier("untrackedViewsInDB")
+    JobDetail jobDetail4;
 
     @Bean(name = "emailJob")
     public JobDetail emailingProfileReceiverJob() {
@@ -65,5 +69,22 @@ public class ConfigureQuartzJob {
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every hour
                 .build();
     }
+
+    @Bean(name = "untrackedViewsInDB")
+    public JobDetail incrementUntrackedViews() {
+        JobDetail incrementUntrackedViews = JobBuilder.newJob(UntrackedViewsScheduler.class)
+                .withIdentity("incrementUntrackedViews")
+                .storeDurably().build();
+        return incrementUntrackedViews;
+    }
+
+    @Bean
+    public Trigger incrementUntrackedViewsTrigger() {
+        return TriggerBuilder.newTrigger().forJob(jobDetail4)
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every hour
+                .build();
+    }
+
+
 
 }

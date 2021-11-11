@@ -173,7 +173,7 @@ public class RedisServiceManager {
         }
     }
 
-    public Set<String> zrangebyscore(String set, String min, String max) {
+    public Set<String> zrangeByScore(String set, String min, String max) {
         try (Jedis redis  = jedisConnection().getJedis()) {
             return redis.zrangeByScore(set, min, max);
         }
