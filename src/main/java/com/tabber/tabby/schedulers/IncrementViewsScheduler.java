@@ -27,9 +27,6 @@ public class IncrementViewsScheduler implements Job {
     UserResumeManager userResumeManager;
 
     @Autowired
-    UserRepository userRepository;
-
-    @Autowired
     PortfolioRepository portfolioRepository;
 
     @Autowired
@@ -44,49 +41,55 @@ public class IncrementViewsScheduler implements Job {
 
     public void incrementViewsScheduler() {
         // for tracked views
-        try {
-            Set<Tuple> set = redisServiceManager.zrevrangeWithScores("viewsSet", 0, -1);
-            String[] keysToRemove = new String[set.size()];
-            int index = 0;
-            for(Tuple tuple : set) {
-                String key = tuple.getElement();
-                UserEntity userEntity = userResumeManager.findUserById(Long.valueOf(key));
+
+        Set<Tuple> set = redisServiceManager.zrevrangeWithScores("viewsSet", 0, -1);
+        String[] keysToRemove = new String[set.size()];
+        Integer index = 0;
+        for(Tuple tuple : set) {
+            String key = tuple.getElement();
+            UserEntity userEntity = null;
+            try {
+                userEntity = userResumeManager.findUserById(Long.valueOf(key));
                 PortfolioEntity portfolioEntity = portfolioRepository.getTopByPortfolioUserId(Long.valueOf(key));
                 Long currentViews = userEntity.getPortfolio().getViews();
-                portfolioEntity.setViews(currentViews==null ? Double.valueOf(tuple.getScore()).intValue() : currentViews + Double.valueOf(tuple.getScore()).intValue());
+                portfolioEntity.setViews(currentViews == null ? Double.valueOf(tuple.getScore()).intValue() : currentViews + Double.valueOf(tuple.getScore()).intValue());
                 portfolioRepository.saveAndFlush(portfolioEntity);
                 userEntity.setPortfolio(portfolioEntity);
                 userService.updateCache(userEntity);
-                keysToRemove[index] = key;
-                index++;
             }
-            redisServiceManager.zrem("viewsSet", keysToRemove);
-
-        } catch (Exception ex) {
-            logger.log(Level.WARNING,"Failed to increment views in DB due to exception:"+ ex.toString());
+            catch (Exception ex){
+                logger.log(Level.WARNING,"Failed to increment views in DB due to exception:" +userEntity!=null? String.valueOf(userEntity.getUserId()) :"no user"  + ex.toString());
+            }
+            keysToRemove[index] = key;
+            index++;
         }
+        redisServiceManager.zrem("viewsSet", keysToRemove);
+
 
         // for untracked views
-        try {
-            Set<Tuple> set = redisServiceManager.zrevrangeWithScores("untrackedViewsSet", 0, -1);
-            String[] keysToRemove = new String[set.size()];
-            int index = 0;
-            for(Tuple tuple : set) {
-                String key = tuple.getElement();
-                UserEntity userEntity = userResumeManager.findUserById(Long.valueOf(key));
+
+        set = redisServiceManager.zrevrangeWithScores("untrackedViewsSet", 0, -1);
+        keysToRemove = new String[set.size()];
+        index = 0;
+        for(Tuple tuple : set) {
+            String key = tuple.getElement();
+            UserEntity userEntity = null;
+            try {
+                userEntity = userResumeManager.findUserById(Long.valueOf(key));
                 PortfolioEntity portfolioEntity = portfolioRepository.getTopByPortfolioUserId(Long.valueOf(key));
                 Long currentUntrackedViews = userEntity.getPortfolio().getUntrackedViews();
-                portfolioEntity.setUntrackedViews(currentUntrackedViews==null ? Double.valueOf(tuple.getScore()).intValue() : currentUntrackedViews + Double.valueOf(tuple.getScore()).intValue());
+                portfolioEntity.setUntrackedViews(currentUntrackedViews == null ? Double.valueOf(tuple.getScore()).intValue() : currentUntrackedViews + Double.valueOf(tuple.getScore()).intValue());
                 portfolioRepository.saveAndFlush(portfolioEntity);
                 userEntity.setPortfolio(portfolioEntity);
                 userService.updateCache(userEntity);
-                keysToRemove[index] = key;
-                index++;
             }
-            redisServiceManager.zrem("untrackedViewsSet", keysToRemove);
-        } catch (Exception ex) {
-            logger.log(Level.WARNING,"Failed to increment untracked views in DB due to exception:"+ ex.toString());
+            catch (Exception ex){
+                logger.log(Level.WARNING, "Failed to increment untracked views in DB due to exception: "+userEntity!=null? String.valueOf(userEntity.getUserId()) :"no user"  +ex.toString());
+            }
+            keysToRemove[index] = key;
+            index++;
         }
+        redisServiceManager.zrem("untrackedViewsSet", keysToRemove);
 
     }
 

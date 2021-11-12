@@ -28,7 +28,8 @@ public class ExpiringTrackingIdScheduler implements Job {
             Set<String> setOfKeysToRemove = redisServiceManager
                     .zrangeByScore("trackingIdSet", "0", String.valueOf(System.currentTimeMillis()/1000));
             String[] keysToRemove = setOfKeysToRemove.toArray(new String[0]);
-            redisServiceManager.zrem("trackingIdSet", keysToRemove);
+            if(keysToRemove.length != 0)
+                redisServiceManager.zrem("trackingIdSet", keysToRemove);
         } catch(Exception ex) {
             logger.log(Level.WARNING,"Failed to remove tracking ids due to exception:"+ ex.toString());
         }
