@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object getUserFromCustomLink(Long id, String groupId, Long trackingId){
+    public Object getUserFromCustomLink(Long id, String groupId, String trackingId){
         Long userId = userResumeManager.getCustomLinkUserId(groupId,id);
         if(userId == null)
             return null;
@@ -124,7 +124,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object getEnrichedUserData(Long userId, Long trackingId){
+    public Object getEnrichedUserData(Long userId, String trackingId){
         UserEntity userEntity= userResumeManager.findUserById(userId);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);

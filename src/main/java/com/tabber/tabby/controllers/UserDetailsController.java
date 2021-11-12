@@ -22,7 +22,7 @@ public class UserDetailsController {
     UserService userService;
 
     @GetMapping(value = URIEndpoints.GUEST_RESUME,produces = "application/json")
-    public ResponseEntity<Object> getGuestUserResume(@RequestParam("id") Long userId, @RequestParam(value = "group", required = false) String group, @RequestParam(value = "trackingId", required = false) Long trackingId) throws Exception {
+    public ResponseEntity<Object> getGuestUserResume(@RequestParam("id") Long userId, @RequestParam(value = "group", required = false) String group, @RequestParam(value = "trackingId", required = false) String trackingId) throws Exception {
         Object userEntity = null;
         try {
             userEntity = userService.getUserFromCustomLink(userId,group,trackingId);

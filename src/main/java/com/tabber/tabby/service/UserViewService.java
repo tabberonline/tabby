@@ -26,11 +26,11 @@ public class UserViewService {
         }
     }
 
-    public void setTrackingId(UserEntity userEntity, Long trackingId) {
+    public void setTrackingId(UserEntity userEntity, String trackingId) {
         try {
-            Double prevTrackingId = redisServiceManager.zscore("trackingIdSet", String.valueOf(trackingId));
-            String trackingIdAndUserIdCombination = prevTrackingId + "_" + userEntity.getUserId();
-            if(prevTrackingId==null) {
+            Double prevTrackingIdScore = redisServiceManager.zscore("trackingIdSet", trackingId);
+            String trackingIdAndUserIdCombination = trackingId + "_" + userEntity.getUserId();
+            if(prevTrackingIdScore==null) {
                 Long currentTimestamp = (System.currentTimeMillis()/1000) + 3600;
                 redisServiceManager.zadd("trackingIdSet", trackingIdAndUserIdCombination, currentTimestamp);
                 incrementViewsRedis(userEntity);
