@@ -116,15 +116,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object getUserFromCustomLink(Long id, String groupId, String trackingId){
+    public Object getUserFromCustomLink(Long id, String groupId, String trackingId, Boolean considerViews){
         Long userId = userResumeManager.getCustomLinkUserId(groupId,id);
         if(userId == null)
             return null;
-        return getEnrichedUserData(userId, trackingId);
+        return getEnrichedUserData(userId, trackingId, considerViews);
     }
 
     @Override
-    public Object getEnrichedUserData(Long userId, String trackingId){
+    public Object getEnrichedUserData(Long userId, String trackingId, Boolean considerViews){
         UserEntity userEntity= userResumeManager.findUserById(userId);
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
@@ -154,10 +154,10 @@ public class UserServiceImpl implements UserService {
             }
             ((LinkedHashMap) userEnrichedData).remove("custom_link_entity",portfolioLink);
             ((LinkedHashMap) userEnrichedData).put("portfolio_link",portfolioLink);
-            if(trackingId!=null) {
+            if(considerViews && trackingId!=null) {
                 userViewService.setTrackingId(userEntity, trackingId);
             }
-            else {
+            else if(considerViews){
                 userViewService.setUntrackedViews(userEntity);
             }
             return userEnrichedData;
