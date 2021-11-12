@@ -65,7 +65,7 @@ public class ConfigureQuartzJob {
     public Trigger expiringTrackingIdTrigger() {
         return TriggerBuilder.newTrigger().forJob(deleteTrackingIdsJobDetail)
                 .withIdentity("expiringTrackingIdTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * * *")) // every hour
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/1 ? * * *")) // every hour
                 .build();
     }
 
