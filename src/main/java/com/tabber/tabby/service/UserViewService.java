@@ -19,8 +19,7 @@ public class UserViewService {
         try {
             Long userId = userEntity.getUserId();
             Double currentViews = redisServiceManager.zscore("viewsSet", String.valueOf(userId));
-            Integer converter = currentViews==null ? 0 : currentViews.intValue();
-            Long views = Long.valueOf(converter);
+            Long views = currentViews==null ? 0 : currentViews.longValue();
             redisServiceManager.zadd("viewsSet", String.valueOf(userId), views+1);
         } catch(Exception ex) {
             logger.log(Level.INFO,"Error in incrementing views in redis : "+ex);
@@ -30,9 +29,10 @@ public class UserViewService {
     public void setTrackingId(UserEntity userEntity, Long trackingId) {
         try {
             Double prevTrackingId = redisServiceManager.zscore("trackingIdSet", String.valueOf(trackingId));
+            String trackingIdAndUserIdCombination = prevTrackingId + "_" + userEntity.getUserId();
             if(prevTrackingId==null) {
                 Long currentTimestamp = (System.currentTimeMillis()/1000) + 3600;
-                redisServiceManager.zadd("trackingIdSet", String.valueOf(trackingId), currentTimestamp);
+                redisServiceManager.zadd("trackingIdSet", trackingIdAndUserIdCombination, currentTimestamp);
                 incrementViewsRedis(userEntity);
             }
         } catch (Exception ex) {

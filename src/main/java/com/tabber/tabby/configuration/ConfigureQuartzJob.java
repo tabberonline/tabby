@@ -3,7 +3,6 @@ package com.tabber.tabby.configuration;
 import com.tabber.tabby.schedulers.EmailTabberProfileReceiverScheduler;
 import com.tabber.tabby.schedulers.ExpiringTrackingIdScheduler;
 import com.tabber.tabby.schedulers.IncrementViewsScheduler;
-import com.tabber.tabby.schedulers.UntrackedViewsScheduler;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,16 +13,13 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigureQuartzJob {
 
     @Autowired @Qualifier("emailJob")
-    JobDetail jobDetail1;
+    JobDetail emailJobDetail;
 
     @Autowired @Qualifier("viewsInDB")
-    JobDetail jobDetail2;
+    JobDetail viewsInDBJobDetail;
 
     @Autowired @Qualifier("deleteTrackingIds")
-    JobDetail jobDetail3;
-
-    @Autowired @Qualifier("untrackedViewsInDB")
-    JobDetail jobDetail4;
+    JobDetail deleteTrackingIdsJobDetail;
 
     @Bean(name = "emailJob")
     public JobDetail emailingProfileReceiverJob() {
@@ -35,7 +31,7 @@ public class ConfigureQuartzJob {
 
     @Bean
     public Trigger emailJobTrigger() {
-        return TriggerBuilder.newTrigger().forJob(jobDetail1)
+        return TriggerBuilder.newTrigger().forJob(emailJobDetail)
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every half hour
                 .build();
     }
@@ -50,7 +46,7 @@ public class ConfigureQuartzJob {
 
     @Bean
     public Trigger incrementJobTrigger() {
-        return TriggerBuilder.newTrigger().forJob(jobDetail2)
+        return TriggerBuilder.newTrigger().forJob(viewsInDBJobDetail)
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every six hour
                 .build();
     }
@@ -65,26 +61,9 @@ public class ConfigureQuartzJob {
 
     @Bean
     public Trigger expiringTrackingIdTrigger() {
-        return TriggerBuilder.newTrigger().forJob(jobDetail3)
+        return TriggerBuilder.newTrigger().forJob(deleteTrackingIdsJobDetail)
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every hour
                 .build();
     }
-
-    @Bean(name = "untrackedViewsInDB")
-    public JobDetail incrementUntrackedViews() {
-        JobDetail incrementUntrackedViews = JobBuilder.newJob(UntrackedViewsScheduler.class)
-                .withIdentity("incrementUntrackedViews")
-                .storeDurably().build();
-        return incrementUntrackedViews;
-    }
-
-    @Bean
-    public Trigger incrementUntrackedViewsTrigger() {
-        return TriggerBuilder.newTrigger().forJob(jobDetail4)
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every hour
-                .build();
-    }
-
-
 
 }

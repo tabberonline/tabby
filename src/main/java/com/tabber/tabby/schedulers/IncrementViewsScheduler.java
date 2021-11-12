@@ -43,6 +43,7 @@ public class IncrementViewsScheduler implements Job {
     }
 
     public void incrementViewsScheduler() {
+        // for tracked views
         try {
             Set<Tuple> set = redisServiceManager.zrevrangeWithScores("viewsSet", 0, -1);
             String[] keysToRemove = new String[set.size()];
@@ -60,9 +61,33 @@ public class IncrementViewsScheduler implements Job {
                 index++;
             }
             redisServiceManager.zrem("viewsSet", keysToRemove);
+
         } catch (Exception ex) {
             logger.log(Level.WARNING,"Failed to increment views in DB due to exception:"+ ex.toString());
         }
+
+        // for untracked views
+        try {
+            Set<Tuple> set = redisServiceManager.zrevrangeWithScores("untrackedViewsSet", 0, -1);
+            String[] keysToRemove = new String[set.size()];
+            int index = 0;
+            for(Tuple tuple : set) {
+                String key = tuple.getElement();
+                UserEntity userEntity = userResumeManager.findUserById(Long.valueOf(key));
+                PortfolioEntity portfolioEntity = portfolioRepository.getTopByPortfolioUserId(Long.valueOf(key));
+                Long currentUntrackedViews = userEntity.getPortfolio().getUntrackedViews();
+                portfolioEntity.setUntrackedViews(currentUntrackedViews==null ? Double.valueOf(tuple.getScore()).intValue() : currentUntrackedViews + Double.valueOf(tuple.getScore()).intValue());
+                portfolioRepository.saveAndFlush(portfolioEntity);
+                userEntity.setPortfolio(portfolioEntity);
+                userService.updateCache(userEntity);
+                keysToRemove[index] = key;
+                index++;
+            }
+            redisServiceManager.zrem("untrackedViewsSet", keysToRemove);
+        } catch (Exception ex) {
+            logger.log(Level.WARNING,"Failed to increment untracked views in DB due to exception:"+ ex.toString());
+        }
+
     }
 
 }

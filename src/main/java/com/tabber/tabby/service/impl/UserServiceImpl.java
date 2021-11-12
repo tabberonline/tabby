@@ -162,7 +162,7 @@ public class UserServiceImpl implements UserService {
             }
             return userEnrichedData;
         }catch(Exception e){
-            logger.log(Level.INFO,"Error in college enriching  "+e);
+            logger.log(Level.INFO,"Error in uder data enriching  "+e);
         }
         return null;
     }
