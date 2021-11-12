@@ -32,6 +32,7 @@ public class ConfigureQuartzJob {
     @Bean
     public Trigger emailJobTrigger() {
         return TriggerBuilder.newTrigger().forJob(emailJobDetail)
+                .withIdentity("emailJobTrigger")
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every half hour
                 .build();
     }
@@ -45,9 +46,10 @@ public class ConfigureQuartzJob {
     }
 
     @Bean
-    public Trigger incrementJobTrigger() {
+    public Trigger incrementViewsJobTrigger() {
         return TriggerBuilder.newTrigger().forJob(viewsInDBJobDetail)
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every six hour
+                .withIdentity("incrementViewsJobTrigger")
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 */6 * * *")) // every six hour
                 .build();
     }
 
@@ -62,7 +64,8 @@ public class ConfigureQuartzJob {
     @Bean
     public Trigger expiringTrackingIdTrigger() {
         return TriggerBuilder.newTrigger().forJob(deleteTrackingIdsJobDetail)
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/30 * 1/1 * ? *")) // every hour
+                .withIdentity("expiringTrackingIdTrigger")
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 * * * *")) // every hour
                 .build();
     }
 
