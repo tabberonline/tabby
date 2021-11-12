@@ -31,4 +31,5 @@
     <include file="db/migrations/022_add_courses_and_experience_widgets_limit.xml"/>
     <include file="db/migrations/023_add_cookie_accepted_column_to_users.xml"/>
     <include file="db/migrations/024_create_custom_link_table.xml"/>
+    <include file="db/migrations/025_add_views_to_portfolio_entity.xml"/>
 </databaseChangeLog>

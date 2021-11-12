@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.entity.*;
+import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.exceptions.UnauthorisedException;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.UserRepository;
@@ -19,6 +20,10 @@ import java.util.logging.Logger;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    UserViewService userViewService;
+
     @Autowired
     UserRepository userRepository;
 
@@ -112,16 +117,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Object getUserFromCustomLink(Long id, String groupId){
+    public Object getUserFromCustomLink(Long id, String groupId, String trackingId, Boolean considerViews){
         Long userId = userResumeManager.getCustomLinkUserId(groupId,id);
         if(userId == null)
             return null;
-        return getEnrichedUserData(userId);
+        return getEnrichedUserData(userId, trackingId, considerViews);
     }
 
     @Override
-    public Object getEnrichedUserData(Long userId){
+    public Object getEnrichedUserData(Long userId, String trackingId, Boolean considerViews){
         UserEntity userEntity= userResumeManager.findUserById(userId);
+        if(userEntity == null){
+            throw new BadRequestException("User doesn't exist");
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
@@ -150,9 +158,15 @@ public class UserServiceImpl implements UserService {
             }
             ((LinkedHashMap) userEnrichedData).remove("custom_link_entity",portfolioLink);
             ((LinkedHashMap) userEnrichedData).put("portfolio_link",portfolioLink);
+            if(considerViews && trackingId!=null) {
+                userViewService.setTrackingId(userEntity, trackingId);
+            }
+            else if(considerViews){
+                userViewService.setUntrackedViews(userEntity);
+            }
             return userEnrichedData;
         }catch(Exception e){
-            logger.log(Level.INFO,"Error in college enriching  "+e);
+            logger.log(Level.INFO,"Error in uder data enriching  "+e);
         }
         return null;
     }
