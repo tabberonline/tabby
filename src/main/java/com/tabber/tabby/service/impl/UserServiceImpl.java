@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.introspect.VisibilityChecker;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.entity.*;
+import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.exceptions.UnauthorisedException;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.UserRepository;
@@ -126,6 +127,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object getEnrichedUserData(Long userId, String trackingId, Boolean considerViews){
         UserEntity userEntity= userResumeManager.findUserById(userId);
+        if(userEntity == null){
+            throw new BadRequestException("User doesn't exist");
+        }
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
