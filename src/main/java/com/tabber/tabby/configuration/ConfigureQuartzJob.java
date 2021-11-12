@@ -49,7 +49,7 @@ public class ConfigureQuartzJob {
     public Trigger incrementViewsJobTrigger() {
         return TriggerBuilder.newTrigger().forJob(viewsInDBJobDetail)
                 .withIdentity("incrementViewsJobTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 */6 * * *")) // every six hour
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 0/6 ? * * *")) // every six hour
                 .build();
     }
 
@@ -65,7 +65,7 @@ public class ConfigureQuartzJob {
     public Trigger expiringTrackingIdTrigger() {
         return TriggerBuilder.newTrigger().forJob(deleteTrackingIdsJobDetail)
                 .withIdentity("expiringTrackingIdTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 * * * *")) // every hour
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * ? * * *")) // every hour
                 .build();
     }
 
