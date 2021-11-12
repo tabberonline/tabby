@@ -28,8 +28,8 @@ public class UserViewService {
 
     public void setTrackingId(UserEntity userEntity, String trackingId) {
         try {
-            Double prevTrackingIdScore = redisServiceManager.zscore("trackingIdSet", trackingId);
             String trackingIdAndUserIdCombination = trackingId + "_" + userEntity.getUserId();
+            Double prevTrackingIdScore = redisServiceManager.zscore("trackingIdSet", trackingIdAndUserIdCombination);
             if(prevTrackingIdScore==null) {
                 Long currentTimestamp = (System.currentTimeMillis()/1000) + 3600;
                 redisServiceManager.zadd("trackingIdSet", trackingIdAndUserIdCombination, currentTimestamp);
