@@ -15,9 +15,9 @@ public class UserViewService {
 
     private static final Logger logger = Logger.getLogger(UserViewService.class.getName());
 
-    public Double getRecentViews(Long userId) {
+    public Long getRecentViews(Long userId) {
          Double views = redisServiceManager.zscore("viewsSet",userId.toString());
-        return views == null? 0:views;
+        return views == null? 0:views.longValue();
     }
 
     public void incrementViewsRedis(UserEntity userEntity) {

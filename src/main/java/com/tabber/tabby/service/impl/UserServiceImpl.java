@@ -157,7 +157,7 @@ public class UserServiceImpl implements UserService {
                 } else {
                     collegeName = universityService.getAllUniversityMap().get(collegeIndex);
                 }
-                Double recentViews = userViewService.getRecentViews(userId);
+                Long recentViews = userViewService.getRecentViews(userId);
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("college_num", collegeIndex);
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("college", collegeName);
                 ((LinkedHashMap) ((LinkedHashMap) userEnrichedData).get("portfolio")).put("recentViews", recentViews);
