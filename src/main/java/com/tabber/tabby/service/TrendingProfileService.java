@@ -7,6 +7,8 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedHashMap;
+
 
 @Service
 public class TrendingProfileService {
@@ -25,7 +27,13 @@ public class TrendingProfileService {
         JSONObject result = new JSONObject();
         for (final JsonNode objNode : userIds.get("userIds")) {
             Long userId = Long.parseLong(objNode.toString());
-            result.put(userId.toString(),userService.getEnrichedUserData(userId,null,false));
+            Object userObject= userService.getEnrichedUserData(userId,null,false);
+            ((LinkedHashMap) userObject).remove("string_map");
+            ((LinkedHashMap) userObject).remove("rank_widgets");
+            ((LinkedHashMap) userObject).remove("course_widgets");
+            ((LinkedHashMap) userObject).remove("contest_widgets");
+            ((LinkedHashMap) userObject).remove("experience_widgets");
+            result.put(userId.toString(),userObject);
         }
         return result;
     }
