@@ -52,7 +52,7 @@ public class IncrementViewsScheduler implements Job {
                 userEntity = userResumeManager.findUserById(Long.valueOf(key));
                 PortfolioEntity portfolioEntity = portfolioRepository.getTopByPortfolioUserId(Long.valueOf(key));
                 Long currentViews = userEntity.getPortfolio().getViews();
-                portfolioEntity.setViews(currentViews == null ? Double.valueOf(tuple.getScore()).intValue() : currentViews + Double.valueOf(tuple.getScore()).intValue());
+                portfolioEntity.setViews((currentViews == null || currentViews == 0l)? Double.valueOf(tuple.getScore()).intValue() : currentViews + Double.valueOf(tuple.getScore()).intValue());
                 portfolioRepository.saveAndFlush(portfolioEntity);
                 userEntity.setPortfolio(portfolioEntity);
                 userService.updateCache(userEntity);
@@ -78,7 +78,7 @@ public class IncrementViewsScheduler implements Job {
                 userEntity = userResumeManager.findUserById(Long.valueOf(key));
                 PortfolioEntity portfolioEntity = portfolioRepository.getTopByPortfolioUserId(Long.valueOf(key));
                 Long currentUntrackedViews = userEntity.getPortfolio().getUntrackedViews();
-                portfolioEntity.setUntrackedViews(currentUntrackedViews == null ? Double.valueOf(tuple.getScore()).intValue() : currentUntrackedViews + Double.valueOf(tuple.getScore()).intValue());
+                portfolioEntity.setUntrackedViews((currentUntrackedViews == null || currentUntrackedViews == 0l)? Double.valueOf(tuple.getScore()).intValue() : currentUntrackedViews + Double.valueOf(tuple.getScore()).intValue());
                 portfolioRepository.saveAndFlush(portfolioEntity);
                 userEntity.setPortfolio(portfolioEntity);
                 userService.updateCache(userEntity);
