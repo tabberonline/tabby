@@ -8,6 +8,7 @@ import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.entity.*;
 import com.tabber.tabby.exceptions.BadRequestException;
 import com.tabber.tabby.exceptions.UnauthorisedException;
+import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.UserRepository;
 import com.tabber.tabby.service.*;
@@ -53,6 +54,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     CustomLinkService customLinkService;
+
+    @Autowired
+    FrontendConfigManager frontendConfigManager;
 
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
@@ -127,6 +131,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public Object getEnrichedUserData(Long userId, String trackingId, Boolean considerViews){
         UserEntity userEntity= userResumeManager.findUserById(userId);
+        FrontendConfigurationEntity portfolioStringMap = frontendConfigManager.findFeConfigurationByPageTypeAndKey("portfolio", "education_level");
         if(userEntity == null){
             throw new BadRequestException("User doesn't exist");
         }
@@ -158,6 +163,7 @@ public class UserServiceImpl implements UserService {
             }
             ((LinkedHashMap) userEnrichedData).remove("custom_link_entity",portfolioLink);
             ((LinkedHashMap) userEnrichedData).put("portfolio_link",portfolioLink);
+            ((LinkedHashMap) userEnrichedData).put("string_map",portfolioStringMap.getValue());
             if(considerViews && trackingId!=null) {
                 userViewService.setTrackingId(userEntity, trackingId);
             }
@@ -166,7 +172,7 @@ public class UserServiceImpl implements UserService {
             }
             return userEnrichedData;
         }catch(Exception e){
-            logger.log(Level.INFO,"Error in uder data enriching  "+e);
+            logger.log(Level.INFO,"Error in user data enriching  "+e);
         }
         return null;
     }

@@ -45,6 +45,8 @@ public class PortfolioServiceImpl implements PortfolioService {
                 .graduationYear(portfolioRequest.getGraduationYear())
                 .college(collegeNum)
                 .collegeOthers(portfolioRequest.getCollegeOthers())
+                .untrackedViews(0l)
+                .views(0l)
                 .user(user)
                 .build();
         portfolioRepository.saveAndFlush(portfolioEntity);
