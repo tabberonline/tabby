@@ -19,6 +19,7 @@ public interface URIEndpoints {
     String EMAIL_HISTORY = "/email/history";
     String WEBSITE = "/website";
     String ALL_WEBSITE = "/website/all";
+    String TRENDING_PROFILES = "/website/trendingProfiles";
     String UPDATE_USER_NAME = "/update/user_name";
     String GET_USER_COOKIE = "/get/cookie";
     String UPDATE_USER_COOKIE = "/update/cookie";
