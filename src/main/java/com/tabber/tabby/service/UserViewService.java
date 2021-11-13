@@ -20,6 +20,11 @@ public class UserViewService {
         return views == null? 0:views.longValue();
     }
 
+    public Long getTotalViews(UserEntity userEntity) {
+        Long views = userEntity.getPortfolio().getViews() + getRecentViews(userEntity.getUserId());
+        return views;
+    }
+
     public void incrementViewsRedis(UserEntity userEntity) {
         try {
             Long userId = userEntity.getUserId();
