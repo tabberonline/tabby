@@ -32,4 +32,5 @@
     <include file="db/migrations/023_add_cookie_accepted_column_to_users.xml"/>
     <include file="db/migrations/024_create_custom_link_table.xml"/>
     <include file="db/migrations/025_add_views_to_portfolio_entity.xml"/>
+    <include file="db/migrations/026_create_logs_table.xml"/>
 </databaseChangeLog>
