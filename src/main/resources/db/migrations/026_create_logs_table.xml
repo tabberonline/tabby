@@ -22,6 +22,5 @@
     <changeSet author="mandeep.sidhu2@gmail.com" id="026_004_notNullConstraint_logs">
         <addNotNullConstraint schemaName="public" tableName="logs" columnName="class_name" columnDataType="VARCHAR" />
         <addNotNullConstraint schemaName="public" tableName="logs" columnName="type" columnDataType="VARCHAR" />
-        <addNotNullConstraint schemaName="public" tableName="logs" columnName="user_id" columnDataType="BIGINT" />
     </changeSet>
 </databaseChangeLog>
