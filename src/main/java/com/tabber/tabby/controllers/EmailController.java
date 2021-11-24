@@ -6,6 +6,7 @@ import com.tabber.tabby.dto.EmailRequest;
 import com.tabber.tabby.dto.StatusWiseResponse;
 import com.tabber.tabby.email.EmailService;
 import com.tabber.tabby.enums.ResponseStatus;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.EmailTabberProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class EmailController {
     @Autowired
     EmailTabberProfileService emailTabberProfileService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.EMAIL_TABBER,produces = "application/json")
     public ResponseEntity<String> sendEmail(
             @RequestBody @Validated EmailRequest emailRequest) throws Exception {
@@ -32,6 +36,7 @@ public class EmailController {
             emailService.sendMail(emailRequest.getEmailTo(), emailRequest.getSubject(), emailRequest.getText(), emailRequest.getEmail());
         }
         catch (Exception e){
+            commonService.setLog(EmailController.class.toString(), e.toString(), null);
             throw new Exception("Unable to send email for request "+emailRequest+" due to exception "+e.toString());
         }
         return new ResponseEntity<>("Email Sent Successfully", HttpStatus.OK);
@@ -46,6 +51,7 @@ public class EmailController {
             statusWiseResponse=emailTabberProfileService.sendTabbyProfileInEmail(userId, emailTo, file);
         }
         catch (Exception e){
+            commonService.setLog(EmailController.class.toString(), e.toString(), null);
             statusWiseResponse= new StatusWiseResponse().toBuilder()
                     .status(ResponseStatus.failure.name())
                     .message("Error in sending email")
@@ -65,6 +71,7 @@ public class EmailController {
             return new ResponseEntity<>(emailHistoryResponse, HttpStatus.OK);
         }
         catch (Exception e){
+            commonService.setLog(EmailController.class.toString(), e.toString(), null);
             throw e;
         } }
 

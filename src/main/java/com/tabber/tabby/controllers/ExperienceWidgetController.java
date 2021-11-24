@@ -7,6 +7,7 @@ import com.tabber.tabby.entity.CourseWidgetEntity;
 import com.tabber.tabby.entity.ExperienceWidgetEntity;
 import com.tabber.tabby.exceptions.CourseWidgetNotExistsException;
 import com.tabber.tabby.exceptions.ExperienceWidgetNotExistsException;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.CourseWidgetService;
 import com.tabber.tabby.service.ExperienceWidgetService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ public class ExperienceWidgetController {
     @Autowired
     ExperienceWidgetService experienceWidgetService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<ExperienceWidgetEntity> createExperienceWidget(
             @RequestBody @Validated ExperienceWidgetRequest experienceWidgetRequest) throws Exception {
@@ -37,6 +41,7 @@ public class ExperienceWidgetController {
             experienceWidgetEntity = experienceWidgetService.createExperienceWidget(experienceWidgetRequest, userId);
         }
         catch (Exception ex){
+            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -54,6 +59,7 @@ public class ExperienceWidgetController {
             experienceWidgetEntity = experienceWidgetService.updateExperienceWidget(experienceWidgetRequest,id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -70,6 +76,7 @@ public class ExperienceWidgetController {
             experienceWidgetEntity = experienceWidgetService.deleteExperienceWidget(id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot delete widget due to exception: {}",ex.toString());
             throw ex;
         }

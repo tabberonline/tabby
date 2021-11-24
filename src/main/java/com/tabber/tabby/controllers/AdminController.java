@@ -7,6 +7,7 @@ import com.tabber.tabby.exceptions.FrontendConfigurationExistsException;
 import com.tabber.tabby.exceptions.FrontendConfigurationNotExistsException;
 import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.UserService;
 import com.tabber.tabby.service.impl.UserServiceImpl;
 import com.tabber.tabby.utils.CacheClearUtil;
@@ -34,6 +35,9 @@ public class AdminController {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CommonService commonService;
 
 
     @PostMapping(value = URIEndpoints.FRONTEND_CONFIG_CREATE,produces = "application/json")
@@ -104,8 +108,9 @@ public class AdminController {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             userService.deleteUser(userId,deleteUserId);
         }
-        catch (Exception e){
-            throw e;
+        catch (Exception ex){
+            commonService.setLog(AdminController.class.toString(), ex.toString(), deleteUserId);
+            throw ex;
         }
         return new ResponseEntity<>(true,HttpStatus.OK);
 

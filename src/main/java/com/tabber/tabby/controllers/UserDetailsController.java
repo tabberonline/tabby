@@ -3,6 +3,7 @@ package com.tabber.tabby.controllers;
 import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.UserBasicRespone;
 import com.tabber.tabby.entity.UserEntity;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,9 @@ public class UserDetailsController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    CommonService commonService;
+
     @GetMapping(value = URIEndpoints.GUEST_RESUME,produces = "application/json")
     public ResponseEntity<Object> getGuestUserResume(@RequestParam("id") Long userId, @RequestParam(value = "group", required = false) String group, @RequestParam(value = "trakingId", required = false) String trackingId) throws Exception {
         Object userEntity = null;
@@ -28,6 +32,7 @@ public class UserDetailsController {
             userEntity = userService.getUserFromCustomLink(userId,group,trackingId, true);
         }
         catch (Exception ex){
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), userId);
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -42,6 +47,7 @@ public class UserDetailsController {
             userEntity = userService.getEnrichedUserData(userId, null,false);
         }
         catch (Exception ex){
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -67,6 +73,7 @@ public class UserDetailsController {
 
         }
         catch (Exception ex){
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -81,6 +88,7 @@ public class UserDetailsController {
             userEntity = userService.getUserFromUserId(userId);
         }
         catch (Exception ex){
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -95,6 +103,7 @@ public class UserDetailsController {
             userService.updateUserCookiePermission(userId);
         }
         catch (Exception ex){
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -109,6 +118,7 @@ public class UserDetailsController {
             userService.updateUserName(userId,userName);
         }
         catch (Exception ex){
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }

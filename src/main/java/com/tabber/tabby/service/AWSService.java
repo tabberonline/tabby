@@ -26,6 +26,7 @@ import com.amazonaws.services.simpleemail.model.RawMessage;
 import com.amazonaws.services.simpleemail.model.SendRawEmailRequest;
 import com.sun.istack.ByteArrayDataSource;
 import com.tabber.tabby.entity.UserEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -34,6 +35,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class AWSService {
 
     private AmazonS3 s3client;
+
+    @Autowired
+    CommonService commonService;
 
     @Async
     public void sendSESEmail(String toEmail,String text, String HTML, String subject, MultipartFile multipartFile, UserEntity userEntity){
@@ -99,6 +103,7 @@ public class AWSService {
         client.sendRawEmail(rawEmailRequest);
         System.out.println("Email sent!");
         } catch (Exception ex) {
+            commonService.setLog(AWSService.class.toString(), ex.toString(), userEntity.getUserId());
             System.out.println("The email was not sent. Error message: "
                     + ex.getMessage());
         }

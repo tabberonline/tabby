@@ -4,6 +4,7 @@ import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.CourseWidgetRequest;
 import com.tabber.tabby.entity.CourseWidgetEntity;
 import com.tabber.tabby.exceptions.CourseWidgetNotExistsException;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.CourseWidgetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class CourseWidgetController {
     @Autowired
     CourseWidgetService courseWidgetService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<CourseWidgetEntity> createCourseWidget(
             @RequestBody @Validated CourseWidgetRequest courseWidgetRequest) throws Exception {
@@ -33,6 +37,7 @@ public class CourseWidgetController {
             courseWidgetEntity = courseWidgetService.createCourseWidget(courseWidgetRequest, userId);
         }
         catch (Exception ex){
+            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -50,6 +55,7 @@ public class CourseWidgetController {
             courseWidgetEntity = courseWidgetService.updateCourseWidget(courseWidgetRequest,id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -66,6 +72,7 @@ public class CourseWidgetController {
             courseWidgetEntity = courseWidgetService.deleteCourseWidget(id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot delete widget due to exception: {}",ex.toString());
             throw ex;
         }

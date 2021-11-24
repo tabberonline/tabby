@@ -5,6 +5,7 @@ import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.entity.CustomLinkEntity;
 import com.tabber.tabby.entity.UserEntity;
 import com.tabber.tabby.respository.UserRepository;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.CustomLinkService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,9 @@ public class UserResumeManager {
     @Autowired
     RedisServiceManager redisServiceManager;
 
+    @Autowired
+    CommonService commonService;
+
     public UserEntity findUserById(Long userId){
         String resumeCacheKey = getResumeCacheKey(userId);
         ObjectMapper objectMapper = new ObjectMapper();
@@ -28,8 +32,9 @@ public class UserResumeManager {
         UserEntity userEntity = null;
         try{
             userEntity=objectMapper.readValue(redisServiceManager.getValueForKey(resumeCacheKey),UserEntity.class) ;
-        }catch (Exception ex){}
-
+        }catch (Exception ex){
+            commonService.setLog(UserResumeManager.class.toString(), ex.toString(), userId);
+        }
 
         if(userEntity == null){
             String userResumeString;
@@ -37,7 +42,9 @@ public class UserResumeManager {
             try{
                 userResumeString=objectMapper.writeValueAsString(userEntity);
                 redisServiceManager.setWithExpiry(resumeCacheKey,userResumeString,3600);
-            }catch (Exception ex){}
+            }catch (Exception ex){
+                commonService.setLog(UserResumeManager.class.toString(), ex.toString(), userId);
+            }
         }
 
        return userEntity;
@@ -50,15 +57,18 @@ public class UserResumeManager {
         try{
             userResumeString=objectMapper.writeValueAsString(userEntity);
             redisServiceManager.setWithExpiry(resumeCacheKey,userResumeString,3600);
-        }catch (Exception ex){}
+        }catch (Exception ex){
+            commonService.setLog(UserResumeManager.class.toString(), ex.toString(), null);
+        }
     }
 
     public void deleteUserCache(Long userId){
         String resumeCacheKey = getResumeCacheKey(userId);
-
         try{
             redisServiceManager.delKey(resumeCacheKey);
-        }catch (Exception ex){}
+        }catch (Exception ex){
+            commonService.setLog(UserResumeManager.class.toString(), ex.toString(), userId);
+        }
     }
 
     public Long getCustomLinkUserId(String groupId, Long id) {

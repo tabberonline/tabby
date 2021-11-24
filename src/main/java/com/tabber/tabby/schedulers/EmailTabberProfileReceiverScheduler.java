@@ -6,6 +6,7 @@ import com.csvreader.CsvWriter;
 import com.tabber.tabby.constants.TabbyConstants;
 import com.tabber.tabby.manager.RedisServiceManager;
 import com.tabber.tabby.service.AWSService;
+import com.tabber.tabby.service.CommonService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,9 @@ import java.util.logging.Logger;
 
 @Service
 public class EmailTabberProfileReceiverScheduler implements Job {
+
+    @Autowired
+    CommonService commonService;
 
     private static final Logger logger = Logger.getLogger(EmailTabberProfileReceiverScheduler.class.getName());
 
@@ -66,6 +70,7 @@ public class EmailTabberProfileReceiverScheduler implements Job {
 
         }
         catch (Exception e){
+            commonService.setLog(EmailTabberProfileReceiverScheduler.class.toString(), e.toString(), null);
             logger.log(Level.WARNING,"Failed uploading on S3 due to exception:"+e.toString());
         }
     }

@@ -16,6 +16,7 @@ import com.tabber.tabby.manager.PlansManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.EmailsRepository;
 import com.tabber.tabby.service.AWSService;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.EmailTabberProfileService;
 import com.tabber.tabby.service.ReceiverEmailListRedisService;
 import com.tabber.tabby.utils.DateUtil;
@@ -57,6 +58,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
 
     @Autowired
     private MeterRegistry meterRegistry;
+
+    @Autowired
+    CommonService commonService;
 
     private String getHTMLwithTemplate(UserEntity userEntity) {
         Map<String,Object> model =new HashMap<String,Object>();
@@ -110,6 +114,7 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             awsService.sendSESEmail(receiverEmail, null, html, subject, multipartFile, userEntity);
         }
         catch (Exception ex){
+            commonService.setLog(EmailTabberProfileServiceImpl.class.toString(), ex.toString(), userEntity.getUserId());
             meterRegistry.counter("failed_share_profile_email_count").increment();
             throw ex;
         }
@@ -135,8 +140,9 @@ public class EmailTabberProfileServiceImpl implements EmailTabberProfileService 
             if(lastEmailDate.equals(dateToCompare) && dateToday.equals(lastEmailDate))
                 return true;
         }
-        catch (Exception ex){}
-
+        catch (Exception ex){
+            commonService.setLog(EmailTabberProfileServiceImpl.class.toString(), ex.toString(), null);
+        }
         return false;
     }
 

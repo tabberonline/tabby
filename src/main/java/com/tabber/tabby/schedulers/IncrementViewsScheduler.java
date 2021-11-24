@@ -6,6 +6,7 @@ import com.tabber.tabby.manager.RedisServiceManager;
 import com.tabber.tabby.manager.UserResumeManager;
 import com.tabber.tabby.respository.PortfolioRepository;
 import com.tabber.tabby.respository.UserRepository;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.UserService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -31,6 +32,9 @@ public class IncrementViewsScheduler implements Job {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CommonService commonService;
 
     private static final Logger logger = Logger.getLogger(IncrementViewsScheduler.class.getName());
 
@@ -58,6 +62,7 @@ public class IncrementViewsScheduler implements Job {
                 userService.updateCache(userEntity);
             }
             catch (Exception ex){
+                commonService.setLog(IncrementViewsScheduler.class.toString(), ex.toString(), userEntity.getUserId());
                 logger.log(Level.WARNING,"Failed to increment views in DB due to exception:" +userEntity!=null? String.valueOf(userEntity.getUserId()) :"no user"  + ex.toString());
             }
             keysToRemove[index] = key;
@@ -84,6 +89,7 @@ public class IncrementViewsScheduler implements Job {
                 userService.updateCache(userEntity);
             }
             catch (Exception ex){
+                commonService.setLog(IncrementViewsScheduler.class.toString(), ex.toString(), userEntity.getUserId());
                 logger.log(Level.WARNING, "Failed to increment untracked views in DB due to exception: "+userEntity!=null? String.valueOf(userEntity.getUserId()) :"no user"  +ex.toString());
             }
             keysToRemove[index] = key;

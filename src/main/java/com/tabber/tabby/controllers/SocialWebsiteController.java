@@ -2,6 +2,7 @@ package com.tabber.tabby.controllers;
 
 import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.SocialWebsiteDto;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ public class SocialWebsiteController {
     @Autowired
     PortfolioService portfolioService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<ArrayList<SocialWebsiteDto> > addSocialProfileLink(
             @RequestBody @Validated SocialWebsiteDto socialWebsiteDto) throws Exception {
@@ -33,6 +37,7 @@ public class SocialWebsiteController {
             socialWebsiteDtoArrayList = portfolioService.addSocialWeblink(socialWebsiteDto.getWebsite_name(),socialWebsiteDto.getLink(),userId);
         }
         catch (Exception ex){
+            commonService.setLog(SocialWebsiteController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot create social link due to exception: {}",ex.toString());
             throw ex;
         }
@@ -49,6 +54,7 @@ public class SocialWebsiteController {
             socialWebsiteDtoArrayList = portfolioService.updateSocialWeblink(socialWebsiteDto.getWebsite_name(),socialWebsiteDto.getLink(),userId);
         }
         catch (Exception ex){
+            commonService.setLog(SocialWebsiteController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot create social link due to exception: {}",ex.toString());
             throw ex;
         }

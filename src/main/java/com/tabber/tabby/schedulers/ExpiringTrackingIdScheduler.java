@@ -1,6 +1,7 @@
 package com.tabber.tabby.schedulers;
 
 import com.tabber.tabby.manager.RedisServiceManager;
+import com.tabber.tabby.service.CommonService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -15,6 +16,9 @@ public class ExpiringTrackingIdScheduler implements Job {
 
     @Autowired
     RedisServiceManager redisServiceManager;
+
+    @Autowired
+    CommonService commonService;
 
     private static final Logger logger = Logger.getLogger(ExpiringTrackingIdScheduler.class.getName());
 
@@ -31,6 +35,7 @@ public class ExpiringTrackingIdScheduler implements Job {
             if(keysToRemove.length != 0)
                 redisServiceManager.zrem("trackingIdSet", keysToRemove);
         } catch(Exception ex) {
+            commonService.setLog(ExpiringTrackingIdScheduler.class.toString(), ex.toString(), null);
             logger.log(Level.WARNING,"Failed to remove tracking ids due to exception:"+ ex.toString());
         }
     }

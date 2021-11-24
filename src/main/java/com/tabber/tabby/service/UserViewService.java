@@ -13,6 +13,9 @@ public class UserViewService {
     @Autowired
     RedisServiceManager redisServiceManager;
 
+    @Autowired
+    CommonService commonService;
+
     private static final Logger logger = Logger.getLogger(UserViewService.class.getName());
 
     public Long getRecentViews(Long userId) {
@@ -27,6 +30,7 @@ public class UserViewService {
             Long views = currentViews==null ? 0 : currentViews.longValue();
             redisServiceManager.zadd("viewsSet", String.valueOf(userId), views+1);
         } catch(Exception ex) {
+            commonService.setLog(UserViewService.class.toString(), ex.toString(), userEntity.getUserId());
             logger.log(Level.INFO,"Error in incrementing views in redis : "+ex);
         }
     }
@@ -41,6 +45,7 @@ public class UserViewService {
                 incrementViewsRedis(userEntity);
             }
         } catch (Exception ex) {
+            commonService.setLog(UserViewService.class.toString(), ex.toString(), userEntity.getUserId());
             logger.log(Level.INFO,"Error in setting tracking id in redis : "+ex);
         }
     }
@@ -56,6 +61,7 @@ public class UserViewService {
                 redisServiceManager.zadd("untrackedViewsSet", String.valueOf(userId), (long)1);
             }
         } catch(Exception ex) {
+            commonService.setLog(UserViewService.class.toString(), ex.toString(), userEntity.getUserId());
             logger.log(Level.INFO,"Error in setting untracked views in redis : "+ex);
         }
     }
