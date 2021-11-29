@@ -57,7 +57,7 @@ public class UserDetailsController {
     @GetMapping(value = URIEndpoints.USER_INFO,produces = "application/json")
     public ResponseEntity<UserBasicRespone> getUserInfo() throws Exception {
         UserBasicRespone userBasicRespone = null;
-        UserEntity userEntity;
+        UserEntity userEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             userEntity = userService.getUserFromUserId(userId);
@@ -73,7 +73,7 @@ public class UserDetailsController {
 
         }
         catch (Exception ex){
-            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), userEntity==null?null:userEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -82,13 +82,13 @@ public class UserDetailsController {
 
     @GetMapping(value = URIEndpoints.GET_USER_COOKIE,produces = "application/json")
     public ResponseEntity<Boolean> getUserCookie() throws Exception {
-        UserEntity userEntity;
+        UserEntity userEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             userEntity = userService.getUserFromUserId(userId);
         }
         catch (Exception ex){
-            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), userEntity==null?null:userEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -97,13 +97,13 @@ public class UserDetailsController {
 
     @GetMapping(value = URIEndpoints.UPDATE_USER_COOKIE,produces = "application/json")
     public ResponseEntity<String> updateUserCookie() throws Exception {
-        UserEntity userEntity;
+        UserEntity userEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             userService.updateUserCookiePermission(userId);
         }
         catch (Exception ex){
-            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), userEntity==null?null:userEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }
@@ -112,13 +112,13 @@ public class UserDetailsController {
 
     @GetMapping(value = URIEndpoints.UPDATE_USER_NAME,produces = "application/json")
     public ResponseEntity<String> updateUserName(@RequestParam String userName) throws Exception {
-        UserEntity userEntity;
+        UserEntity userEntity = null;
         try {
             Long userId= Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             userService.updateUserName(userId,userName);
         }
         catch (Exception ex){
-            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), null);
+            commonService.setLog(UserDetailsController.class.toString(), ex.toString(), userEntity==null?null:userEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot get user due to exception: {}",ex.toString());
             throw ex;
         }

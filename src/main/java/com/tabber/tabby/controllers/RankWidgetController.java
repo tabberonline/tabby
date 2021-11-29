@@ -39,7 +39,7 @@ public class RankWidgetController {
             rankWidgetEntity = rankWidgetService.createRankWidget(rankWidgetRequest,userId);
         }
         catch (Exception ex){
-            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity.getUserId());
+            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity==null?null: rankWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
            throw ex;
         }
@@ -56,7 +56,7 @@ public class RankWidgetController {
             rankWidgetEntity = rankWidgetService.updateRankWidget(rankWidgetRequest,userId);
         }
         catch (Exception ex){
-            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity.getUserId());
+            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity==null?null: rankWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -73,7 +73,7 @@ public class RankWidgetController {
             rankWidgetEntity = rankWidgetService.deleteRankWidget(websiteId,userId);
         }
         catch (Exception ex){
-            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity.getUserId());
+            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity==null?null: rankWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }

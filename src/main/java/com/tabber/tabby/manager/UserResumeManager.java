@@ -58,7 +58,7 @@ public class UserResumeManager {
             userResumeString=objectMapper.writeValueAsString(userEntity);
             redisServiceManager.setWithExpiry(resumeCacheKey,userResumeString,3600);
         }catch (Exception ex){
-            commonService.setLog(UserResumeManager.class.toString(), ex.toString(), null);
+            commonService.setLog(UserResumeManager.class.toString(), ex.toString(), userEntity.getUserId());
         }
     }
 

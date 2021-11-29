@@ -41,7 +41,7 @@ public class ExperienceWidgetController {
             experienceWidgetEntity = experienceWidgetService.createExperienceWidget(experienceWidgetRequest, userId);
         }
         catch (Exception ex){
-            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity.getUserId());
+            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity==null? null:experienceWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -59,7 +59,7 @@ public class ExperienceWidgetController {
             experienceWidgetEntity = experienceWidgetService.updateExperienceWidget(experienceWidgetRequest,id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity.getUserId());
+            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity==null? null:experienceWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -76,7 +76,7 @@ public class ExperienceWidgetController {
             experienceWidgetEntity = experienceWidgetService.deleteExperienceWidget(id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity.getUserId());
+            commonService.setLog(ExperienceWidgetController.class.toString(), ex.toString(), experienceWidgetEntity==null? null:experienceWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot delete widget due to exception: {}",ex.toString());
             throw ex;
         }

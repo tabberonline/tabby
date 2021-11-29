@@ -62,7 +62,7 @@ public class IncrementViewsScheduler implements Job {
                 userService.updateCache(userEntity);
             }
             catch (Exception ex){
-                commonService.setLog(IncrementViewsScheduler.class.toString(), ex.toString(), userEntity.getUserId());
+                commonService.setLog(IncrementViewsScheduler.class.toString(), ex.toString(), userEntity==null?null:userEntity.getUserId());
                 logger.log(Level.WARNING,"Failed to increment views in DB due to exception:" +userEntity!=null? String.valueOf(userEntity.getUserId()) :"no user"  + ex.toString());
             }
             keysToRemove[index] = key;
@@ -89,7 +89,7 @@ public class IncrementViewsScheduler implements Job {
                 userService.updateCache(userEntity);
             }
             catch (Exception ex){
-                commonService.setLog(IncrementViewsScheduler.class.toString(), ex.toString(), userEntity.getUserId());
+                commonService.setLog(IncrementViewsScheduler.class.toString(), ex.toString(), userEntity==null?null:userEntity.getUserId());
                 logger.log(Level.WARNING, "Failed to increment untracked views in DB due to exception: "+userEntity!=null? String.valueOf(userEntity.getUserId()) :"no user"  +ex.toString());
             }
             keysToRemove[index] = key;

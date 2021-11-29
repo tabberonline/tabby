@@ -38,7 +38,7 @@ public class PersonalProjectController {
             personalProjectEntity = personalProjectService.createPersonalProject(personalProjectRequest,userId);
         }
         catch (Exception ex){
-            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity.getUserId());
+            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity==null?null:personalProjectEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create project due to exception: {}",ex.toString());
             throw ex;
         }
@@ -56,7 +56,7 @@ public class PersonalProjectController {
             personalProjectEntity = personalProjectService.updatePersonalProject(personalProjectRequest,id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity.getUserId());
+            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity==null?null:personalProjectEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update project due to exception: {}",ex.toString());
             throw ex;
         }
@@ -73,7 +73,7 @@ public class PersonalProjectController {
             personalProjectEntity = personalProjectService.deletePersonalProject(id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity.getUserId());
+            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity==null?null:personalProjectEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update project due to exception: {}",ex.toString());
             throw ex;
         }

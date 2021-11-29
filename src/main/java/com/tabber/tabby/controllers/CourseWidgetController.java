@@ -37,7 +37,7 @@ public class CourseWidgetController {
             courseWidgetEntity = courseWidgetService.createCourseWidget(courseWidgetRequest, userId);
         }
         catch (Exception ex){
-            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity.getUserId());
+            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity==null?null: courseWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -55,7 +55,7 @@ public class CourseWidgetController {
             courseWidgetEntity = courseWidgetService.updateCourseWidget(courseWidgetRequest,id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity.getUserId());
+            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity==null?null: courseWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -72,7 +72,7 @@ public class CourseWidgetController {
             courseWidgetEntity = courseWidgetService.deleteCourseWidget(id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity.getUserId());
+            commonService.setLog(CourseWidgetService.class.toString(), ex.toString(), courseWidgetEntity==null?null: courseWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot delete widget due to exception: {}",ex.toString());
             throw ex;
         }

@@ -38,7 +38,7 @@ public class ContestWidgetController {
             contestWidgetEntity = contestWidgetService.createContestWidget(contestWidgetRequest,userId);
         }
         catch (Exception ex){
-            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity.getUserId());
+            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity==null?null: contestWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -56,7 +56,7 @@ public class ContestWidgetController {
             contestWidgetEntity = contestWidgetService.updateContestWidget(contestWidgetRequest,id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity.getUserId());
+            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity==null?null: contestWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -73,7 +73,7 @@ public class ContestWidgetController {
             contestWidgetEntity = contestWidgetService.deleteContestWidget(id,userId);
         }
         catch (Exception ex){
-            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity.getUserId());
+            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity==null?null: contestWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }

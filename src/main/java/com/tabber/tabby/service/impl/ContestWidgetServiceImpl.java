@@ -49,6 +49,7 @@ public class ContestWidgetServiceImpl implements ContestWidgetService {
         userService.updateCache(userEntity);
         return contestWidgetEntity;
     }
+
     @Override
     public ContestWidgetEntity updateContestWidget(ContestWidgetRequest contestWidgetRequest,Long contestId ,Long userId) throws ContestWidgetNotExistsException{
         if(contestId == null){

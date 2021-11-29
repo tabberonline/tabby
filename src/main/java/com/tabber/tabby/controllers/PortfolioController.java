@@ -56,7 +56,7 @@ public class PortfolioController {
             portfolioEntity = portfolioService.createPortfolio(portfolioRequest,userId);
         }
         catch (Exception ex){
-            commonService.setLog(PortfolioController.class.toString(), ex.toString(), null);
+            commonService.setLog(PortfolioController.class.toString(), ex.toString(), portfolioEntity==null?null:portfolioEntity.getUser().getUserId());
             logger.log(Level.SEVERE,"Cannot create portfolio due to exception: {}",ex.toString());
             throw ex;
         }
@@ -73,7 +73,7 @@ public class PortfolioController {
              portfolioEntity = portfolioService.updatePortfolio(portfolioRequest,userId);
         }
         catch (Exception ex){
-            commonService.setLog(PortfolioController.class.toString(), ex.toString(), null);
+            commonService.setLog(PortfolioController.class.toString(), ex.toString(), portfolioEntity==null?null:portfolioEntity.getUser().getUserId());
             logger.log(Level.SEVERE,"Cannot update portfolio due to exception: {}",ex.toString());
             throw ex;
         }
