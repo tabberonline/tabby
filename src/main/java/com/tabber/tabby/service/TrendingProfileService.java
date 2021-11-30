@@ -7,7 +7,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 
 @Service
@@ -20,11 +22,10 @@ public class TrendingProfileService {
     UserServiceImpl userService;
 
 
-    public JSONObject getTrendingProfiles(){
-
+    public List<Object> getTrendingProfiles(){
         FrontendConfigurationEntity frontendConfigurationEntity = frontendConfigManager.findFeConfigurationByPageTypeAndKey("Home", "TrendingProfile");
         JsonNode userIds = frontendConfigurationEntity.getValue();
-        JSONObject result = new JSONObject();
+        ArrayList<Object> list = new ArrayList<>();
         for (final JsonNode objNode : userIds.get("userIds")) {
             Long userId = Long.parseLong(objNode.toString());
             Object userObject= userService.getEnrichedUserData(userId,null,false);
@@ -33,8 +34,8 @@ public class TrendingProfileService {
             ((LinkedHashMap) userObject).remove("course_widgets");
             ((LinkedHashMap) userObject).remove("contest_widgets");
             ((LinkedHashMap) userObject).remove("experience_widgets");
-            result.put(userId.toString(),userObject);
+            list.add(userObject);
         }
-        return result;
+        return list;
     }
 }

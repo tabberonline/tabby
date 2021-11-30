@@ -50,8 +50,6 @@ public class WebsiteController {
     @GetMapping(value = URIEndpoints.TRENDING_PROFILES,produces = "application/json")
     public ResponseEntity<Object> getTrenidingProfiles() throws Exception {
         Object result = trendingProfileService.getTrendingProfiles();
-        return new ResponseEntity<>( result.toString(), HttpStatus.OK);
+        return new ResponseEntity<>( result, HttpStatus.OK);
     }
-
-
 }
