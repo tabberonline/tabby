@@ -4,6 +4,7 @@ import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.PersonalProjectRequest;
 import com.tabber.tabby.entity.PersonalProjectEntity;
 import com.tabber.tabby.exceptions.PersonalProjectNotExistsException;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.PersonalProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class PersonalProjectController {
     @Autowired
     PersonalProjectService personalProjectService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<PersonalProjectEntity> createPersonalProject(
             @RequestBody @Validated PersonalProjectRequest personalProjectRequest) throws Exception {
@@ -34,6 +38,7 @@ public class PersonalProjectController {
             personalProjectEntity = personalProjectService.createPersonalProject(personalProjectRequest,userId);
         }
         catch (Exception ex){
+            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity==null?null:personalProjectEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create project due to exception: {}",ex.toString());
             throw ex;
         }
@@ -51,6 +56,7 @@ public class PersonalProjectController {
             personalProjectEntity = personalProjectService.updatePersonalProject(personalProjectRequest,id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity==null?null:personalProjectEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update project due to exception: {}",ex.toString());
             throw ex;
         }
@@ -67,6 +73,7 @@ public class PersonalProjectController {
             personalProjectEntity = personalProjectService.deletePersonalProject(id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(PersonalProjectController.class.toString(), ex.toString(), personalProjectEntity==null?null:personalProjectEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update project due to exception: {}",ex.toString());
             throw ex;
         }

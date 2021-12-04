@@ -5,7 +5,9 @@ import com.tabber.tabby.dto.RankWidgetRequest;
 import com.tabber.tabby.entity.RankWidgetEntity;
 import com.tabber.tabby.exceptions.RankWidgetExistsException;
 import com.tabber.tabby.exceptions.RankWidgetNotExistsException;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.RankWidgetService;
+import groovy.util.logging.Commons;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,9 @@ public class RankWidgetController {
     @Autowired
     RankWidgetService rankWidgetService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<RankWidgetEntity> createRankWidget(
             @RequestBody @Validated RankWidgetRequest rankWidgetRequest) throws Exception {
@@ -34,6 +39,7 @@ public class RankWidgetController {
             rankWidgetEntity = rankWidgetService.createRankWidget(rankWidgetRequest,userId);
         }
         catch (Exception ex){
+            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity==null?null: rankWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
            throw ex;
         }
@@ -50,6 +56,7 @@ public class RankWidgetController {
             rankWidgetEntity = rankWidgetService.updateRankWidget(rankWidgetRequest,userId);
         }
         catch (Exception ex){
+            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity==null?null: rankWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -66,6 +73,7 @@ public class RankWidgetController {
             rankWidgetEntity = rankWidgetService.deleteRankWidget(websiteId,userId);
         }
         catch (Exception ex){
+            commonService.setLog(RankWidgetController.class.toString(), ex.toString(), rankWidgetEntity==null?null: rankWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }

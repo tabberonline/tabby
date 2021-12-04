@@ -5,6 +5,7 @@ import com.tabber.tabby.dto.PortfolioRequest;
 import com.tabber.tabby.entity.PortfolioEntity;
 import com.tabber.tabby.exceptions.PortfolioExistsException;
 import com.tabber.tabby.exceptions.PortfolioNotExistsException;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,9 @@ public class PortfolioController {
     @Autowired
     PortfolioService portfolioService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.UPLOAD_CLOUD_RESUME_LINK,produces = "application/json")
     public ResponseEntity<Boolean> uploadCloudResumeLink(
             @RequestParam("cloud_link")  String cloudLink) throws Exception {
@@ -35,6 +39,7 @@ public class PortfolioController {
             portfolioService.updateResumeLink(cloudLink,userId);
         }
         catch (Exception ex){
+            commonService.setLog(PortfolioController.class.toString(), ex.toString(), null);
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
             return new ResponseEntity<>(false, HttpStatus.OK);
         }
@@ -51,6 +56,7 @@ public class PortfolioController {
             portfolioEntity = portfolioService.createPortfolio(portfolioRequest,userId);
         }
         catch (Exception ex){
+            commonService.setLog(PortfolioController.class.toString(), ex.toString(), portfolioEntity==null?null:portfolioEntity.getUser().getUserId());
             logger.log(Level.SEVERE,"Cannot create portfolio due to exception: {}",ex.toString());
             throw ex;
         }
@@ -67,6 +73,7 @@ public class PortfolioController {
              portfolioEntity = portfolioService.updatePortfolio(portfolioRequest,userId);
         }
         catch (Exception ex){
+            commonService.setLog(PortfolioController.class.toString(), ex.toString(), portfolioEntity==null?null:portfolioEntity.getUser().getUserId());
             logger.log(Level.SEVERE,"Cannot update portfolio due to exception: {}",ex.toString());
             throw ex;
         }

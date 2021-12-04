@@ -1,6 +1,7 @@
 package com.tabber.tabby.email;
 
 import com.tabber.tabby.service.AWSService;
+import com.tabber.tabby.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -17,6 +18,9 @@ public class EmailService {
     @Autowired
     private AWSService awsService;
 
+    @Autowired
+    CommonService commonService;
+
     private static final Logger logger = Logger.getLogger(EmailService.class.getName());
 
     public void sendMail(String toEmail, String subject, String message, String email) {
@@ -29,6 +33,7 @@ public class EmailService {
             awsService.sendSESEmail(toEmail,textPart,null,subject,null,null);
         }
         catch (Exception ex){
+            commonService.setLog(EmailService.class.toString(), ex.toString(), null);
             logger.log(Level.WARNING,"Failed in sending email on contact page, due to "+ex.toString());
         }
     }

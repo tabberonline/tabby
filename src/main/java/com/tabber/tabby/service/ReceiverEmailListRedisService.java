@@ -15,6 +15,9 @@ public class ReceiverEmailListRedisService {
     @Autowired
     ObjectMapper mapper;
 
+    @Autowired
+    CommonService commonService;
+
    public Boolean addEmailToRedisCachedList(String email){
         try {
             String countString = redisServiceManager.getValueForKey(TabbyConstants.COUNT_EMAIL_KEY);
@@ -39,6 +42,7 @@ public class ReceiverEmailListRedisService {
             }
         }
         catch (Exception ex){
+            commonService.setLog(ReceiverEmailListRedisService.class.toString(), ex.toString(), null);
             return false;
         }
         return true;

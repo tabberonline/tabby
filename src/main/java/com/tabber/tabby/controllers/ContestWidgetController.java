@@ -4,6 +4,7 @@ import com.tabber.tabby.constants.URIEndpoints;
 import com.tabber.tabby.dto.ContestWidgetRequest;
 import com.tabber.tabby.entity.ContestWidgetEntity;
 import com.tabber.tabby.exceptions.ContestWidgetNotExistsException;
+import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.ContestWidgetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class ContestWidgetController {
     @Autowired
     ContestWidgetService contestWidgetService;
 
+    @Autowired
+    CommonService commonService;
+
     @PostMapping(value = URIEndpoints.CREATE,produces = "application/json")
     public ResponseEntity<ContestWidgetEntity> createContestWidget(
             @RequestBody @Validated ContestWidgetRequest contestWidgetRequest) throws Exception {
@@ -34,6 +38,7 @@ public class ContestWidgetController {
             contestWidgetEntity = contestWidgetService.createContestWidget(contestWidgetRequest,userId);
         }
         catch (Exception ex){
+            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity==null?null: contestWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot create widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -51,6 +56,7 @@ public class ContestWidgetController {
             contestWidgetEntity = contestWidgetService.updateContestWidget(contestWidgetRequest,id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity==null?null: contestWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }
@@ -67,6 +73,7 @@ public class ContestWidgetController {
             contestWidgetEntity = contestWidgetService.deleteContestWidget(id,userId);
         }
         catch (Exception ex){
+            commonService.setLog(ContestWidgetService.class.toString(), ex.toString(), contestWidgetEntity==null?null: contestWidgetEntity.getUserId());
             logger.log(Level.SEVERE,"Cannot update widget due to exception: {}",ex.toString());
             throw ex;
         }

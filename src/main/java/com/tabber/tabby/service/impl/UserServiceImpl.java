@@ -58,6 +58,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     FrontendConfigManager frontendConfigManager;
 
+    @Autowired
+    CommonService commonService;
+
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
 
@@ -175,6 +178,7 @@ public class UserServiceImpl implements UserService {
             }
             return userEnrichedData;
         }catch(Exception e){
+            commonService.setLog(UserServiceImpl.class.toString(), e.toString(), userId);
             logger.log(Level.INFO,"Error in user data enriching  "+e);
         }
         return null;
