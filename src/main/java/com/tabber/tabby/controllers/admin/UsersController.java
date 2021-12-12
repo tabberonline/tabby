@@ -8,10 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,9 +23,34 @@ public class UsersController {
 
     private static final Logger logger = Logger.getLogger(AuthController.class.getName());
 
-    @GetMapping("/get_users")
-    private ResponseEntity<List<UserEntity>> getUsers(@RequestParam Integer pageSize, @RequestParam Integer pageNo) {
-        logger.log(Level.WARNING, "Inside Admin User Controller :: Page No : " + pageNo + " :: Page Size : " + pageSize);
-        return new ResponseEntity<>(this.usersService.getUsersForAdmin(pageSize, pageNo), HttpStatus.OK);
+    @GetMapping("/get_users_from_limit_and_offset")
+    private ResponseEntity<List<UserEntity>> getUsersFromLimitAndOffset(@RequestParam Integer pageSize, @RequestParam Integer pageNo) {
+        logger.log(Level.WARNING, "Inside Admin User Controller :: getUsersFromLimitAndOffset :: Page No : " + pageNo + " :: Page Size : " + pageSize);
+        return new ResponseEntity<>(this.usersService.getUsersFromLimitAndOffset(pageSize, pageNo), HttpStatus.OK);
     }
+
+    @GetMapping("/get_similar_name_users")
+    private ResponseEntity<List<UserEntity>> getSimilarNameUsers(@RequestParam String name, @RequestParam Integer pageSize, @RequestParam Integer pageNo) {
+        logger.log(Level.WARNING, "Inside Admin User Controller :: getSimilarNameUsers :: Name : " + name +  " Page No : " + pageNo + " :: Page Size : " + pageSize);
+        return new ResponseEntity<>(this.usersService.getSimilarNameUsers(name, pageSize, pageNo), HttpStatus.OK);
+    }
+
+    @GetMapping("/get_similar_plan_users")
+    private ResponseEntity<List<UserEntity>> getSimilarPlanUsers(@RequestParam Integer planId, @RequestParam Integer pageSize, @RequestParam Integer pageNo) {
+        logger.log(Level.WARNING, "Inside Admin User Controller :: getSimilarPlanUsers :: Plan Id : " + planId + " Page No : " + pageNo + " :: Page Size : " + pageSize);
+        return new ResponseEntity<>(this.usersService.getSimilarPlanUsers(planId, pageSize, pageNo), HttpStatus.OK);
+    }
+
+    @GetMapping("/get_user_from_email")
+    private ResponseEntity<List<UserEntity>> getUserFromEmail(@RequestParam String email) {
+        logger.log(Level.WARNING, "Inside Admin User Controller :: getUserFromEmail :: Email : " + email);
+        return new ResponseEntity<>(this.usersService.getUserFromEmail(email), HttpStatus.OK);
+    }
+
+    @PostMapping("/set_views_manually")
+    private ResponseEntity<String> setViewsManually(@RequestParam String email, @RequestParam Long userId, @RequestParam Long views) {
+        logger.log(Level.WARNING, "Inside Admin User Controller :: setViewsManually :: Email : " + email + " :: Views : " + views);
+        return new ResponseEntity<>(this.usersService.setViewsManually(email, userId, views), HttpStatus.OK);
+    }
+
 }
