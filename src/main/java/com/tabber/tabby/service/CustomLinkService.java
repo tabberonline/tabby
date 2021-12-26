@@ -16,7 +16,16 @@ public class CustomLinkService {
         return customLinkRepository.getCustomLink(group,id,linkType);
     }
 
+    public CustomLinkEntity getCustomLinkEntityFromUserId(Long userId){
+        return customLinkRepository.getCustomLinkFromUserId(userId);
+    }
+
+
     public void deleteCustomLink(CustomLinkEntity customLinkEntity){
         customLinkRepository.delete(customLinkEntity);
+    }
+
+    public void saveAndFlush(CustomLinkEntity customLinkEntity){
+        customLinkRepository.saveAndFlush(customLinkEntity);
     }
 }

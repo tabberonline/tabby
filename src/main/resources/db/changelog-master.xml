@@ -33,4 +33,5 @@
     <include file="db/migrations/024_create_custom_link_table.xml"/>
     <include file="db/migrations/025_add_views_to_portfolio_entity.xml"/>
     <include file="db/migrations/026_create_logs_table.xml"/>
+    <include file="db/migrations/027_add_auto_incrementing_to_custom_links.xml"/>
 </databaseChangeLog>

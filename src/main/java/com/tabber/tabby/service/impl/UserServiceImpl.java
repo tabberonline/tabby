@@ -82,6 +82,13 @@ public class UserServiceImpl implements UserService {
         return userEntity;
     }
 
+    // This method uses repository, not cache, this is not customer facing
+    @Override
+    public UserEntity getUserFromEmail(String emailId){
+        return userRepository.getTopByEmailId(emailId);
+    }
+
+
     @Override
     public UserEntity getUserFromSub(String sub){
         return userRepository.getTopBySub(sub);
