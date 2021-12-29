@@ -22,11 +22,14 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     @Query(value = "SELECT * FROM users LIMIT ?1 OFFSET ?2", nativeQuery = true)
     List<UserEntity> getUsersFromLimitAndOffset(Integer pageSize, Integer pageLimit);
 
-    @Query(value = "SELECT * FROM users WHERE name=?1 LIMIT ?2 OFFSET ?3", nativeQuery = true)
+    @Query(value = "SELECT * FROM users WHERE LOWER(name)=LOWER(?1) LIMIT ?2 OFFSET ?3", nativeQuery = true)
     List<UserEntity> getSimilarNameUsers(String name, Integer pageSize, Integer pageLimit);
 
     @Query(value = "SELECT * FROM users WHERE email=?1", nativeQuery = true)
-    List<UserEntity> getUserFromEmail(String name);
+    UserEntity getUserFromEmail(String email);
+
+    @Query(value = "SELECT * FROM users WHERE user_id=?1", nativeQuery = true)
+    UserEntity getUserFromId(Long id);
 
     @Query(value = "SELECT * FROM users WHERE plan_id=?1 LIMIT ?2 OFFSET ?3", nativeQuery = true)
     List<UserEntity> getSimilarPlanUsers(Integer plan_id, Integer pageSize, Integer pageLimit);
