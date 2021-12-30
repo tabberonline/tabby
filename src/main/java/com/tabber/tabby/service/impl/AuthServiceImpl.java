@@ -64,6 +64,7 @@ public class AuthServiceImpl implements AuthService {
                     .cookieAccepted(false)
                     .lastLoggedIn(presentDate)
                     .planId(TabbyConstants.LITE_PLAN_ID)
+                    .userType("user")
                     .build();
         }
         else {
