@@ -7,6 +7,9 @@ import com.tabber.tabby.service.admin.AdminCommonService;
 import com.tabber.tabby.service.admin.UsersService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,13 +33,14 @@ public class UsersController {
 
     private static final Logger logger = Logger.getLogger(AuthController.class.getName());
 
-    @GetMapping("/get_users_from_limit_and_offset")
+    @GetMapping("/get-users-from-limit-and-offset")
     private ResponseEntity<List<UserEntity>> getUsersFromLimitAndOffset(@RequestParam Integer pageSize, @RequestParam Integer pageNo) throws Exception {
         logger.log(Level.WARNING, "Inside Admin User Controller :: getUsersFromLimitAndOffset :: Page No : " + pageNo + " :: Page Size : " + pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("name"));
         try {
             Long adminUserId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             commonService.verifyAdmin(adminUserId);
-            return new ResponseEntity<>(usersService.getUsersFromLimitAndOffset(pageSize, pageNo), HttpStatus.OK);
+            return new ResponseEntity<>(usersService.getUsersFromLimitAndOffset(pageable), HttpStatus.OK);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot fetch users from limit and offset due to exception: {} : " + ex.toString());
@@ -44,7 +48,7 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/get_user_from_id")
+    @GetMapping("/get-user-from-id")
     private ResponseEntity<UserEntity> getUserFromId(@RequestParam Long userId) throws Exception {
         logger.log(Level.WARNING, "Inside Admin User Controller :: getUserFromId :: User Id : " + userId);
         try {
@@ -58,13 +62,14 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/get_similar_name_users")
+    @GetMapping("/get-similar-name-users")
     private ResponseEntity<List<UserEntity>> getSimilarNameUsers(@RequestParam String name, @RequestParam Integer pageSize, @RequestParam Integer pageNo) throws Exception {
         logger.log(Level.WARNING, "Inside Admin User Controller :: getSimilarNameUsers :: Name : " + name +  " Page No : " + pageNo + " :: Page Size : " + pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("name"));
         try {
             Long adminUserId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             commonService.verifyAdmin(adminUserId);
-            return new ResponseEntity<>(usersService.getSimilarNameUsers(name, pageSize, pageNo), HttpStatus.OK);
+            return new ResponseEntity<>(usersService.getSimilarNameUsers(name, pageable), HttpStatus.OK);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot fetch users of similar names due to exception: {} : " + ex.toString());
@@ -72,13 +77,14 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/get_similar_plan_users")
+    @GetMapping("/get-similar-plan-users")
     private ResponseEntity<List<UserEntity>> getSimilarPlanUsers(@RequestParam Integer planId, @RequestParam Integer pageSize, @RequestParam Integer pageNo) throws Exception {
         logger.log(Level.WARNING, "Inside Admin User Controller :: getSimilarPlanUsers :: Plan Id : " + planId + " Page No : " + pageNo + " :: Page Size : " + pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("name"));
         try {
             Long adminUserId = Long.parseLong(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
             commonService.verifyAdmin(adminUserId);
-            return new ResponseEntity<>(usersService.getSimilarPlanUsers(planId, pageSize, pageNo), HttpStatus.OK);
+            return new ResponseEntity<>(usersService.getSimilarPlanUsers(planId, pageable), HttpStatus.OK);
         }
         catch (Exception ex){
             logger.log(Level.SEVERE,"Cannot fetch users of similar plans due to exception: {} : " + ex.toString());
@@ -86,7 +92,7 @@ public class UsersController {
         }
     }
 
-    @GetMapping("/get_user_from_email")
+    @GetMapping("/get-user-from-email")
     private ResponseEntity<UserEntity> getUserFromEmail(@RequestParam String email) throws Exception {
         logger.log(Level.WARNING, "Inside Admin User Controller :: getUserFromEmail :: Email : " + email);
         try {
@@ -100,7 +106,7 @@ public class UsersController {
         }
     }
 
-    @PostMapping("/set_views_manually")
+    @PostMapping("/set-views-manually")
     private ResponseEntity<Map<String, Map<Long, Long>>> setViewsManually(@RequestParam Long userId, @RequestParam Long views) throws Exception {
         logger.log(Level.WARNING, "Inside Admin User Controller :: setViewsManually :: UserId : " + userId + " :: Views : " + views);
         String response = null;

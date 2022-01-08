@@ -9,6 +9,7 @@ import com.tabber.tabby.respository.UserRepository;
 import com.tabber.tabby.service.UserService;
 import com.tabber.tabby.service.admin.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.logging.Level;
@@ -33,9 +34,9 @@ public class UsersServiceImpl implements UsersService {
     private static final Logger logger = Logger.getLogger(AuthController.class.getName());
 
     @Override
-    public List<UserEntity> getUsersFromLimitAndOffset(Integer pageSize, Integer pageNo) {
+    public List<UserEntity> getUsersFromLimitAndOffset(Pageable pageable) {
         try {
-            List<UserEntity> users = userRepository.getUsersFromLimitAndOffset(pageSize, (--pageNo)*pageSize);
+            List<UserEntity> users = userRepository.getUsersFromLimitAndOffset(pageable);
             return users;
         }
          catch (Exception ex) {
@@ -45,9 +46,9 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<UserEntity> getSimilarNameUsers(String name, Integer pageSize, Integer pageNo) {
+    public List<UserEntity> getSimilarNameUsers(String name, Pageable pageable) {
         try {
-            List<UserEntity> users = userRepository.getSimilarNameUsers(name, pageSize, (--pageNo)*pageSize);
+            List<UserEntity> users = userRepository.getSimilarNameUsers(name, pageable);
             return users;
         }
         catch (Exception ex) {
@@ -57,9 +58,9 @@ public class UsersServiceImpl implements UsersService {
     }
 
     @Override
-    public List<UserEntity> getSimilarPlanUsers(Integer planId, Integer pageSize, Integer pageNo) {
+    public List<UserEntity> getSimilarPlanUsers(Integer planId, Pageable pageable) {
         try {
-            List<UserEntity> users = userRepository.getSimilarPlanUsers(planId, pageSize, (--pageNo)*pageSize);
+            List<UserEntity> users = userRepository.getSimilarPlanUsers(planId, pageable);
             return users;
         }
         catch (Exception ex) {
