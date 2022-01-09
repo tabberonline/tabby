@@ -21,7 +21,7 @@ public class AdminCommonService {
             throw new Exception("Exception occur while fetching admin entity from admin id in " + AdminCommonService.class);
         }
         String userType = userEntity.getUserType();
-        if(userType == null || Objects.equals(userType, "user")) {
+        if(userType == null || !Objects.equals(userType, "admin")) {
             throw new UnauthorisedException("Invalid Admin");
         }
     }
