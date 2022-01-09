@@ -106,4 +106,12 @@ public class UserEntity {
     @JsonProperty("plan_id")
     @Column(name = "plan_id")
     private Integer planId;
+
+    @JsonProperty("updated_by")
+    @Column(name = "updated_by")
+    private Long updatedBy;
+
+    @JsonProperty("user_type")
+    @Column(name = "user_type")
+    private String userType;
 }
