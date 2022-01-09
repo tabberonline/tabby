@@ -88,7 +88,7 @@ public class UsersServiceImpl implements UsersService {
                 portfolioEntity.setViews(views);
                 portfolioRepository.saveAndFlush(portfolioEntity);
                 userEntity.setPortfolio(portfolioEntity);
-                redisServiceManager.zadd("viewsSet", String.valueOf(userId), views);
+               // redisServiceManager.zadd("viewsSet", String.valueOf(userId), views);
                 userService.updateCache(userEntity);
                 return "Updated Views";
             }
