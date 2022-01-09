@@ -4,6 +4,7 @@ import com.tabber.tabby.entity.UserEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,8 +24,8 @@ public interface UserRepository extends JpaRepository<UserEntity,Long> {
     @Query(value = "SELECT * FROM users", nativeQuery = true)
     List<UserEntity> getUsersFromLimitAndOffset(Pageable pageable);
 
-    @Query(value = "SELECT * FROM users WHERE LOWER(name)=LOWER(?1)", nativeQuery = true)
-    List<UserEntity> getSimilarNameUsers(String name, Pageable pageable);
+    @Query(value = "SELECT * FROM users WHERE name ~*:nameSearch", nativeQuery = true)
+    List<UserEntity> getSimilarNameUsers(@Param("nameSearch")String name, Pageable pageable);
 
     @Query(value = "SELECT * FROM users WHERE email=?1", nativeQuery = true)
     UserEntity getUserFromEmail(String email);
