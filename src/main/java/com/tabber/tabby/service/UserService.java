@@ -7,6 +7,7 @@ public interface UserService {
     Long save(UserEntity userEntity);
     void updateCache(UserEntity userEntity);
     UserEntity getUserFromUserId(Long userId);
+    UserEntity getUserFromEmail(String emailId);
     UserEntity getUserFromSub(String sub);
     UserEntity setResumePresent(UserEntity userEntity);
     void updateUserName(Long userId, String userName);

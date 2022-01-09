@@ -9,6 +9,7 @@ import com.tabber.tabby.manager.FrontendConfigManager;
 import com.tabber.tabby.respository.FrontendConfigurationRepository;
 import com.tabber.tabby.service.CommonService;
 import com.tabber.tabby.service.UserService;
+import com.tabber.tabby.service.admin.UploadExcelSheetService;
 import com.tabber.tabby.service.impl.UserServiceImpl;
 import com.tabber.tabby.utils.CacheClearUtil;
 import liquibase.pro.packaged.A;
@@ -18,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RequestMapping(URIEndpoints.ADMIN)
@@ -38,6 +41,9 @@ public class AdminController {
 
     @Autowired
     CommonService commonService;
+
+    @Autowired
+    UploadExcelSheetService uploadExcelSheetService;
 
 
     @PostMapping(value = URIEndpoints.FRONTEND_CONFIG_CREATE,produces = "application/json")
@@ -110,6 +116,18 @@ public class AdminController {
         }
         catch (Exception ex){
             commonService.setLog(AdminController.class.toString(), ex.toString(), deleteUserId);
+            throw ex;
+        }
+        return new ResponseEntity<>(true,HttpStatus.OK);
+
+    }
+
+    @PostMapping(value = "upload_custom_link_sheet",produces = "application/json")
+    public ResponseEntity uploadCustomLinkSheet(@RequestParam("file") MultipartFile multipartFile) throws Exception{
+        try {
+            uploadExcelSheetService.uploadExcelSheetForCustomLink(multipartFile);
+        }
+        catch (Exception ex){
             throw ex;
         }
         return new ResponseEntity<>(true,HttpStatus.OK);
