@@ -30,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
 
     public String login(String idTokenString) throws UnauthorisedException{
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new JacksonFactory())
-                .setAudience(Collections.singletonList("148434873376-a1k8ubdj3g3oqkh53an00v8angbj2itd.apps.googleusercontent.com"))
+                .setAudience(Collections.singletonList("954820964588-l8ba8pbqa49riqctv9fa6ckrt1dbul77.apps.googleusercontent.com"))
                 .build();
         GoogleIdToken idToken;
         try {
