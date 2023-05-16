@@ -15,13 +15,23 @@ COPY target/tabby-0.0.1-SNAPSHOT.jar /tabby.jar
 # ENV SCHEDULER_DB_USERNAME=nggnfmgccrtxit
 # ENV SCHEDULER_DB_PASSWORD=20deb40cec77d6124adcc2ddbff1439239602e6af0aef24a6d6a82fa4a91eee0
 
+ENV DB_PASSWORD=zICTbQWOz5YHZ!aP
+ENV DB_URL=jdbc:postgresql://lin-20366-7190-pgsql-primary.servers.linodedb.net:5432/tabby
+ENV DB_USERNAME=linpostgres
+ENV REDIS_HOST_URL=localhost
+ENV REDIS_PASSWORD=
+ENV REDIS_PORT=6379
+ENV SERVER_PORT=8082
+ENV SCHEDULER_DB_URL=jdbc:postgresql://lin-20366-7190-pgsql-primary.servers.linodedb.net:5432/tabby_scheduler
+ENV SCHEDULER_DB_USERNAME=linpostgres
+ENV SCHEDULER_DB_PASSWORD=zICTbQWOz5YHZ!aP
 ENTRYPOINT ["java","-Dserver.port=8082","-Dspring.profiles.active=prod","-jar","/tabby.jar"]
-
+# java -Dserver.port=8082 -Dspring.profiles.active=dev -jar ./target/tabby-0.0.1-SNAPSHOT.jar
 EXPOSE 8082
 
 # aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/s3y9k6b7
 # docker build -t springio/tabby-spring-boot-docker .
-# docker tag springio/tabby-spring-boot-docker:latest public.ecr.aws/s3y9k6b7/tabby
+# docker tag sspringio/tabby-spring-boot-docker:latest public.ecr.aws/s3y9k6b7/tabby
 # docker push public.ecr.aws/s3y9k6b7/tabby
 #
 # docker run -p 8082:8082 springio/tabby-spring-boot-docker

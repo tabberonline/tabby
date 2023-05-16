@@ -148,7 +148,7 @@ public class UserServiceImpl implements UserService {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.setVisibility(VisibilityChecker.Std.defaultInstance().withFieldVisibility(JsonAutoDetect.Visibility.ANY));
-        String portfolioLink = "tabber.online/d/";
+        String portfolioLink = "http://localhost:3000/d/";
         if(userEntity.getCustomLinkEntity()!=null){
             portfolioLink += userEntity.getCustomLinkEntity().getLinkGroup() + '/' + userEntity.getCustomLinkEntity().getGroupId();
         }
